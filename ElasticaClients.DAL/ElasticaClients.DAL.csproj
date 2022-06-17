@@ -1,0 +1,438 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{571117E6-14FA-4383-9FB5-CF2BC5EFB074}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ElasticaClients.DAL</RootNamespace>
+    <AssemblyName>ElasticaClients.DAL</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Z.EntityFramework.Extensions, Version=4.0.94.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.EntityFramework.Extensions.4.0.94\lib\net45\Z.EntityFramework.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Z.EntityFramework.Plus.EF6, Version=1.12.34.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.EntityFramework.Plus.EF6.1.12.34\lib\net45\Z.EntityFramework.Plus.EF6.dll</HintPath>
+    </Reference>
+    <Reference Include="Z.Expressions.Eval, Version=4.0.16.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.Expressions.Eval.4.0.16\lib\net45\Z.Expressions.Eval.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Accessory\IncomeType.cs" />
+    <Compile Include="Accessory\Salary.cs" />
+    <Compile Include="Accessory\SubscriptionStatus.cs" />
+    <Compile Include="Accessory\TrainingItemPayStatus.cs" />
+    <Compile Include="Accessory\TrainingItemStatus.cs" />
+    <Compile Include="Accessory\TrainingStatus.cs" />
+    <Compile Include="Cache\AccountCache.cs" />
+    <Compile Include="Data\BranchDAL.cs" />
+    <Compile Include="Data\IncomeDAL.cs" />
+    <Compile Include="Data\SubscriptionDAL.cs" />
+    <Compile Include="Data\TrainingDAL.cs" />
+    <Compile Include="Data\TrainingItemDAL.cs" />
+    <Compile Include="Entities\Branch.cs" />
+    <Compile Include="Entities\BranchContext.cs" />
+    <Compile Include="Entities\FreezeSubscriptionItemContext.cs" />
+    <Compile Include="Entities\FreezeSubscriptionItem.cs" />
+    <Compile Include="Entities\Income.cs" />
+    <Compile Include="Entities\IncomeContext.cs" />
+    <Compile Include="Entities\Gym.cs" />
+    <Compile Include="Entities\GymContext.cs" />
+    <Compile Include="Data\AccountDAL.cs" />
+    <Compile Include="Entities\Account.cs" />
+    <Compile Include="Entities\AccountContext.cs" />
+    <Compile Include="Data\GymDAL.cs" />
+    <Compile Include="Accessory\IIncome.cs" />
+    <Compile Include="Helpers\StringExtensions.cs" />
+    <Compile Include="Migrations\202007282024195_1.cs" />
+    <Compile Include="Migrations\202007282024195_1.designer.cs">
+      <DependentUpon>202007282024195_1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202007282041225_2.cs" />
+    <Compile Include="Migrations\202007282041225_2.designer.cs">
+      <DependentUpon>202007282041225_2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202007282121208_3.cs" />
+    <Compile Include="Migrations\202007282121208_3.designer.cs">
+      <DependentUpon>202007282121208_3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202007282151231_4.cs" />
+    <Compile Include="Migrations\202007282151231_4.designer.cs">
+      <DependentUpon>202007282151231_4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202007282152495_5.cs" />
+    <Compile Include="Migrations\202007282152495_5.designer.cs">
+      <DependentUpon>202007282152495_5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202007290857487_6.cs" />
+    <Compile Include="Migrations\202007290857487_6.designer.cs">
+      <DependentUpon>202007290857487_6.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202007290917395_7.cs" />
+    <Compile Include="Migrations\202007290917395_7.designer.cs">
+      <DependentUpon>202007290917395_7.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202008020803398_8.cs" />
+    <Compile Include="Migrations\202008020803398_8.designer.cs">
+      <DependentUpon>202008020803398_8.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202008020806263_9.cs" />
+    <Compile Include="Migrations\202008020806263_9.designer.cs">
+      <DependentUpon>202008020806263_9.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202008021409033_10.cs" />
+    <Compile Include="Migrations\202008021409033_10.designer.cs">
+      <DependentUpon>202008021409033_10.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202008051148496_11.cs" />
+    <Compile Include="Migrations\202008051148496_11.designer.cs">
+      <DependentUpon>202008051148496_11.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202008161002459_12.cs" />
+    <Compile Include="Migrations\202008161002459_12.designer.cs">
+      <DependentUpon>202008161002459_12.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202008161013131_13.cs" />
+    <Compile Include="Migrations\202008161013131_13.designer.cs">
+      <DependentUpon>202008161013131_13.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202008201857013_14.cs" />
+    <Compile Include="Migrations\202008201857013_14.designer.cs">
+      <DependentUpon>202008201857013_14.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202008262027574_15.cs" />
+    <Compile Include="Migrations\202008262027574_15.designer.cs">
+      <DependentUpon>202008262027574_15.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202008262044433_16.cs" />
+    <Compile Include="Migrations\202008262044433_16.designer.cs">
+      <DependentUpon>202008262044433_16.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202008262047351_17.cs" />
+    <Compile Include="Migrations\202008262047351_17.designer.cs">
+      <DependentUpon>202008262047351_17.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202008262216451_18.cs" />
+    <Compile Include="Migrations\202008262216451_18.designer.cs">
+      <DependentUpon>202008262216451_18.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202008271229367_19.cs" />
+    <Compile Include="Migrations\202008271229367_19.designer.cs">
+      <DependentUpon>202008271229367_19.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202104130503051_20.cs" />
+    <Compile Include="Migrations\202104130503051_20.designer.cs">
+      <DependentUpon>202104130503051_20.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202104130516169_21.cs" />
+    <Compile Include="Migrations\202104130516169_21.designer.cs">
+      <DependentUpon>202104130516169_21.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202104142109434_22.cs" />
+    <Compile Include="Migrations\202104142109434_22.designer.cs">
+      <DependentUpon>202104142109434_22.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202106071651462_23.cs" />
+    <Compile Include="Migrations\202106071651462_23.designer.cs">
+      <DependentUpon>202106071651462_23.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202106280339110_24.cs" />
+    <Compile Include="Migrations\202106280339110_24.designer.cs">
+      <DependentUpon>202106280339110_24.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202106280503549_25.cs" />
+    <Compile Include="Migrations\202106280503549_25.designer.cs">
+      <DependentUpon>202106280503549_25.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202106281441402_26.cs" />
+    <Compile Include="Migrations\202106281441402_26.designer.cs">
+      <DependentUpon>202106281441402_26.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202106282054322_27.cs" />
+    <Compile Include="Migrations\202106282054322_27.designer.cs">
+      <DependentUpon>202106282054322_27.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202106301305457_28.cs" />
+    <Compile Include="Migrations\202106301305457_28.designer.cs">
+      <DependentUpon>202106301305457_28.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107082024219_29.cs" />
+    <Compile Include="Migrations\202107082024219_29.designer.cs">
+      <DependentUpon>202107082024219_29.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107091252362_30.cs" />
+    <Compile Include="Migrations\202107091252362_30.designer.cs">
+      <DependentUpon>202107091252362_30.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107101909226_31.cs" />
+    <Compile Include="Migrations\202107101909226_31.designer.cs">
+      <DependentUpon>202107101909226_31.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107130546512_32.cs" />
+    <Compile Include="Migrations\202107130546512_32.designer.cs">
+      <DependentUpon>202107130546512_32.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107142108171_33.cs" />
+    <Compile Include="Migrations\202107142108171_33.designer.cs">
+      <DependentUpon>202107142108171_33.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107152219183_34.cs" />
+    <Compile Include="Migrations\202107152219183_34.designer.cs">
+      <DependentUpon>202107152219183_34.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107171031057_35.cs" />
+    <Compile Include="Migrations\202107171031057_35.designer.cs">
+      <DependentUpon>202107171031057_35.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107181351561_36.cs" />
+    <Compile Include="Migrations\202107181351561_36.designer.cs">
+      <DependentUpon>202107181351561_36.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202108071008152_37.cs" />
+    <Compile Include="Migrations\202108071008152_37.designer.cs">
+      <DependentUpon>202108071008152_37.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202108080957050_38.cs" />
+    <Compile Include="Migrations\202108080957050_38.designer.cs">
+      <DependentUpon>202108080957050_38.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202108251925490_39.cs" />
+    <Compile Include="Migrations\202108251925490_39.designer.cs">
+      <DependentUpon>202108251925490_39.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202108261044235_40.cs" />
+    <Compile Include="Migrations\202108261044235_40.designer.cs">
+      <DependentUpon>202108261044235_40.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202109021916099_41.cs" />
+    <Compile Include="Migrations\202109021916099_41.designer.cs">
+      <DependentUpon>202109021916099_41.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202109041044037_42.cs" />
+    <Compile Include="Migrations\202109041044037_42.designer.cs">
+      <DependentUpon>202109041044037_42.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202109061923313_43.cs" />
+    <Compile Include="Migrations\202109061923313_43.designer.cs">
+      <DependentUpon>202109061923313_43.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202109071147258_44.cs" />
+    <Compile Include="Migrations\202109071147258_44.designer.cs">
+      <DependentUpon>202109071147258_44.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202111291935069_45.cs" />
+    <Compile Include="Migrations\202111291935069_45.designer.cs">
+      <DependentUpon>202111291935069_45.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202202231938056_46.cs" />
+    <Compile Include="Migrations\202202231938056_46.designer.cs">
+      <DependentUpon>202202231938056_46.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Data\RoleDAL.cs" />
+    <Compile Include="Entities\Role.cs" />
+    <Compile Include="Entities\RoleContext.cs" />
+    <Compile Include="Entities\Subscription.cs" />
+    <Compile Include="Entities\SubscriptionContext.cs" />
+    <Compile Include="Entities\Training.cs" />
+    <Compile Include="Entities\TrainingContext.cs" />
+    <Compile Include="Entities\TrainingItem.cs" />
+    <Compile Include="Entities\TrainingItemContext.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202007282024195_1.resx">
+      <DependentUpon>202007282024195_1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202007282041225_2.resx">
+      <DependentUpon>202007282041225_2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202007282121208_3.resx">
+      <DependentUpon>202007282121208_3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202007282151231_4.resx">
+      <DependentUpon>202007282151231_4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202007282152495_5.resx">
+      <DependentUpon>202007282152495_5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202007290857487_6.resx">
+      <DependentUpon>202007290857487_6.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202007290917395_7.resx">
+      <DependentUpon>202007290917395_7.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202008020803398_8.resx">
+      <DependentUpon>202008020803398_8.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202008020806263_9.resx">
+      <DependentUpon>202008020806263_9.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202008021409033_10.resx">
+      <DependentUpon>202008021409033_10.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202008051148496_11.resx">
+      <DependentUpon>202008051148496_11.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202008161002459_12.resx">
+      <DependentUpon>202008161002459_12.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202008161013131_13.resx">
+      <DependentUpon>202008161013131_13.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202008201857013_14.resx">
+      <DependentUpon>202008201857013_14.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202008262027574_15.resx">
+      <DependentUpon>202008262027574_15.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202008262044433_16.resx">
+      <DependentUpon>202008262044433_16.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202008262047351_17.resx">
+      <DependentUpon>202008262047351_17.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202008262216451_18.resx">
+      <DependentUpon>202008262216451_18.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202008271229367_19.resx">
+      <DependentUpon>202008271229367_19.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202104130503051_20.resx">
+      <DependentUpon>202104130503051_20.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202104130516169_21.resx">
+      <DependentUpon>202104130516169_21.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202104142109434_22.resx">
+      <DependentUpon>202104142109434_22.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202106071651462_23.resx">
+      <DependentUpon>202106071651462_23.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202106280339110_24.resx">
+      <DependentUpon>202106280339110_24.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202106280503549_25.resx">
+      <DependentUpon>202106280503549_25.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202106281441402_26.resx">
+      <DependentUpon>202106281441402_26.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202106282054322_27.resx">
+      <DependentUpon>202106282054322_27.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202106301305457_28.resx">
+      <DependentUpon>202106301305457_28.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107082024219_29.resx">
+      <DependentUpon>202107082024219_29.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107091252362_30.resx">
+      <DependentUpon>202107091252362_30.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107101909226_31.resx">
+      <DependentUpon>202107101909226_31.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107130546512_32.resx">
+      <DependentUpon>202107130546512_32.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107142108171_33.resx">
+      <DependentUpon>202107142108171_33.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107152219183_34.resx">
+      <DependentUpon>202107152219183_34.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107171031057_35.resx">
+      <DependentUpon>202107171031057_35.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107181351561_36.resx">
+      <DependentUpon>202107181351561_36.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202108071008152_37.resx">
+      <DependentUpon>202108071008152_37.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202108080957050_38.resx">
+      <DependentUpon>202108080957050_38.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202108251925490_39.resx">
+      <DependentUpon>202108251925490_39.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202108261044235_40.resx">
+      <DependentUpon>202108261044235_40.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202109021916099_41.resx">
+      <DependentUpon>202109021916099_41.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202109041044037_42.resx">
+      <DependentUpon>202109041044037_42.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202109061923313_43.resx">
+      <DependentUpon>202109061923313_43.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202109071147258_44.resx">
+      <DependentUpon>202109071147258_44.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111291935069_45.resx">
+      <DependentUpon>202111291935069_45.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202202231938056_46.resx">
+      <DependentUpon>202202231938056_46.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Данный проект ссылается на пакеты NuGet, отсутствующие на этом компьютере. Используйте восстановление пакетов NuGet, чтобы скачать их.  Дополнительную информацию см. по адресу: http://go.microsoft.com/fwlink/?LinkID=322105. Отсутствует следующий файл: {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+</Project>

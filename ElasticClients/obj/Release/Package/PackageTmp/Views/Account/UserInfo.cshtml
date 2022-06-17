@@ -1,0 +1,17 @@
+﻿@if (User.Identity != null && User.Identity.IsAuthenticated)
+{
+	var currentAcc = ElasticaClients.Logic.AccountB.GetLite(Convert.ToInt32(User.Identity.Name));
+
+	<li class="nav-item active">
+		@Html.ActionLink(currentAcc.Name, "Details", "Account", new { id = User.Identity.Name }, new { @class = "nav-link" })
+	</li>
+	<li class="nav-item active">
+		@Html.ActionLink("Выйти ", "Logout", "Account", new { id = "" }, new { @class = "nav-link" })
+	</li>
+}
+else
+{
+	<li class="nav-item active">
+		@Html.ActionLink("Войти", "Login", "Account", new { @class = "nav-link" })
+	</li>
+}

@@ -1,0 +1,65 @@
+﻿@model ElasticaClients.Models.IncomeTotalModel
+
+@{
+	ViewBag.Title = "Index";
+
+	DateTime prev = ((DateTime)ViewData["DateTime"]).AddMonths(-1);
+	DateTime next = ((DateTime)ViewData["DateTime"]).AddMonths(1);
+}
+
+<button class="btn btn-primary" onclick="location.href='@Url.Action("Create", "Income", new { BranchId = Model.BranchId })'"><i class="bi bi-plus-circle mr-1"></i>Добавить</button>
+
+<h3>@ViewData["DateFormat"]</h3>
+
+<button class="btn btn-info" onclick="location.href='@Url.Action("Index", new { branchId = ViewData["branchId"], year = prev.Year, month = prev.Month })'"><i class="bi bi-arrow-left"></i></button>
+<button class="btn btn-info" onclick="location.href='@Url.Action("index", new { branchId = ViewData["branchId"], year = next.Year, month = next.Month })'"><i class="bi bi-arrow-right"></i></button>
+
+<table class="table">
+	<tr>
+		<th>
+			Название
+		</th>
+		<th>
+			Стоимость
+		</th>
+		<th>
+			Дата
+		</th>
+		<th></th>
+	</tr>
+
+	@foreach (var item in Model.AllIncomes)
+	{
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.IncomeName)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Cost)
+			</td>
+			<td>
+				@ElasticaClients.Models.ModelHelper.GetDateFormat(item.Date)
+			</td>
+			<td>
+				@if (item.IncomeId != 0)
+				{
+					<a href="~/Income/Edit/@item.IncomeId">
+						<button class="btn btn-default" type="button">
+							<img src="~/Content/img/edit.png" />
+						</button>
+					</a>
+					<a>
+						@using (Html.BeginForm("Delete", "Income", new { id = item.IncomeId }, FormMethod.Post, new { @class = "inline", onsubmit = "return confirm('Удалить " + @item.IncomeName + "?');" }))
+						{
+							@Html.AntiForgeryToken()
+							<button type="submit" class="btn btn-default" onsubmit="return confirm('Удалить?')">
+								<img src="~/Content/img/empty-trash.png" />
+							</button>
+						}
+					</a>
+				}
+			</td>
+		</tr>
+	}
+</table>
+<span><b>Общая сумма :</b> @Model.TotalIncome</span>

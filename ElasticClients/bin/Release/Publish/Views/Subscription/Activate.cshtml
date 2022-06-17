@@ -1,0 +1,30 @@
+﻿@model ElasticaClients.Models.SubscriptionModel
+
+@{
+	ViewBag.Title = "Activate";
+}
+
+<h2>Активация абонемента</h2>
+
+
+@using (Html.BeginForm())
+{
+	@Html.AntiForgeryToken()
+
+	@Html.HiddenFor(model => model.Id)
+
+	<div class="form-horizontal">
+		<div class="form-group">
+			@Html.LabelFor(model => model.ActivateDate, htmlAttributes: new { @class = "control-label col-md-3" })
+			<div class="col-md-9">
+				@Html.EditorFor(model => model.ActivateDate, new { htmlAttributes = new { @class = "form-control" } })
+				@Html.ValidationMessageFor(model => model.ActivateDate, "", new { @class = "text-danger" })
+			</div>
+		</div>
+	</div>
+
+	<div class="btn-group" role="group">
+		<button type="submit" value="Create" class="btn btn-success">Активировать</button>
+		<button type="button" class="btn btn-secondary" onclick="GoBack()">Назад</button>
+	</div>
+}

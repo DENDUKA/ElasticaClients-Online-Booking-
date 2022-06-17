@@ -1,0 +1,82 @@
+﻿@model ElasticaClients.Models.SubscriptionModel
+
+@{
+	ViewBag.Title = "Edit";
+}
+
+<h2>Редактирование</h2>
+
+@using (Html.BeginForm())
+{
+	@Html.AntiForgeryToken()
+
+<div class="form-horizontal">	
+	<hr />
+	@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+	@Html.HiddenFor(model => model.Id)
+	@Html.HiddenFor(model => model.StatusId)
+
+	<div class="form-group">
+		@Html.LabelFor(model => model.BranchId, htmlAttributes: new { @class = "control-label col-md-2" })
+		<div class="col-md-9">
+			<input class="form-control" disabled value="@Model.Branch.Name" />
+			@Html.HiddenFor(model => model.BranchId, new { htmlAttributes = new { @class = "form-control" } })
+			@Html.ValidationMessageFor(model => model.BranchId, "", new { @class = "text-danger" })
+		</div>
+	</div>
+
+	<div class="form-group">
+		@Html.LabelFor(model => model.AccountId, htmlAttributes: new { @class = "control-label col-md-2" })
+		<div class="col-md-9">
+			<input class="form-control" disabled value="@Model.Account.Name" />
+			@Html.HiddenFor(model => model.AccountId, new { htmlAttributes = new { @class = "form-control" } })
+			@Html.ValidationMessageFor(model => model.AccountId, "", new { @class = "text-danger" })
+		</div>
+	</div>
+
+	<div class="form-group">
+		@Html.LabelFor(model => model.BuyDate, htmlAttributes: new { @class = "control-label col-md-3" })
+		<div class="col-md-9">
+			@Html.EditorFor(model => model.BuyDate, new { htmlAttributes = new { @class = "form-control" } })
+			@Html.ValidationMessageFor(model => model.BuyDate, "", new { @class = "text-danger" })
+		</div>
+	</div>
+
+	<div class="form-group">
+		@Html.LabelFor(model => model.TrainingCount, htmlAttributes: new { @class = "control-label col-md-3" })
+		<div class="col-md-9">
+			@Html.EditorFor(model => model.TrainingCount, new { htmlAttributes = new { @class = "form-control" } })
+			@Html.ValidationMessageFor(model => model.TrainingCount, "", new { @class = "text-danger" })
+		</div>
+	</div>
+
+	<div class="form-group">
+		@Html.LabelFor(model => model.Cost, htmlAttributes: new { @class = "control-label col-md-3" })
+		<div class="col-md-9">
+			@Html.EditorFor(model => model.Cost, new { htmlAttributes = new { @class = "form-control" } })
+			@Html.ValidationMessageFor(model => model.Cost, "", new { @class = "text-danger" })
+		</div>
+	</div>
+
+	<div class="form-group">
+		@Html.LabelFor(model => model.ByCash, htmlAttributes: new { @class = "control-label col-md-3" })
+		<div class="col-md-9">
+			@Html.EditorFor(model => model.ByCash, new { htmlAttributes = new { @class = "form-control col-md-1" } })
+			@Html.ValidationMessageFor(model => model.ByCash, "", new { @class = "text-danger" })
+		</div>
+	</div>
+
+	<div class="form-group">
+		@Html.LabelFor(model => model.ActiveDays, htmlAttributes: new { @class = "control-label col-md-3" })
+		<div class="col-md-9">
+			@Html.EditorFor(model => model.ActiveDays, new { htmlAttributes = new { @class = "form-control" } })
+			@Html.ValidationMessageFor(model => model.ActiveDays, "", new { @class = "text-danger" })
+		</div>
+	</div>
+
+	<div class="btn-group" role="group">
+		<button type="submit" value="Create" class="btn btn-success">Сохранить</button>
+		<button type="button" class="btn btn-secondary" onclick="GoBack()">Назад</button>
+	</div>
+</div>
+}

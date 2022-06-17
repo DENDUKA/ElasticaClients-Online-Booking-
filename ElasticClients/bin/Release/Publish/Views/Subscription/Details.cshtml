@@ -1,0 +1,32 @@
+﻿@model ElasticaClients.Models.SubscriptionModel
+
+@{
+	ViewBag.Title = "Details";
+}
+
+<div class="btn-group" role="group">
+
+	<button type="button" class="btn btn-secondary" onclick="GoBack()">Назад</button>
+	@if (ElasticaClients.Logic.AccountB.IsCurrentUserAdmin())
+	{
+		<button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Index", "Subscription")'">К списку абонементов</button>
+	}
+
+	@if (ElasticaClients.Logic.AccountB.IsCurrentUserAdmin())
+	{
+		using (Html.BeginForm("Reacalculate", "Subscription", new { id = Model.Id }, FormMethod.Post))
+		{
+			<button type="submit" class="btn btn-dark">Пересчитать</button>
+		}
+	}
+</div>
+
+<h2>Абонемент</h2>
+
+<div>
+	<hr />
+	<dl class="dl-horizontal">
+	</dl>
+</div>
+
+@Html.Partial("~/Views/Subscription/Partial/_SubscriptionBlock.cshtml", Model)

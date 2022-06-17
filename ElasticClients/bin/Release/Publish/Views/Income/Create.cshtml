@@ -1,0 +1,68 @@
+﻿@model ElasticaClients.Models.IncomeModel
+
+@{
+	ViewBag.Title = "Create";
+}
+
+@using (Html.BeginForm())
+{
+	@Html.AntiForgeryToken()
+
+	<div class="form-horizontal">
+		<h4>Добавить запись в доходы/расходы</h4>
+		<hr />
+		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+		<div class="form-group">
+			@Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+				@Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(model => model.Cost, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.Cost, new { htmlAttributes = new { @class = "form-control" } })
+				@Html.ValidationMessageFor(model => model.Cost, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.DropDownListFor(model => model.Type, ElasticaClients.Logic.IncomeB.ToSelectListItems(-1), new { @class = "form-control" })
+				@Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
+				@Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(model => model.BranchId, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.DropDownListFor(model => model.BranchId, ElasticaClients.Logic.BranchB.ToSelectListItems(Model.BranchId), new { @class = "form-control", @disabled = "true" })
+				@Html.ValidationMessageFor(model => model.BranchId, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		@*<div class="form-group">
+				@Html.LabelFor(model => model.GymId, htmlAttributes: new { @class = "control-label col-md-2" })
+				<div class="col-md-10">
+					@Html.EditorFor(model => model.GymId, new { htmlAttributes = new { @class = "form-control" } })
+					@Html.ValidationMessageFor(model => model.GymId, "", new { @class = "text-danger" })
+				</div>
+			</div>*@
+
+		<div class="btn-group" role="group">
+			<button type="submit" value="Create" class="btn btn-success">Сохранить</button>
+			<button type="button" class="btn btn-secondary" onclick="location.href='@Url.Action("Index", "income", new { BranchId = Model.BranchId  })'">Назад</button>
+		</div>
+	</div>
+}
