@@ -30,13 +30,7 @@ namespace ElasticaClients.DAL.Data
 				{
 					Debug.WriteLine("{0} - {1}", acc.Name, acc.Id);
 				}
-
 			}
-
-			using (FlyStretchDataSet db = new FlyStretchDataSet())
-			{ }	
-
-				
 		}
 
 
