@@ -82,7 +82,7 @@ namespace ElasticaClients.Logic
 		{
 			var ti = TrainingItemB.Get(id);
 
-			TrainingItemDAL.Delete(id);			
+			TrainingItemDAL.Delete(id);
 
 			SubscriptionB.RecalculateValues(ti.SubscriptionId);
 			TrainingB.ReacalculateValues(ti.TrainingId);
@@ -144,6 +144,11 @@ namespace ElasticaClients.Logic
 			}
 
 			return true;
+		}
+
+		public static List<TrainingItem> GetFutureTrainings(int accountId)
+		{
+			return TrainingItemDAL.GetAllForAccount(accountId, DateTime.Today, DateTime.Today.Date.AddMonths(1)).OrderBy(x => x.Training.StartTime).Where(x => x.StatusId == (int)TrainingItemStatus.yes || x.StatusId == (int)TrainingItemStatus.unKnown).ToList();
 		}
 	}
 }

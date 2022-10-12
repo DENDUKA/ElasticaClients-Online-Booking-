@@ -165,36 +165,36 @@ namespace ConsoleApp1
 		private int gymId = 11;//центр
 		private int trainerId = 6276;//9na
 
-		internal void ToBD(List<ExcelFormat> subs)
-		{
-			var accs = AccountDAL.GetAll();
+		//internal void ToBD(List<ExcelFormat> subs)
+		//{
+		//	var accs = AccountDAL.GetAll();
 
-			foreach (var x in subs)
-			{
-				var currentAcc = CreateAcc(x);
+		//	foreach (var x in subs)
+		//	{
+		//		var currentAcc = CreateAcc(x);
 
-				var currentSub = CreateSub(x, currentAcc);
+		//		var currentSub = CreateSub(x, currentAcc);
 
-				if (currentSub == null)
-				{
-					continue;
-				}
+		//		if (currentSub == null)
+		//		{
+		//			continue;
+		//		}
 
-				foreach (var t in x.trainingsDates)
-				{
-					var currentTraining = CreateTraining(t);
+		//		foreach (var t in x.trainingsDates)
+		//		{
+		//			var currentTraining = CreateTraining(t);
 
-					var currentTrainingItem = CreateTrainingItem(currentSub,currentAcc, currentTraining, (int)TrainingItemStatus.yes);
-				}
+		//			var currentTrainingItem = CreateTrainingItem(currentSub,currentAcc, currentTraining, (int)TrainingItemStatus.yes);
+		//		}
 
-				foreach (var t in x.notrainingsDates)
-				{
-					var currentTraining = CreateTraining(t);
+		//		foreach (var t in x.notrainingsDates)
+		//		{
+		//			var currentTraining = CreateTraining(t);
 
-					var currentTrainingItem = CreateTrainingItem(currentSub, currentAcc, currentTraining, (int)TrainingItemStatus.no);
-				}
-			}
-		}
+		//			var currentTrainingItem = CreateTrainingItem(currentSub, currentAcc, currentTraining, (int)TrainingItemStatus.no);
+		//		}
+		//	}
+		//}
 
 		internal void toDBAccs(List<ExcelFormat> accsEx)
 		{
@@ -264,80 +264,80 @@ namespace ConsoleApp1
 			}
 		}
 
-		private Subscription CreateSub(ExcelFormat x, Account currentAcc)
-		{
-			var accSubs = SubscriptionDAL.GetForAccount(currentAcc.Id);
+		//private Subscription CreateSub(ExcelFormat x, Account currentAcc)
+		//{
+		//	var accSubs = SubscriptionDAL.GetForAccount(currentAcc.Id);
 
-			DateTime buyDate;
+		//	DateTime buyDate;
 
-			try
-			{
-				buyDate = x.DateStart != null ? (DateTime)x.DateStart : x.trainingsDates.Concat(x.notrainingsDates).Min();
-			}
-			catch (Exception)
-			{
-				return null;
-			}
+		//	try
+		//	{
+		//		buyDate = x.DateStart != null ? (DateTime)x.DateStart : x.trainingsDates.Concat(x.notrainingsDates).Min();
+		//	}
+		//	catch (Exception)
+		//	{
+		//		return null;
+		//	}
 
-			Subscription currentSub;
+		//	Subscription currentSub;
 
-			if (accSubs.Any(y => y.BuyDate == buyDate))
-			{
-				currentSub = accSubs.First(y => y.BuyDate == buyDate);
+		//	if (accSubs.Any(y => y.BuyDate == buyDate))
+		//	{
+		//		currentSub = accSubs.First(y => y.BuyDate == buyDate);
 
-				Console.WriteLine($"Абонемент {currentSub.BuyDate} найден");
-			}
-			else
-			{
-				currentSub = new Subscription();
+		//		Console.WriteLine($"Абонемент {currentSub.BuyDate} найден");
+		//	}
+		//	else
+		//	{
+		//		currentSub = new Subscription();
 
-				currentSub.AccountId = currentAcc.Id;
-				currentSub.BranchId = branchId;
-				currentSub.BuyDate = buyDate;
-				currentSub.Name = "Приобретен до 01.11.2021";
-				currentSub.TrainingCount = x.trainingCount;
+		//		currentSub.AccountId = currentAcc.Id;
+		//		currentSub.BranchId = branchId;
+		//		currentSub.BuyDate = buyDate;
+		//		currentSub.Name = "Приобретен до 01.11.2021";
+		//		currentSub.TrainingCount = x.trainingCount;
 
-				if (x.DateStart != null && x.DateEnd == null)
-				{
-					currentSub.StatusId = (int)SubscriptionStatus.NotActivated;
-					currentSub.BuyDate = (DateTime)x.DateStart;
+		//		if (x.DateStart != null && x.DateEnd == null)
+		//		{
+		//			currentSub.StatusId = (int)SubscriptionStatus.NotActivated;
+		//			currentSub.BuyDate = (DateTime)x.DateStart;
 
-					Console.WriteLine($"Абонемент {currentSub.BuyDate} создан НЕАКТИВИРОВАННЫМ");
-				}
+		//			Console.WriteLine($"Абонемент {currentSub.BuyDate} создан НЕАКТИВИРОВАННЫМ");
+		//		}
 
-				if (x.DateStart == null && x.DateEnd == null)
-				{
-					DateTime dateend = x.trainingsDates.Concat(x.notrainingsDates).Max();
+		//		if (x.DateStart == null && x.DateEnd == null)
+		//		{
+		//			DateTime dateend = x.trainingsDates.Concat(x.notrainingsDates).Max();
 
-					currentSub.ActivateDate = buyDate;
-					currentSub.ActiveDays = ((TimeSpan)(dateend - buyDate)).Days;
-					currentSub.StatusId = (int)SubscriptionStatus.Closed;
+		//			currentSub.ActivateDate = buyDate;
+		//			currentSub.ActiveDays = ((TimeSpan)(dateend - buyDate)).Days;
+		//			currentSub.StatusId = (int)SubscriptionStatus.Closed;
 
-					Console.WriteLine($"Абонемент {currentSub.BuyDate} создан ЗАВЕРШЕННЫМ");
-				}
+		//			Console.WriteLine($"Абонемент {currentSub.BuyDate} создан ЗАВЕРШЕННЫМ");
+		//		}
 
-				if (x.DateStart != null && x.DateEnd != null)
-				{
-					currentSub.ActivateDate = x.DateStart;
-					currentSub.ActiveDays = ((TimeSpan)(x.DateEnd - x.DateStart)).Days;
-					currentSub.StatusId = (int)SubscriptionStatus.Activated;
+		//		if (x.DateStart != null && x.DateEnd != null)
+		//		{
+		//			currentSub.ActivateDate = x.DateStart;
+		//			currentSub.ActiveDays = ((TimeSpan)(x.DateEnd - x.DateStart)).Days;
+		//			currentSub.StatusId = (int)SubscriptionStatus.Activated;
 
-					Console.WriteLine($"Абонемент {currentSub.BuyDate} создан АКТИВИРОВАННЫМ");
+		//			Console.WriteLine($"Абонемент {currentSub.BuyDate} создан АКТИВИРОВАННЫМ");
 
-					if (x.DateEnd < DateTime.Today)
-					{
-						currentSub.StatusId = (int)SubscriptionStatus.Closed;
-						Console.WriteLine($"Абонемент {currentSub.BuyDate} создан ЗАВЕРШЕННЫМ");
-					}
+		//			if (x.DateEnd < DateTime.Today)
+		//			{
+		//				currentSub.StatusId = (int)SubscriptionStatus.Closed;
+		//				Console.WriteLine($"Абонемент {currentSub.BuyDate} создан ЗАВЕРШЕННЫМ");
+		//			}
 
 
-				}
+		//		}
 
-				SubscriptionDAL.Add(currentSub);
-			}
+		//		SubscriptionDAL.Add(currentSub);
+		//	}
 
-			return currentSub;
-		}
+		//	return currentSub;
+		//}
 
 		private Account CreateAcc(ExcelFormat x)
 		{

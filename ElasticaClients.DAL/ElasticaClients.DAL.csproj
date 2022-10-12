@@ -270,6 +270,10 @@
     <Compile Include="Migrations\202202231938056_46.designer.cs">
       <DependentUpon>202202231938056_46.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202207011035064_47.cs" />
+    <Compile Include="Migrations\202207011035064_47.designer.cs">
+      <DependentUpon>202207011035064_47.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Data\RoleDAL.cs" />
@@ -424,6 +428,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202202231938056_46.resx">
       <DependentUpon>202202231938056_46.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202207011035064_47.resx">
+      <DependentUpon>202207011035064_47.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

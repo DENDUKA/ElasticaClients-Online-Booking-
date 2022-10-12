@@ -133,7 +133,7 @@ namespace ElasticaClients.DAL.Data
 				return db.TrainingItems
 					.Where(x => x.Training.StartTime > StartDate && x.Training.StartTime < EndDate)
 					.Where(x => x.AccountId == accountId)
-					.Include(x => x.Training)
+					.Include(x => x.Training.Gym.Branch)
 					.ToList();
 			}
 		}

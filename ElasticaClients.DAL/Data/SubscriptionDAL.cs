@@ -165,6 +165,36 @@ namespace ElasticaClients.DAL.Data
 			}
 		}
 
+		public static List<Subscription> GetForAccount(int accId, bool includeRazovoe = false, int subscriptionStatus = -1, bool includeTrainingItems = false)
+		{
+			using (SubscriptionContext db = new SubscriptionContext())
+			{
+				var subs = db.Subscriptions
+					.Where(x => x.AccountId == accId)
+					.Include(x => x.FreezeSubscriptionList);
+
+				if (!includeRazovoe)
+				{
+					subs = subs.Where(x => x.StatusId != (int)SubscriptionStatus.Razovoe);
+				}
+
+				if (subscriptionStatus != -1)
+				{
+					SubscriptionStatus status = (SubscriptionStatus)subscriptionStatus;
+
+					subs = subs.Where(x => x.StatusId == (int)status);
+				}
+
+				if (includeTrainingItems)
+				{
+					subs = subs.Include(x => x.TrainingItems.Select(y => y.Training));
+				}
+
+
+				return subs.ToList();
+			}
+		}
+
 		public static void Add(Subscription sub)
 		{
 			using (SubscriptionContext db = new SubscriptionContext())

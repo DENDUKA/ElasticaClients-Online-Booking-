@@ -290,6 +290,15 @@ namespace ElasticaClients.DAL.Data
 			Debug.WriteLine($"Account GetByPhone(string phone) {sw.ElapsedMilliseconds}");
 		}
 
+		public static Account GetByTelegramId(string chatId)
+		{
+			using (AccountContext db = new AccountContext())
+			{
+				return db.Accounts
+					.FirstOrDefault(x => x.TelegramId == chatId);
+			}
+		}
+
 		private static void IsLoaded()
 		{
 			if (!IsAccsLoaded)

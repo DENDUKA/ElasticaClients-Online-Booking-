@@ -13,12 +13,17 @@ namespace ConsoleApp1
 	{
 		static void Main(string[] args)
 		{
+			DateTime dt1 = DateTime.Now;
 
-			AccountDAL.GetByPhoneStorageProcedure("92711606212");
+			DateTime dt2 = DateTime.Now.AddDays(2);
+
+			Console.WriteLine((dt2 - dt1).Hours);
+			Console.WriteLine((dt2 - dt1).TotalHours);
+			Console.ReadKey();
 
 
 
-
+			//AccountDAL.GetByPhoneStorageProcedure("92711606212");
 
 
 			//EngelsAccounts.GetAllAccsInEngels();

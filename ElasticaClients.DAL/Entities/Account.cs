@@ -22,6 +22,7 @@ namespace ElasticaClients.DAL.Entities
 		public bool Verified { get; set; }
 		public int Bonuses { get; set; }
 		public int BonusesOff { get; set; }
+		public string TelegramId { get; set; } 
 		public Account()
 		{
 			Trainings = new List<Training>();

@@ -1,4 +1,5 @@
 ﻿using ElasticaClients.DAL.Entities;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -33,6 +34,16 @@ namespace ElasticaClients.DAL.Data
 				return db.Gyms.Where(g => g.Name == name && g.BranchId == branchId)
 					   .Include(g => g.Trainings)
 					   .First();
+			}
+		}
+
+		public static List<Gym> GetForBranch(int branchId)
+		{
+			using (GymContext db = new GymContext())
+			{
+				return db.Gyms.Where(g => g.BranchId == branchId)
+					   .Include(g => g.Trainings)
+					   .ToList();
 			}
 		}
 	}
