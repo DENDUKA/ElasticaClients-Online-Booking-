@@ -78,6 +78,15 @@ namespace ElasticaClients.Models
 			{
 				var sub = SubscriptionB.Get(SubscriptionId);
 
+				if (sub != null && (sub.StatusId == (int)SubscriptionStatus.Activated))
+				{
+					sub.DateEnd.AddDays(1);
+					if (training.StartTime > sub.DateEnd)
+					{
+						results.Add(new ValidationResult("Тренировка позже даты окончания абонемента"));
+					}
+				}
+
 				if (sub != null && (sub.StatusId == (int)SubscriptionStatus.Activated || sub.StatusId == (int)SubscriptionStatus.NotActivated))
 				{
 

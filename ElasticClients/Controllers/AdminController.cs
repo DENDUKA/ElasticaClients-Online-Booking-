@@ -33,6 +33,21 @@ namespace ElasticaClients.Controllers
 			SubscriptionB.BatchCloseSubscription();
 		}
 
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public FileResult ExcelStats()
+		{
+			//Logic.Logic.Instance.LogEvent.Log.Debug("EvaluationProjectReport Started");
+			string exelPath = Logic.ExcelHelper.ExcelStats();
+
+			//var projectType = Logic.Logic.Instance.ProjectType.Get(projectTypeId);
+
+			var fileBytes = System.IO.File.ReadAllBytes(exelPath);
+			var fileName = $"Статистика.{DateTime.Now}.xlst";
+
+			return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+		}
+
 		public void RecalculateAllBonuses()
 		{
 			foreach (var x in AccountB.GetAll())

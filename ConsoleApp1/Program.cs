@@ -13,22 +13,10 @@ namespace ConsoleApp1
 	{
 		static void Main(string[] args)
 		{
-			DateTime dt1 = DateTime.Now;
 
-			DateTime dt2 = DateTime.Now.AddDays(2);
-
-			Console.WriteLine((dt2 - dt1).Hours);
-			Console.WriteLine((dt2 - dt1).TotalHours);
-			Console.ReadKey();
-
-
-
-			//AccountDAL.GetByPhoneStorageProcedure("92711606212");
-
+			AccountDAL.GetByPhoneStorageProcedure("92711606212");
 
 			//EngelsAccounts.GetAllAccsInEngels();
-
-
 
 			//Nakrutka.Go( new DateTime(2021,11,01), new DateTime(2022, 03, 30));
 

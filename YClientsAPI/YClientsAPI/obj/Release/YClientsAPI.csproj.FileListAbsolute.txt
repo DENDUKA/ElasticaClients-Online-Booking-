@@ -20,8 +20,8 @@ C:\Users\DENDUKA\Documents\elasticaclients\ElasticClients\YClientsAPI\YClientsAP
 C:\Users\DENDUKA\Documents\elasticaclients\ElasticClients\YClientsAPI\YClientsAPI\bin\Release\Z.EntityFramework.Plus.EF6.xml
 C:\Users\DENDUKA\Documents\elasticaclients\ElasticClients\YClientsAPI\YClientsAPI\bin\Release\Z.EntityFramework.Extensions.xml
 C:\Users\DENDUKA\Documents\elasticaclients\ElasticClients\YClientsAPI\YClientsAPI\bin\Release\Z.Expressions.Eval.xml
-C:\Users\DENDUKA\Documents\elasticaclients\ElasticClients\YClientsAPI\YClientsAPI\obj\Release\YClientsAPI.csprojAssemblyReference.cache
 C:\Users\DENDUKA\Documents\elasticaclients\ElasticClients\YClientsAPI\YClientsAPI\obj\Release\YClientsAPI.csproj.CoreCompileInputs.cache
 C:\Users\DENDUKA\Documents\elasticaclients\ElasticClients\YClientsAPI\YClientsAPI\obj\Release\YClientsAPI.csproj.CopyComplete
 C:\Users\DENDUKA\Documents\elasticaclients\ElasticClients\YClientsAPI\YClientsAPI\obj\Release\YClientsAPI.dll
 C:\Users\DENDUKA\Documents\elasticaclients\ElasticClients\YClientsAPI\YClientsAPI\obj\Release\YClientsAPI.pdb
+C:\Users\DENDUKA\Documents\elasticaclients\ElasticClients\YClientsAPI\YClientsAPI\obj\Release\YClientsAPI.csproj.AssemblyReference.cache

@@ -1,5 +1,4 @@
 ﻿using ElasticaClients.DAL.Entities;
-using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -23,14 +22,6 @@ namespace ElasticaClients.DAL.Data
 				return db.Branches.Where(g => g.Id == id)
 					   .Include(g => g.Gyms)
 					   .First();
-			}
-		}
-
-		public static Branch GetByName(string text)
-		{
-			using (BranchContext db = new BranchContext())
-			{
-				return db.Branches.Where(g => g.Name == text).FirstOrDefault();
 			}
 		}
 	}

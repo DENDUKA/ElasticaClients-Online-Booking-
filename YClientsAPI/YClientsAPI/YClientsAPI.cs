@@ -27,7 +27,7 @@ namespace YClientsAPI
 
 		public YClientsAPI()
 		{
-			
+			Authentication("79085513403", "7991487", "sxwmygnagd8sbrrtpjpy");
 		}
 
 		public void Authentication(string login, string pass, string partner_token)

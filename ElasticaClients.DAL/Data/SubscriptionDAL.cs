@@ -131,7 +131,8 @@ namespace ElasticaClients.DAL.Data
 					.Where(x => x.BranchId == branchId)
 					.Where(x => x.BuyDate >= start && x.BuyDate <= end)
 					.Include(x => x.Account)
-					.Include(x => x.Branch)
+					.Include(x => x.Branch)					
+					.OrderBy(x=>x.StatusId)
 					.Include(x => x.FreezeSubscriptionList);
 
 				if (!includeRazovoe)
@@ -160,36 +161,6 @@ namespace ElasticaClients.DAL.Data
 				{
 					subs = subs.Where(x => x.StatusId != (int)SubscriptionStatus.Razovoe);
 				}
-
-				return subs.ToList();
-			}
-		}
-
-		public static List<Subscription> GetForAccount(int accId, bool includeRazovoe = false, int subscriptionStatus = -1, bool includeTrainingItems = false)
-		{
-			using (SubscriptionContext db = new SubscriptionContext())
-			{
-				var subs = db.Subscriptions
-					.Where(x => x.AccountId == accId)
-					.Include(x => x.FreezeSubscriptionList);
-
-				if (!includeRazovoe)
-				{
-					subs = subs.Where(x => x.StatusId != (int)SubscriptionStatus.Razovoe);
-				}
-
-				if (subscriptionStatus != -1)
-				{
-					SubscriptionStatus status = (SubscriptionStatus)subscriptionStatus;
-
-					subs = subs.Where(x => x.StatusId == (int)status);
-				}
-
-				if (includeTrainingItems)
-				{
-					subs = subs.Include(x => x.TrainingItems.Select(y => y.Training));
-				}
-
 
 				return subs.ToList();
 			}

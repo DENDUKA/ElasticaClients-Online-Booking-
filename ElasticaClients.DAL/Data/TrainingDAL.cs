@@ -44,18 +44,6 @@ namespace ElasticaClients.DAL.Data
 			return res;
 		}
 
-		public static Training GetAllForGymByTime(int gymId, DateTime date)
-		{
-			Training res = null;
-
-			using (TrainingContext db = new TrainingContext())
-			{
-				res = db.Trainings.Where(t => t.GymId == gymId && t.StartTime == date).FirstOrDefault();
-			}
-
-			return res;
-		}
-
 		public static List<Training> GetAllForTrainer(int trainerId, DateTime start, DateTime end)
 		{
 			sw.Restart();

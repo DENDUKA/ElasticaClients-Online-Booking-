@@ -109,10 +109,10 @@ namespace ElasticaClients.Models
 
 			var start = StartDay.AddHours(StartTime.Hour).AddMinutes(StartTime.Minute);
 
-			if (!TrainingB.IsTimeFree(GymId, start, start.Add(Duration), Id))
-			{
-				results.Add(new ValidationResult("На это время назначена другая тренировка."));
-			}
+			//if (!TrainingB.IsTimeFree(GymId, start, start.Add(Duration), Id))
+			//{
+			//	results.Add(new ValidationResult("На это время назначена другая тренировка."));
+			//}
 
 			return results;
 		}

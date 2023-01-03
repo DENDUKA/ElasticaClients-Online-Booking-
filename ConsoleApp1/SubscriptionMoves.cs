@@ -97,40 +97,40 @@ namespace ConsoleApp1
 		}
 
 
-		//public static void SetRightSubscriptionForAllTrainingItems()
-		//{
-		//	var tis = TrainingItemDAL.GetAll();
+		public static void SetRightSubscriptionForAllTrainingItems()
+		{
+			var tis = TrainingItemDAL.GetAll();
 
-		//	foreach (var ti in tis)
-		//	{
-		//		if (ti.Id == 14975)
-		//		{ 
-		//		}
+			foreach (var ti in tis)
+			{
+				if (ti.Id == 14975)
+				{ 
+				}
 
-		//		if (ti.Subscription.Name != "Разовый")
-		//		{
-		//			var subs = SubscriptionDAL.GetForAccount(ti.AccountId);
-		//			var razov = subs.Where(x => x.Name == "Разовый" ).FirstOrDefault();
+				if (ti.Subscription.Name != "Разовый")
+				{
+					var subs = SubscriptionDAL.GetForAccount(ti.AccountId);
+					var razov = subs.Where(x => x.Name == "Разовый" ).FirstOrDefault();
 
-		//			if (razov != null)
-		//			{
-		//				ti.SubscriptionId = razov.Id;
+					if (razov != null)
+					{
+						ti.SubscriptionId = razov.Id;
 
-		//				TrainingItemDAL.Update(ti);
+						TrainingItemDAL.Update(ti);
 
-		//				Console.WriteLine(ti.Id + " обновлено");
-		//			}
-		//			else
-		//			{
-		//				Console.WriteLine("Абонепмента не существует");
-		//			}
+						Console.WriteLine(ti.Id + " обновлено");
+					}
+					else
+					{
+						Console.WriteLine("Абонепмента не существует");
+					}
 
-		//		}
-		//		else
-		//		{
-		//			Console.WriteLine(ti.Id + " не требует обновления");
-		//		}
-		//	}
-		//}
+				}
+				else
+				{
+					Console.WriteLine(ti.Id + " не требует обновления");
+				}
+			}
+		}
 	}
 }

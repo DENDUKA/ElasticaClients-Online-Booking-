@@ -16,7 +16,7 @@ namespace YClientsAPI
 
 
 			//YClientsAPI api = new YClientsAPI();
-			
+			//api.Authentication("79085513403", "753698", "sxwmygnagd8sbrrtpjpy");
 
 			//string readText = File.ReadAllText(@"C:\Users\DENDUKA\Desktop\эластика\API\ClientsIdsSun.txt");
 

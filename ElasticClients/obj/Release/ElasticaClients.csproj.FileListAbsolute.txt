@@ -93,7 +93,7 @@ C:\Users\DENDUKA\Documents\elasticaclients\ElasticClients\ElasticClients\bin\ru\
 C:\Users\DENDUKA\Documents\elasticaclients\ElasticClients\ElasticClients\bin\ru\System.Web.Webpages.Razor.resources.dll
 C:\Users\DENDUKA\Documents\elasticaclients\ElasticClients\ElasticClients\bin\ru\System.Web.Helpers.resources.dll
 C:\Users\DENDUKA\Documents\elasticaclients\ElasticClients\ElasticClients\bin\ru\System.Web.Mvc.resources.dll
-C:\Users\DENDUKA\Documents\elasticaclients\ElasticClients\ElasticClients\obj\Release\ElasticaClients.csprojAssemblyReference.cache
+C:\Users\DENDUKA\Documents\elasticaclients\ElasticClients\ElasticClients\obj\Release\ElasticaClients.csproj.AssemblyReference.cache
 C:\Users\DENDUKA\Documents\elasticaclients\ElasticClients\ElasticClients\obj\Release\ElasticaClients.csproj.CoreCompileInputs.cache
 C:\Users\DENDUKA\Documents\elasticaclients\ElasticClients\ElasticClients\obj\Release\ElasticaClients.csproj.CopyComplete
 C:\Users\DENDUKA\Documents\elasticaclients\ElasticClients\ElasticClients\obj\Release\ElasticaClients.dll

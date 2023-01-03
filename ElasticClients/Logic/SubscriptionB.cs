@@ -129,16 +129,11 @@ namespace ElasticaClients.Logic
 		}
 
 		//branchId == 0 - для всех филиалов
-		public static List<Subscription> GetForAccount(int accId, int branchId = 0, bool includeRazovoe = false)
+		public static List<Subscription> GetForAccount(int accId, int branchId = 0)
 		{
 			var subs = SubscriptionDAL.GetForAccount(accId, branchId);
 
-			if (includeRazovoe)
-			{
-				subs = subs.Where(x => x.StatusId != (int)SubscriptionStatus.Razovoe).ToList();
-			}
-
-			return subs;
+			return subs.Where(x => x.StatusId != (int)SubscriptionStatus.Razovoe).ToList();
 		}
 
 		public static void AddFreeze(FreezeSubscriptionItem freeze)

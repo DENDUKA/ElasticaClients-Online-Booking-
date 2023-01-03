@@ -23,20 +23,25 @@
 
 
 @*@using (Html.BeginForm("UnfreezeAllExpired", "Admin"))
-{
-	<input type="submit" value="UnfreezeAllExpired" class="btn btn-default" />
-}
+	{
+		<input type="submit" value="UnfreezeAllExpired" class="btn btn-default" />
+	}
 
 
-@using (Html.BeginForm("CloseSubscription", "Admin"))
-{
-	<input type="submit" value="CloseSubscription" class="btn btn-default" />
-}*@
+	@using (Html.BeginForm("CloseSubscription", "Admin"))
+	{
+		<input type="submit" value="CloseSubscription" class="btn btn-default" />
+	}*@
 
 @using (Html.BeginForm("RecalculateAllBonuses", "Admin"))
 {
 	<input type="submit" value="RecalculateAllBonuses" class="btn btn-default" style="border: black;" />
 }
 
+@using (Html.BeginForm("ExcelStats", "Admin"))
+{
+	@Html.AntiForgeryToken()
+	<input type="submit" value="ExcelStats" class="btn btn-default" style="border: black;" />
+}
 
 

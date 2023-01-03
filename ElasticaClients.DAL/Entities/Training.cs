@@ -49,10 +49,5 @@ namespace ElasticaClients.DAL.Entities
 			{ TrainingStatus.Active , "Активна" },
 			{ TrainingStatus.Canceled , "Отменена" },
 		};
-
-		public override string ToString()
-		{
-			return $"{StartTime:dd.MM HH:mm} {Name}";
-		}
 	}
 }

@@ -184,5 +184,45 @@ namespace ElasticaClients.Logic
 			{ 9, 500},
 			{ 10, 500},
 		};
-	}
+
+        private static readonly Dictionary<int, int> trainerPaySynnyGroup = new Dictionary<int, int>()
+        {
+            { 1, 300 },
+            { 2, 300 },
+            { 3, 300 },
+            { 4, 350 },
+            { 5, 400 },
+            { 6, 450 },
+            { 7, 450 },
+            { 8, 500 },
+            { 9, 500 },
+            { 10, 600 },
+        };
+
+        private static readonly Dictionary<int, int> trainerPaySynnyIndivid = new Dictionary<int, int>()
+        {
+            { 1, 400 },
+            { 2, 500 },
+        };
+
+        private static readonly Dictionary<int, int> trainerCenterGroup = new Dictionary<int, int>()
+		{
+			{ 1, 300 },
+			{ 2, 300 },
+			{ 3, 300 },
+			{ 4, 350 },
+			{ 5, 350 },
+			{ 6, 400 },
+			{ 7, 450 },
+			{ 8, 500 },
+			{ 9, 500 },
+			{ 10, 500 },
+		};
+
+        private static readonly Dictionary<int, int> trainerPayCenterIndivid = new Dictionary<int, int>()
+        {
+            { 1, 400 },
+            { 2, 500 },
+        };
+    }
 }
