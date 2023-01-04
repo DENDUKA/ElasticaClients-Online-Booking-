@@ -30,8 +30,11 @@ namespace ElasticaClients.Controllers
 			var gym = GymB.Get(gymid);
 			ViewData["GymId"] = gymid;
 			ViewData["GymName"] = gym.Name;
-			TrainingModel model = new TrainingModel();
-			model.Duration = new TimeSpan(1, 0, 0);
+			TrainingModel model = new TrainingModel
+			{
+				Duration = new TimeSpan(0, 0, 0),
+				Seats = 1
+			};
 
 			return View(model);
 		}

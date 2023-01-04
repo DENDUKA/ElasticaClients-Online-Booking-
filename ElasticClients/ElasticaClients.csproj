@@ -72,10 +72,6 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
@@ -670,6 +666,7 @@
     <Compile Include="Models\GymModel.cs" />
     <Compile Include="Models\IncomeModel.cs" />
     <Compile Include="Models\IncomeTotalModel.cs" />
+    <Compile Include="Helpers\ServisesHelper.cs" />
     <Compile Include="Models\ModelHelper.cs" />
     <Compile Include="Helpers\NavigationHelper.cs" />
     <Compile Include="Models\RoleModel.cs" />

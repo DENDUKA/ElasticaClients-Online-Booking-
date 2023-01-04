@@ -32,6 +32,10 @@ namespace ElasticaClients.DAL.Entities
 		public int RazovoeCost { get; set; }
 		public bool IsTrial { get; set; }
 
+		public int Discount { get; set; }
+		public string ServisesList { get; set; }
+
+
 		public bool IsLast
 		{
 			get

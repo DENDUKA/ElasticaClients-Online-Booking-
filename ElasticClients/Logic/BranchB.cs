@@ -14,7 +14,6 @@ namespace ElasticaClients.Logic
 		public static List<Branch> GetAll()
 		{
 			var branches = BranchDAL.GetAll();
-			branches.Remove(branches.First(x=>x.Id == 4));
 
 			return branches;
 		}

@@ -13,118 +13,194 @@
 {
 	@Html.AntiForgeryToken()
 
-	<div class="form-horizontal">
-		<hr />
-		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+<div class="form-horizontal">
+	<hr />
+	@Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-		<div class="form-group">
-			@Html.LabelFor(model => model.TrainingId, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-9">
-				<input class="form-control" disabled value="@startTimeFormat" />
-				@Html.HiddenFor(model => model.TrainingId, new { htmlAttributes = new { @class = "form-control" } })
-				@Html.ValidationMessageFor(model => model.TrainingId, "", new { @class = "text-danger" })
-			</div>
-		</div>
-
-		<div class="form-group">
-			@Html.LabelFor(model => model.AccountId, htmlAttributes: new { @class = "control-label col-md-3" })
-			<div class="col-md-9">
-				<div class="row-fluid">
-					@Html.DropDownListFor(model => model.AccountId, ElasticaClients.Logic.AccountB.ToSelectListItems(), new { id = "accs", @class = "selectpicker", data_show_subtext = "true", data_live_search = "true" })
-				</div>
-				@Html.ValidationMessageFor(model => model.AccountId, "", new { @class = "text-danger" })
-			</div>
-		</div>
-
-		<div class="form-group">
-			@Html.LabelFor(model => model.Razovoe, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-9">
-				@Html.EditorFor(model => model.Razovoe, new { htmlAttributes = new { @class = "form-control col-md-1" } })
-				@Html.ValidationMessageFor(model => model.Razovoe, "", new { @class = "text-danger" })
-			</div>
-		</div>
-
-		<div class="form-group">
-			@Html.LabelFor(model => model.IsTrial, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-9">
-				@Html.EditorFor(model => model.IsTrial, new { htmlAttributes = new { @class = "form-control col-md-1" } })
-				@Html.ValidationMessageFor(model => model.IsTrial, "", new { @class = "text-danger" })
-			</div>
-		</div>
-
-		<div class="form-group">
-			@Html.LabelFor(model => model.RazovoeCost, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-9">
-				@Html.EditorFor(model => model.RazovoeCost, new { @class = "form-control col-md-1" })
-				@Html.ValidationMessageFor(model => model.RazovoeCost, "", new { @class = "text-danger" })
-			</div>
-		</div>
-
-		<div class="form-group">
-			@Html.LabelFor(model => model.SubscriptionId, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-9">
-				@Html.DropDownList("SubscriptionId", new List<SelectListItem>(), new { id = "subs", @class = "form-control" })
-				@Html.ValidationMessageFor(model => model.SubscriptionId, "", new { @class = "text-danger" })
-			</div>
-		</div>
-
-		<div class="form-group">
-			<div id="accstat"></div>
-		</div>
-
-
-
-		<div class="btn-group" role="group">
-			<button type="submit" value="Create" class="btn btn-success">Создать</button>
-			<button type="button" class="btn btn-secondary" onclick="location.href='@Url.Action("Details", "Training", new { id = @trainingid })'">Назад</button>
+	<div class="form-group">
+		@Html.LabelFor(model => model.TrainingId, htmlAttributes: new { @class = "control-label col-md-2" })
+		<div class="col-md-9">
+			<input class="form-control" disabled value="@startTimeFormat" />
+			@Html.HiddenFor(model => model.TrainingId, new { htmlAttributes = new { @class = "form-control" } })
+			@Html.ValidationMessageFor(model => model.TrainingId, "", new { @class = "text-danger" })
 		</div>
 	</div>
+
+	<div class="form-group">
+		@Html.LabelFor(model => model.AccountId, htmlAttributes: new { @class = "control-label col-md-3" })
+		<div class="col-md-9">
+			<div class="row-fluid">
+				@Html.DropDownListFor(model => model.AccountId, ElasticaClients.Logic.AccountB.ToSelectListItems(), new { id = "accs", @class = "selectpicker", data_show_subtext = "true", data_live_search = "true" })
+			</div>
+			@Html.ValidationMessageFor(model => model.AccountId, "", new { @class = "text-danger" })
+		</div>
+	</div>
+
+	@Html.HiddenFor(model => model.Razovoe)
+
+	<hr />
+	<h4>Комплексы :</h4>
+
+	<table>
+
+		@foreach (var item in ElasticaClients.Models.ServisesHelper.СomplexesName)
+		{
+			<tr>
+				<td><label for="@item.Key">@item.Value</label></td>
+				<td>
+					<input id="@item.Key" type="checkbox" value="false" onchange="ComplexChanged(this)" />
+				</td>
+				<td>
+					@ElasticaClients.Models.ServisesHelper.СomplexesPrice[item.Key]
+				</td>
+			</tr>
+		}
+	</table>
+
+	<hr />
+	<h4>Услуги :</h4>
+
+	<table>
+
+		@foreach (var item in ElasticaClients.Models.ServisesHelper.ServisesName)
+		{
+			<tr>
+				<td><label for="@item.Key">@item.Value</label></td>
+				<td>
+					<input id="@item.Key" type="checkbox" value="false" onchange="ServiceChanged(this)" />
+				</td>
+				<td>
+					@ElasticaClients.Models.ServisesHelper.ServisesPrice[item.Key]
+				</td>
+			</tr>
+		}
+	</table>
+
+	<div class="form-group">
+		<label class="control-label col-md-2">Итог </label>
+		<div class="col-md-9">
+			<input class="form-control" id="cost" disabled="" value="0">
+		</div>
+	</div>
+
+	<div class="form-group">
+		@Html.LabelFor(model => model.Discount, htmlAttributes: new { @class = "control-label col-md-3" })
+		<div class="col-md-9">
+			@Html.EditorFor(model => model.Discount, new { htmlAttributes = new { @class = "form-control", @onchange = "RecalculateCost()" } })
+			@Html.ValidationMessageFor(model => model.Discount, "", new { @class = "text-danger" })
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div id="accstat"></div>
+	</div>
+
+	<div class="btn-group" role="group">
+		<button type="submit" value="Create" class="btn btn-success">Создать</button>
+		<button type="button" class="btn btn-secondary" onclick="location.href='@Url.Action("Details", "Training", new { id = @trainingid })'">Назад</button>
+	</div>
+</div>
 }
 
 <script type="text/javascript">
-    $(function (){
-        $('#accs').change(function(){
-            // получаем выбранный id
-            var id = $(this).val();
-            $.ajax({
-                type: 'GET',
-				url: '@Url.Action("_GetSubscriptionsForAccount")/?accId=' + id + '&branchId=' + @t.Gym.BranchId.ToString(),
-				success: function(data) {
-					$('#subs').replaceWith(data);
-                }
-			});
-		});
+	const servisesIds = [@Html.Raw(ElasticaClients.Models.ServisesHelper.GetServiserIdsString())];
+	const complexesIds = [@Html.Raw(ElasticaClients.Models.ServisesHelper.GetComplexesIdsString())];
 
-		$('#Razovoe').change(function () {
-			var obj = $(this);
-			var value = obj.is(":checked");
+	const servisesInComplexesIds = @Html.Raw(Json.Encode(ElasticaClients.Models.ServisesHelper.СomplexesInclude))
+	const complexesCostIds = @Html.Raw(Json.Encode(ElasticaClients.Models.ServisesHelper.СomplexesPrice))
+	const servisesCostIds = @Html.Raw(Json.Encode(ElasticaClients.Models.ServisesHelper.ServisesPrice))
 
-			var sub = $('#subs').parent().parent();
-			var cost = $('#RazovoeCost').parent().parent();
-			var istrial = $('#IsTrial').parent().parent();
+	function ComplexChanged(complex) {
 
-			if (value) {
-				sub.hide();
-				cost.show();
-				istrial.show();
+		var element = $(complex);
+		var isChecked = element.prop('checked');
 
-			} else {
-				sub.show();
-				cost.hide();
-				istrial.hide();
+		UncheckAllComplexes();
+
+		if (isChecked) {
+			CheckListServises(servisesInComplexesIds[element.attr('id')]);
+			element.prop("checked", true);
+		} else {
+			UncheckListServises(servisesInComplexesIds[element.attr('id')]);
+			element.prop("checked", false);
+		}
+
+		RecalculateCost();
+	}
+
+	function ServiceChanged(service) {
+		var s = $(service);
+		var id = s.attr('id');
+
+		selectedComplex = GetSelectedCommplex();
+
+		if (!s.prop('checked')) {
+			if (selectedComplex != null && servisesInComplexesIds[selectedComplex].includes(id)) {
+				$("#" + selectedComplex).prop("checked", false);
+			}
+		}
+
+		RecalculateCost();
+	}
+
+	function RecalculateCost() {
+		var selectedComplex = null;
+		var cost = 0;
+
+		selectedComplex = GetSelectedCommplex();
+
+		if (selectedComplex != null) {
+			cost = cost + complexesCostIds[selectedComplex];
+		}
+
+		servisesIds.forEach((e) => {
+			if ($("#" + e).prop('checked')) {
+				if (selectedComplex != null && servisesInComplexesIds[selectedComplex].includes(e)) {
+				}
+				else {
+					cost = cost + servisesCostIds[e];
+				}
+			}
+		})
+
+		var discount = $("#Discount").prop("value");
+
+		
+
+		$("#cost").prop("value", cost * (100-discount)/100);
+	}
+
+	function GetSelectedCommplex() {
+		var selected = null;
+
+		complexesIds.forEach((e) => {
+			if ($("#" + e).prop('checked')) {
+				selected = e;
+			}
+		})
+
+		return selected;
+	}
+
+	function UncheckAllComplexes() {
+		complexesIds.forEach(function (e) {
+			if ($("#" + e).prop('checked')) {
+				UncheckListServises(servisesInComplexesIds[e]);
 			}
 
-			console.log(value);
-        });
-    })
+			$("#" + e).prop("checked", false);
+		});
+	}
 
-    $(document).ready(function () {
-		$('#accs').change();
-		$('#Razovoe').change();
-    });
+	function CheckListServises(servisesList) {
+		servisesList.forEach(e => $("#" + e).prop("checked", true));
+	}
+
+	function UncheckListServises(servisesList) {
+		servisesList.forEach(e => $("#" + e).prop("checked", false));
+	}
+
+	$(document).ready(function () {
+
+	});
 </script>
-
-
-
-информация о том был ли этот человек уже на тренировке
-

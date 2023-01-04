@@ -24,6 +24,8 @@ namespace ElasticaClients.Controllers
 		{
 			TrainingItemModel model = new TrainingItemModel();
 			model.RazovoeCost = 0;
+			model.Razovoe = true;
+
 			return View(model);
 		}
 

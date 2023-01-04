@@ -7,7 +7,7 @@ namespace ElasticaClients.DAL.Entities
 	{
 		public SubscriptionContext() : base("FlyStretch")
 		{
-			((IObjectContextAdapter)this).ObjectContext.CommandTimeout = 4000; // seconds
+			//((IObjectContextAdapter)this).ObjectContext.CommandTimeout = 10; // seconds
 		}
 
 		public DbSet<Subscription> Subscriptions { get; set; }

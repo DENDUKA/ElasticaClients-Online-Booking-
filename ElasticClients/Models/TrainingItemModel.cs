@@ -29,6 +29,11 @@ namespace ElasticaClients.Models
 		[DisplayName("Пробное ")]
 		public bool IsTrial { get; set; }
 
+		[Required]
+		[DisplayName("Общая скидка")]		
+		public int Discount { get; set; }
+		public string ServisesList { get; set; }
+
 		public static explicit operator TrainingItem(TrainingItemModel model)
 		{
 			return new TrainingItem()
@@ -40,6 +45,8 @@ namespace ElasticaClients.Models
 				Razovoe = model.Razovoe,
 				RazovoeCost = model.RazovoeCost,
 				IsTrial = model.IsTrial,
+				Discount = model.Discount,
+				ServisesList = model.ServisesList,
 			};
 		}
 
