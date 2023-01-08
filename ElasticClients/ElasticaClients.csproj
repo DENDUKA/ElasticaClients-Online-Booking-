@@ -724,6 +724,7 @@
     <Content Include="Views\TrainingItem\SignUp.cshtml" />
     <Content Include="Views\Subscription\Activate.cshtml" />
     <Content Include="Views\Account\BonusesOff.cshtml" />
+    <Content Include="Views\Training\_ServisesBlock.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

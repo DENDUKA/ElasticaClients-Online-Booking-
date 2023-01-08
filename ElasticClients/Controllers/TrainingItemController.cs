@@ -4,6 +4,7 @@ using ElasticaClients.Logic;
 using ElasticaClients.Models;
 using System.Linq;
 using System.Web.Mvc;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ElasticaClients.Controllers
 {

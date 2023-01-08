@@ -13,8 +13,11 @@ namespace ConsoleApp1
 	{
 		static void Main(string[] args)
 		{
+			LazerParcer.Run();
 
-			AccountDAL.GetByPhoneStorageProcedure("92711606212");
+
+
+			//AccountDAL.GetByPhoneStorageProcedure("92711606212");
 
 			//EngelsAccounts.GetAllAccsInEngels();
 

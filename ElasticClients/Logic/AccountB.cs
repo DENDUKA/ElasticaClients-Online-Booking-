@@ -92,7 +92,7 @@ namespace ElasticaClients.Logic
 			return !tis.Any(x => x.StatusId == (int)TrainingItemStatus.yes || x.StatusId == (int)TrainingItemStatus.unKnown || x.StatusId == (int)TrainingItemStatus.no);
 		}
 
-		internal static Account Get(int id)
+		public static Account Get(int id)
 		{
 			var acc = AccountDAL.Get(id);
 			return AccountDAL.Get(id);
@@ -198,7 +198,7 @@ namespace ElasticaClients.Logic
 			}
 		}
 
-		internal static Account GetByPhone(string phone)
+		public static Account GetByPhone(string phone)
 		{
 			return AccountDAL.GetByPhone(phone);
 		}

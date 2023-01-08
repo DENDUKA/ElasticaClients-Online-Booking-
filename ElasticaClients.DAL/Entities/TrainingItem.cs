@@ -34,7 +34,7 @@ namespace ElasticaClients.DAL.Entities
 
 		public int Discount { get; set; }
 		public string ServisesList { get; set; }
-
+		
 
 		public bool IsLast
 		{

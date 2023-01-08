@@ -32,6 +32,7 @@ namespace ElasticaClients.Models
 		[Required]
 		[DisplayName("Общая скидка")]		
 		public int Discount { get; set; }
+
 		public string ServisesList { get; set; }
 
 		public static explicit operator TrainingItem(TrainingItemModel model)

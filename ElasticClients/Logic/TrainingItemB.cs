@@ -1,6 +1,7 @@
 ﻿using ElasticaClients.DAL.Accessory;
 using ElasticaClients.DAL.Data;
 using ElasticaClients.DAL.Entities;
+using ElasticaClients.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,6 +48,8 @@ namespace ElasticaClients.Logic
 			}
 
 			trainingItem.StatusId = (int)TrainingItemStatus.unKnown;
+
+			trainingItem.RazovoeCost = ServisesHelper.GetCost(trainingItem.ServisesList, trainingItem.Discount);
 
 			TrainingItemDAL.Add(trainingItem);
 

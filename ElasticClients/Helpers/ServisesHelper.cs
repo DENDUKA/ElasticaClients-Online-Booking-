@@ -3,21 +3,103 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Web;
 
 namespace ElasticaClients.Models
 {
-	public class ServisesHelper
+	public static class ServisesHelper
 	{
-		public List<string> ServisesList { get; set; }
-		public ServisesHelper(string servisesListJson) 
-		{ 
+		public static int GetCost(string servisesList, int discount)
+		{
+			var servises = servisesList.Split(' ');
+			string selectedComplex = null;
+			var cost = 0;
+
+			if (servises.Length > 0 && СomplexesName.ContainsKey(servises[0]))
+			{
+				selectedComplex = servises[0];
+			}
+
+
+			if (selectedComplex != null)
+			{
+				cost += СomplexesPrice[selectedComplex];
+			}
+
+			foreach (var s in servises)
+			{
+				if (ServisesName.ContainsKey(s))
+				{
+					if (selectedComplex != null && СomplexesInclude[selectedComplex].Contains(s))
+					{ 
+					}
+					else
+					{
+						cost += ServisesPrice[s];
+					}
+				}
+			}
+
+			cost = cost * (100 - discount) / 100;
+
+			return cost;
+		}
+
+		public static List<string> ServisesInComplexNames(string complexId)
+		{
+			if (СomplexesInclude.ContainsKey(complexId))
+			{
+				return СomplexesInclude[complexId].Select(x=> ServisesName[x]).ToList();				
+			}
+
+			return new List<string>();
+		}
+
+		public static List<string> ServisesIdNotInComplex(string servisesList)
+		{
+			var servises = servisesList.Split(' ');
+			string selectedComplex = null;
+
+			if (servises.Length > 0 && СomplexesName.ContainsKey(servises[0]))
+			{
+				selectedComplex = servises[0];
+			}
+
+			if (selectedComplex is null)
+			{
+				return servises.ToList();
+			}
+
+			var result = new List<string>();
+
+			foreach (var s in servises)
+			{
+				if (ServisesName.ContainsKey(s) && !СomplexesInclude[selectedComplex].Contains(s))
+				{
+					result.Add(s);
+				}
+			}
+
+			return result;
 
 		}
 
 		public static string GetServiserIdsString()
 		{
 			return $"\"{string.Join("\",\"", ServisesName.Keys)}\"";
+		}
+
+		public static string GetSelectedComplex(string servisesList)
+		{
+			var servises = servisesList.Split(' ');
+
+			if (servises.Length > 0 && СomplexesName.ContainsKey(servises[0]))
+			{
+				return servises[0];
+			}
+
+			return null;
 		}
 
 		public static string GetComplexesIdsString()

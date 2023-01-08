@@ -76,7 +76,7 @@ namespace ElasticaClients.Logic
 			return trainerPay[count];
 		}
 
-		internal static int Add(Training training)
+		public static int Add(Training training)
 		{
 			return TrainingDAL.Add(training);
 		}
@@ -98,7 +98,7 @@ namespace ElasticaClients.Logic
 			var onTraining = training.TrainingItems.Where(x =>
 			x.StatusId == (int)TrainingItemStatus.yes);
 
-			training.TrainerPay = GetPay(onTraining.Count());
+			training.TrainerPay = (int)(onTraining.Sum(x=>x.Cost) * 0.25);
 
 			//записано на тренировку
 			var signToTraining = training.TrainingItems.Where(x =>

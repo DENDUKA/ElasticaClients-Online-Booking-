@@ -101,8 +101,10 @@
 					@if (isAdminTrainer)
 					{
 						@(item.Razovoe ? $"(Стоимость: {item.RazovoeCost})" : "")<b class="text-warning">@(item.IsTrial ? "Пробное занятие" : "")</b>
-						<b class="text-danger">@(item.IsLast ? "Последнее занятие" : "")</b>
-					}
+					}				
+				
+					@Html.Partial("~/Views/Training/_ServisesBlock.cshtml", item.ServisesList)		
+					<div><b>Скидка: @item.Discount %</b></div>
 				</td>
 				<td>
 					<div class="btn-group btn-group-toggle radiobuttonStatus" data-toggle="buttons" id="@item.Id">
@@ -131,7 +133,6 @@
 					{
 						<div>
 							<div class="btn-group btn-group-toggle radiobuttonPayStatus" data-toggle="buttons" id="@item.Id">
-
 								<label class="btn btn-secondary tistatus-ok" status="@((int)ElasticaClients.DAL.Accessory.TrainingItemPayStatus.yes)">
 									<input type="radio" autocomplete="off" @(item.StatusPayId == (int)ElasticaClients.DAL.Accessory.TrainingItemPayStatus.yes ? "checked" : "")>
 									<i class="bi bi-credit-card"></i>
@@ -148,7 +149,7 @@
 								</label>
 							</div>
 						</div>
-					}
+					}					
 
 					@using (Html.BeginForm("Delete", "TrainingItem", new { id = item.Id }, FormMethod.Post, new { onsubmit = "return confirm('Удалить?');" }))
 					{

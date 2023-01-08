@@ -37,6 +37,7 @@
 	</div>
 
 	@Html.HiddenFor(model => model.Razovoe)
+	@Html.HiddenFor(model => model.ServisesList)	
 
 	<hr />
 	<h4>Комплексы :</h4>
@@ -164,10 +165,39 @@
 		})
 
 		var discount = $("#Discount").prop("value");
+		$("#cost").prop("value", cost * (100 - discount) / 100);
 
-		
+		FillCheckedServisesList();
+	}
 
-		$("#cost").prop("value", cost * (100-discount)/100);
+	function FillCheckedServisesList() {
+
+		var servList = $("#ServisesList");
+		var checkedServises = "";
+
+		complexesIds.forEach((e) => {
+			if ($("#" + e).prop('checked')) {
+				if (checkedServises == "") {
+					checkedServises = e;
+				}
+				else {
+					checkedServises = checkedServises + " " + e;
+				}
+			}
+		})
+
+		servisesIds.forEach((e) => {
+			if ($("#" + e).prop('checked')) {
+				if (checkedServises == "") {
+					checkedServises = e;
+				}
+				else {
+					checkedServises = checkedServises + " " + e;
+				}
+			}
+		})
+
+		servList.prop("value", checkedServises);
 	}
 
 	function GetSelectedCommplex() {
@@ -200,7 +230,15 @@
 		servisesList.forEach(e => $("#" + e).prop("checked", false));
 	}
 
-	$(document).ready(function () {
+	function FillCheckedFromController() {
 
+		$("#ServisesList").prop('value').split(' ').forEach((e) => {
+			$("#" + e).prop('checked', true);
+		})
+	}
+
+	$(document).ready(function () {
+		FillCheckedFromController();
+		RecalculateCost();
 	});
 </script>

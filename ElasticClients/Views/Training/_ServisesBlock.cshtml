@@ -1,0 +1,31 @@
+﻿@using ElasticaClients.DAL.Accessory;
+
+@model string
+
+<div>
+	@{var selectedComplexId = ElasticaClients.Models.ServisesHelper.GetSelectedComplex(Model);} 
+
+	@if (selectedComplexId != null)
+	{
+		<div><b>Комплекс : @ElasticaClients.Models.ServisesHelper.СomplexesName[selectedComplexId]</b></div>
+		<div>
+			@foreach (var s in ElasticaClients.Models.ServisesHelper.ServisesInComplexNames(selectedComplexId))
+			{
+				<div>
+					- @s
+				</div>
+			}
+		</div>
+	}
+
+	<div>
+		<b>Вне комплекса : </b>
+		@foreach (var s in ElasticaClients.Models.ServisesHelper.ServisesIdNotInComplex(Model))
+		{
+			<div>
+				- @ElasticaClients.Models.ServisesHelper.ServisesName[s]
+			</div>
+		}
+	</div>
+
+</div>
