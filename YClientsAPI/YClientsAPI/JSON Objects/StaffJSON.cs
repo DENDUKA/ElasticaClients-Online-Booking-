@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace YClientsAPI.JSON_Objects
 {
-	public class StaffJSON
-	{
-		public string name { get; set; }
-	}
+    public class StaffJSON
+    {
+        public string name { get; set; }
+    }
 }

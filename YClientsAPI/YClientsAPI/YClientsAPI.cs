@@ -41,7 +41,7 @@ namespace YClientsAPI
 			var request = new RestRequest
 			{
 				RequestFormat = DataFormat.Json,
-				Method = Method.POST,
+				Method = Method.Post,
 			};
 			request.AddHeader("Content-Type", "application/json");
 			request.AddHeader("Authorization", $"Bearer {Partner_token}");
@@ -59,7 +59,7 @@ namespace YClientsAPI
 			var request = new RestRequest()
 			{
 				RequestFormat = DataFormat.Json,
-				Method = Method.GET,
+				Method = Method.Get,
 			};
 
 			request.AddHeader("Content-Type", "application/json");
@@ -152,7 +152,7 @@ namespace YClientsAPI
 				var request = new RestRequest()
 				{
 					RequestFormat = DataFormat.Json,
-					Method = Method.POST,
+					Method = Method.Post,
 				};
 
 				request.AddHeader("Accept", "application/vnd.yclients.v2+json");
@@ -202,7 +202,7 @@ namespace YClientsAPI
 			var request = new RestRequest()
 			{
 				RequestFormat = DataFormat.Json,
-				Method = Method.POST,
+				Method = Method.Post,
 			};
 
 			request.AddHeader("Content-Type", "application/json");
@@ -248,7 +248,7 @@ namespace YClientsAPI
 			var request = new RestRequest()
 			{
 				RequestFormat = DataFormat.Json,
-				Method = Method.GET,
+				Method = Method.Get,
 			};
 
 			//request.AddHeader("Content-Type", "application/json");
@@ -315,7 +315,7 @@ namespace YClientsAPI
 
 			if (t != null)
 			{
-				Console.WriteLine($"Тренировка существует {activity.service.title}") ;
+				Console.WriteLine($"Тренировка существует {activity.service.title}");
 				return t;
 			}
 
@@ -352,13 +352,13 @@ namespace YClientsAPI
 			var request = new RestRequest()
 			{
 				RequestFormat = DataFormat.Json,
-				Method = Method.GET,
+				Method = Method.Get,
 			};
 
 			string dateStartStr = start.ToString("yyy-MM-dd");
 			string dateEndStr = end.ToString("yyy-MM-dd");
 
-			string cDateStartStr = new DateTime(1800,1,1).ToString("yyy-MM-dd");
+			string cDateStartStr = new DateTime(1800, 1, 1).ToString("yyy-MM-dd");
 			string cDateEndStr = new DateTime(3000, 1, 1).ToString("yyy-MM-dd");
 
 			//request.AddHeader("Content-Type", "application/json");

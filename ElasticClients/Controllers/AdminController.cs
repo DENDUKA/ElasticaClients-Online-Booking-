@@ -20,7 +20,7 @@ namespace ElasticaClients.Controllers
 
 		public void ReadAndAddAllClients()
 		{
-			YClientsAPI.Program.Main();
+			//YClientsAPI.Program.Main();
 		}
 
 		public void UnfreezeAllExpired()
