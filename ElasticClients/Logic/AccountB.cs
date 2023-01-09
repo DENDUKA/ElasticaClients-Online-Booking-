@@ -26,7 +26,7 @@ namespace ElasticaClients.Logic
 						  new SelectListItem
 						  {
 							  Selected = (g.Id == selectedId),
-							  Text = $"{g.Name} ({g.Phone})" ,
+							  Text = $"{g.Name} (+7{g.Phone})" ,
 							  Value = g.Id.ToString()
 						  })
 						  .OrderBy(y => y.Text)

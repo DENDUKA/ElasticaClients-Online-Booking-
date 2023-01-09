@@ -47,14 +47,19 @@
 		@foreach (var item in ElasticaClients.Models.ServisesHelper.СomplexesName)
 		{
 			<tr>
-				<td><label for="@item.Key">@item.Value</label></td>
-				<td>
-					<input id="@item.Key" type="checkbox" value="false" onchange="ComplexChanged(this)" />
-				</td>
-				<td>
-					@ElasticaClients.Models.ServisesHelper.СomplexesPrice[item.Key]
-				</td>
+                <td>
+                    <label for="@item.Key" style="margin:0">@item.Value</label>
+                    <input id="@item.Key" type="checkbox" value="false" onchange="ComplexChanged(this)" />
+                    @ElasticaClients.Models.ServisesHelper.СomplexesPrice[item.Key]
+                </td>				
 			</tr>
+            <tr>
+                <td>
+                    <label for="@item.Key" style="margin:0">
+                        (@String.Join(", ", ElasticaClients.Models.ServisesHelper.ServisesInComplexNames(item.Key)))
+                    </label>
+                </td>
+            </tr>
 		}
 	</table>
 

@@ -33,8 +33,9 @@ namespace ElasticaClients.Controllers
 			TrainingModel model = new TrainingModel
 			{
 				Duration = new TimeSpan(0, 0, 0),
-				Seats = 1
-			};
+				Seats = 1,
+                Name = "Лазерная эпиляция",
+            };
 
 			return View(model);
 		}
