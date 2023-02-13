@@ -4,6 +4,8 @@ using ElasticaClients.DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
+using Telegram.Bot.Types;
 
 namespace ElasticaClients.Logic
 {
@@ -27,7 +29,7 @@ namespace ElasticaClients.Logic
 
 		public static bool Add(TrainingItem trainingItem)
 		{
-			if (!IsAddValid(trainingItem))
+            if (!IsAddValid(trainingItem))
 			{
 				return false;
 			}
@@ -52,6 +54,8 @@ namespace ElasticaClients.Logic
 
 			TrainingB.ReacalculateValues(trainingItem.TrainingId);
 			SubscriptionB.RecalculateValues(trainingItem.SubscriptionId);
+
+			LogB.NewTrainingItem(trainingItem);
 
 			return true;
 		}
@@ -82,9 +86,11 @@ namespace ElasticaClients.Logic
 		{
 			var ti = TrainingItemB.Get(id);
 
-			TrainingItemDAL.Delete(id);			
+			TrainingItemDAL.Delete(id);
 
-			SubscriptionB.RecalculateValues(ti.SubscriptionId);
+            LogB.DeleteTrainingItem(ti);
+
+            SubscriptionB.RecalculateValues(ti.SubscriptionId);
 			TrainingB.ReacalculateValues(ti.TrainingId);
 		}
 

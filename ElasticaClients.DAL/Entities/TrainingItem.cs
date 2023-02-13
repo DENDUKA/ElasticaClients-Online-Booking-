@@ -75,5 +75,5 @@ namespace ElasticaClients.DAL.Entities
 		{
 			throw new NotImplementedException();
 		}
-	}
+    }
 }

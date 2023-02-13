@@ -25,7 +25,9 @@ namespace ElasticaClients.DAL.Data
 			{
 				return db.TrainingItems
 					.Where(x => x.Id == id)
-					.FirstOrDefault();
+                    .Include(x => x.Training.Gym.Branch)
+                    .Include(x => x.Account)
+                    .FirstOrDefault();
 			}
 		}
 
