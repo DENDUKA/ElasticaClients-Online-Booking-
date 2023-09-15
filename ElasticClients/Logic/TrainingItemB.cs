@@ -98,10 +98,10 @@ namespace ElasticaClients.Logic
 		{
 			if (AccountB.IsFirstTime(accountId))
 			{
-				return 150;
+				return 250;
 			}
 
-			return 400;
+			return 500;
 		}
 
 		/// <summary>
