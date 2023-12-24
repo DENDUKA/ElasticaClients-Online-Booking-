@@ -70,7 +70,6 @@ namespace ElasticaClients.Logic
 		public static int GetPay(int count)
 		{
 			if (count == 0) return 0;
-			if (count < 4) count = 4;
 			if (count > 10) count = 10;
 
 			return trainerPay[count];
@@ -176,24 +175,27 @@ namespace ElasticaClients.Logic
 
 		private static readonly Dictionary<int, int> trainerPay = new Dictionary<int, int>()
 		{
-			{ 4, 300 },
-			{ 5, 350 },
-			{ 6, 400},
-			{ 7, 400},
-			{ 8, 500},
-			{ 9, 500},
-			{ 10, 500},
-		};
+            { 1, 300 },
+            { 2, 300 },
+            { 3, 300 },
+            { 4, 400 },
+            { 5, 450 },
+            { 6, 450 },
+            { 7, 500 },
+            { 8, 500 },
+            { 9, 500 },
+            { 10, 600 },
+        };
 
         private static readonly Dictionary<int, int> trainerPaySynnyGroup = new Dictionary<int, int>()
         {
             { 1, 300 },
             { 2, 300 },
             { 3, 300 },
-            { 4, 350 },
-            { 5, 400 },
+            { 4, 400 },
+            { 5, 450 },
             { 6, 450 },
-            { 7, 450 },
+            { 7, 500 },
             { 8, 500 },
             { 9, 500 },
             { 10, 600 },
@@ -201,28 +203,28 @@ namespace ElasticaClients.Logic
 
         private static readonly Dictionary<int, int> trainerPaySynnyIndivid = new Dictionary<int, int>()
         {
-            { 1, 400 },
-            { 2, 500 },
+            { 1, 475 },
+            { 2, 750 },
         };
 
         private static readonly Dictionary<int, int> trainerCenterGroup = new Dictionary<int, int>()
 		{
-			{ 1, 300 },
-			{ 2, 300 },
-			{ 3, 300 },
-			{ 4, 350 },
-			{ 5, 350 },
-			{ 6, 400 },
-			{ 7, 450 },
-			{ 8, 500 },
-			{ 9, 500 },
-			{ 10, 500 },
-		};
+            { 1, 300 },
+            { 2, 300 },
+            { 3, 300 },
+            { 4, 400 },
+            { 5, 450 },
+            { 6, 450 },
+            { 7, 500 },
+            { 8, 500 },
+            { 9, 500 },
+            { 10, 600 },
+        };
 
         private static readonly Dictionary<int, int> trainerPayCenterIndivid = new Dictionary<int, int>()
         {
-            { 1, 400 },
-            { 2, 500 },
+            { 1, 475 },
+            { 2, 750 },
         };
     }
 }
