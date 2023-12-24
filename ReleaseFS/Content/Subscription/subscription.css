@@ -1,0 +1,56 @@
+﻿div.subscription {
+	width: 94%;
+	height: auto;
+	margin-left: 3%;
+	margin-top: 20px;
+	background: white;
+	border: 2px inset black;
+	border-radius: 8px;
+}
+
+div.subscription-line {
+	margin: 15px;
+	padding-top: 2px;
+	color: black;
+}
+
+span.training-heder {
+	text-align: center;
+}
+
+div.subscription-trainings-block {
+	height: auto;
+	min-height: 250px;
+	margin-right: 10px;
+	margin-left: 10px;
+	margin-top: 20px;
+	background: #cff9ff;
+	border: 2px inset blue;
+	border-radius: 15px;
+}
+
+div.subscription-training {
+	display: inline-block;
+	border: 2px inset black;
+	background: #fc3;
+	padding: 5px;
+	margin: 2px;
+	min-width: 77px;
+	min-height: 24px;
+	text-align: center;
+}
+
+div.training-yes {
+	background: green;
+	color: white;
+}
+
+div.training-unKnown {
+	background: black;
+	color: white;
+}
+
+div.training-no {
+	background: #b80022;
+	color: white;
+}

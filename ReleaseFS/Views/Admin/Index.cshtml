@@ -1,0 +1,47 @@
+﻿
+@{
+	/**/
+
+	ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+
+@*@using (Html.BeginForm("ParceExcelClients", "Admin"))
+	{
+
+		<input type="submit" value="Parce" class="btn btn-default" />
+	}
+
+	@using (Html.BeginForm("ReadAndAddAllClients", "Admin"))
+	{
+
+		<input type="submit" value="ReadAndAddAllClients" class="btn btn-default" />
+	}*@
+
+
+
+@*@using (Html.BeginForm("UnfreezeAllExpired", "Admin"))
+	{
+		<input type="submit" value="UnfreezeAllExpired" class="btn btn-default" />
+	}
+
+
+	@using (Html.BeginForm("CloseSubscription", "Admin"))
+	{
+		<input type="submit" value="CloseSubscription" class="btn btn-default" />
+	}*@
+
+@using (Html.BeginForm("RecalculateAllBonuses", "Admin"))
+{
+	<input type="submit" value="RecalculateAllBonuses" class="btn btn-default" style="border: black;" />
+}
+
+@using (Html.BeginForm("ExcelStats", "Admin"))
+{
+	@Html.AntiForgeryToken()
+	<input type="submit" value="ExcelStats" class="btn btn-default" style="border: black;" />
+}
+
+

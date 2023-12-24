@@ -1,0 +1,116 @@
+﻿@using FullCalendar
+
+@model ElasticaClients.Models.AccountModel
+
+<script src="~/Scripts/jquery-3.5.1.min.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+
+<script src="~/Scripts/fullcalendar.min.js"></script>
+<script src="~/Scripts/fullcalendar.helper.min.js"></script>
+<link href="~/Content/fullcalendar.min.css" rel="stylesheet" />
+<script src="~/Scripts/locale/ru.js"></script>
+
+@{
+	ViewBag.Title = "Страница тренера";
+}
+
+<div>
+	<h4>Страница тренера</h4>
+	<hr />
+	<dl class="dl-horizontal">
+		<dt>
+			@Html.DisplayNameFor(model => model.Name)
+		</dt>
+		<dd>
+			@Html.DisplayFor(model => model.Name)
+		</dd>
+		<dt>
+			@Html.DisplayNameFor(model => model.Instagram)
+		</dt>
+		<dd>
+			@Html.DisplayFor(model => model.Instagram)
+		</dd>
+		@if (ElasticaClients.Logic.AccountB.IsCurrentUserAdmin())
+		{
+			<dt>
+				@Html.DisplayNameFor(model => model.Email)
+			</dt>
+			<dd>
+				@Html.DisplayFor(model => model.Email)
+			</dd>
+			<dt>
+				Роль :
+			</dt>
+			<dd>
+				@Html.DisplayFor(model => model.Role.Name)
+			</dd>
+			<dt>
+				Зарплата
+			</dt>
+			<dd>
+				<span id="trainerPay"></span>
+			</dd>
+		}
+	</dl>
+</div>
+
+<h3>Расписание</h3>
+
+<div>
+	@Html.FullCalendar(settings =>
+{
+	settings.Name = "calendar";
+	settings.CssClass = "css-test";
+	settings.Header = new Header
+	{
+		Left = new ControlsBuilder().AddButton(HeaderButton.Prev).AddSeparator(HeaderSeparator.Adjacent)
+		.AddButton(HeaderButton.Next).AddSeparator(HeaderSeparator.Gap).AddButton(HeaderButton.Today),
+		Center = new ControlsBuilder().AddTitle(),
+		Right = new ControlsBuilder("month,listWeek")
+	};
+	settings.DefaultView = AvailableView.ListWeek.ToString();
+	settings.AllDaySlot = false;
+	settings.AllDayDefault = false;
+	settings.Selectable = false;
+	settings.SlotDuration = TimeSpan.FromMinutes(60);
+	settings.Events = Events.AsJsonFeed(Url.Action("GetTrainingsForTrainer", "TrainingCalendar", new { trainerId = Model.Id }));
+	settings.Locale = "ru";
+	settings.DisplayEventTime = true;
+	settings.EventLimit = 1000;
+	settings.FirstDay = DayOfWeek.Monday;
+	settings.SlotDuration = new TimeSpan(0, 30, 0);
+	settings.EventStartEditable = false;
+
+	settings.ClientSideEvents.EventClick = $"function (event, element) {{document.location.href = '{Url.Action("Details", "Training")}/' + event.id }}";
+	settings.ClientSideEvents.ViewRender = ElasticaClients.Logic.AccountB.IsCurrentUserAdmin() ? $"function (json) {{RerenderPageInfo() }}" : "";
+})
+</div>
+
+@if (ElasticaClients.Logic.AccountB.IsCurrentUserAdmin())
+{
+	<script>
+	function RerenderPageInfo() {
+		var calendar = $('#calendar');
+		var c = calendar.fullCalendar('getCalendar')
+
+		var view = c.view;
+		var start = new Date(view.start._d).toLocaleDateString("en-US");
+		var end = new Date(view.end._d).toLocaleDateString("en-US");
+
+		var url = window.location.toString();
+		var id = url.substring(url.lastIndexOf('/') + 1);
+
+		console.log(id);
+
+		$.ajax({
+            type: 'GET',
+			url: '@Url.Action("GetTrainerData", "Account")/?start=' + start + '&end=' + end + '&accId=' + id,
+			success: function (data) {
+				$("#trainerPay").text(data.pay);
+			console.log(data);
+            }
+		});
+	};
+	</script>
+}
+

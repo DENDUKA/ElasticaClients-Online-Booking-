@@ -1,0 +1,87 @@
+﻿@using ElasticaClients.Models;
+@model ElasticaClients.Models.AccountModel
+
+
+<div class="btn-group" role="group" aria-label="Basic example">
+	@if (ElasticaClients.Logic.AccountB.IsCurrentUserAdmin())
+	{
+		<button class="btn btn-info" onclick="location.href='@Url.Action("Edit", new { id = Model.Id })'"><i class="bi bi-pencil-square"></i> Редактировать</button>
+	}
+
+
+	@if (ElasticaClients.Logic.AccountB.IsCurrentUserAdminTrainer())
+	{
+		<button class="btn btn-primary" onclick="location.href='@Url.Action("Create", "Subscription", new { AccountId = Model.Id })'"><i class="bi bi-receipt"></i> Добавить абонемент</button>
+	}
+
+	@if (ElasticaClients.Logic.AccountB.IsCurrentUserAdmin())
+	{
+		<button class="btn btn-danger" onclick="location.href='@Url.Action("BonusesOff", "Account", new { AccountId = Model.Id })'"><i class="bi bi-scissors"></i>Списать баллы</button>
+	}
+</div>
+
+<div>
+	<dl class="dl-horizontal">
+		<dt>
+			@Html.DisplayNameFor(model => model.Name)
+		</dt>
+		<dd>
+			@Html.DisplayFor(model => model.Name)
+		</dd>
+		@if (ElasticaClients.Logic.AccountB.IsCurrentUserAdminTrainer() || System.Web.HttpContext.Current.User.Identity.Name == Model.Id.ToString())
+		{
+			@*<dt>
+				@Html.DisplayNameFor(model => model.Bonuses)
+			</dt>
+			<dd>
+				@Model.BonusesSummary
+			</dd>
+			if (ElasticaClients.Logic.AccountB.IsCurrentUserAdmin())
+			{
+				<dt>
+					@Html.DisplayNameFor(model => model.BonusesOff)
+				</dt>
+				<dd>
+					@Model.BonusesOff
+				</dd>
+			}*@
+			<dt>
+				@Html.DisplayNameFor(model => model.Instagram)
+			</dt>
+			<dd>
+				@Html.DisplayFor(model => model.Instagram)
+			</dd>
+			<dt>
+				@Html.DisplayNameFor(model => model.Email)
+			</dt>
+			<dd>
+				@Html.DisplayFor(model => model.Email)
+			</dd>
+			<dt>
+				@Html.DisplayNameFor(model => model.Phone)
+			</dt>
+			<dd>
+				+7<span>@Html.DisplayFor(model => model.Phone)
+			</dd>
+			if (ElasticaClients.Logic.AccountB.IsCurrentUserAdminTrainer())
+			{
+				<dt>
+					Роль :
+				</dt>
+				<dd>
+					@Html.DisplayFor(model => model.Role.Name)
+				</dd>
+			}
+		}
+	</dl>
+</div>
+
+Абонементы :
+
+@foreach (var item in Model.Subscriptions.OrderBy(x => x.StatusId))
+{
+	if (!(item.TrainingItems.Count == 0 && item.StatusId == (int)ElasticaClients.DAL.Accessory.SubscriptionStatus.Razovoe))
+	{
+		@Html.Partial("~/Views/Subscription/Partial/_SubscriptionBlock.cshtml", (SubscriptionModel)item)
+	}
+}
