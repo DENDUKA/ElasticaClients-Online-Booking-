@@ -750,6 +750,7 @@
     <Compile Include="Logic\AccountB.cs" />
     <Compile Include="Logic\Batches.cs" />
     <Compile Include="Logic\BranchB.cs" />
+    <Compile Include="Logic\ExcelGenerator.cs" />
     <Compile Include="Logic\ExcelHelper.cs" />
     <Compile Include="Logic\GymB.cs" />
     <Compile Include="Logic\IncomeB.cs" />
