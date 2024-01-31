@@ -51,100 +51,104 @@ namespace ElasticaClients.Logic
             accounts = AccountDAL.GetAllLight();
         }
 
-        public string MonthReport(int branchId, int year, int month)
+        public async Task<string> MonthReportAsync(int branchId, int year, int month)
         {
             var basePath = $"C:\\Server\\dataEL\\Excel\\Base.xlsx";
             var filePath = $"C:\\Server\\dataEL\\Excel\\{Guid.NewGuid()}.xlsx";
             File.Copy(basePath, filePath);
 
-            Month = month;
-            Year = year;
-            BranchId = branchId;
-
-            Application excel = new Application();
-            Workbook wb = excel.Workbooks.Open(filePath);
-            var wsheet = (Worksheet)wb.Sheets[1];
-
-            dateStart = new DateTime(year, month, 1);
-            dateEnd = dateStart.AddMonths(1);
-
-            var branch = BranchDAL.Get(branchId);
-
-            var trainings = new List<Training>();
-
-            foreach (var gym in branch.Gyms)
+            await Task.Run(() =>
             {
-                trainings.AddRange(TrainingDAL.GetAllForGym(gym.Id, dateStart, dateEnd));
-            }
 
-            trainings = trainings.OrderBy(x => x.StartTime).ToList();
+                Month = month;
+                Year = year;
+                BranchId = branchId;
 
-            for (int i = 0; i < trainings.Count; i++)
-            {
-                trainings[i] = TrainingDAL.Get(trainings[i].Id);
-            }
+                Application excel = new Application();
+                Workbook wb = excel.Workbooks.Open(filePath);
+                var wsheet = (Worksheet)wb.Sheets[1];
 
-            wsheet.Cells[27, 2] = DateTime.DaysInMonth(year, month);
+                dateStart = new DateTime(year, month, 1);
+                dateEnd = dateStart.AddMonths(1);
 
-            var subs = SubscriptionB.GetForBranch(branchId, dateStart.AddMonths(-12), dateEnd.AddYears(3));
+                var branch = BranchDAL.Get(branchId);
 
-            subscriptions = subs.ToDictionary(x => x.Id, x => x);
+                var trainings = new List<Training>();
 
-            for (int d = 1; d <= DateTime.DaysInMonth(year, month); d++)
-            {
-                var trainingsDay = TrainingsDay(trainings, d, month);
-
-                var allCount = 0;
-                var byAbon = 0;
-                var razovoe = 0;
-                var trial = 0;
-                var ostalsa = 0;
-                var fired = 0;
-
-                foreach (var t in trainingsDay)
+                foreach (var gym in branch.Gyms)
                 {
-                    if (t.Name[1] != individ[1] && t.Name[2] != individ[2])
-                    {
-                        var trialTI = TrialTIs(t.TrainingItems);
-                        var abonTI = BySubscription(t.TrainingItems);
-                        var ostalis = Ostalis(trialTI);
-                        var razovoeTI = RazovoeTIs(t.TrainingItems);
-                        var firedTI = FiredBySubscription(abonTI);
-
-                        allCount += AllValueTrainingItems(t.TrainingItems).Count;
-                        byAbon += abonTI.Count;
-                        fired += firedTI.Count;
-                        razovoe += razovoeTI.Count;
-                        trial += trialTI.Count;
-                        ostalsa += ostalis.Count;
-
-                        TrialByTrainer(trialTI, ostalis);
-
-                        TrainingValue(abonTI, razovoeTI, trialTI, firedTI, wsheet);
-                    }
-                    else
-                    {
-                    }
+                    trainings.AddRange(TrainingDAL.GetAllForGym(gym.Id, dateStart, dateEnd));
                 }
 
-                wsheet.Cells[3, 1 + d] = byAbon;
-                wsheet.Cells[4, 1 + d] = razovoe;
-                wsheet.Cells[5, 1 + d] = trial;
-                wsheet.Cells[6, 1 + d] = fired;
-                wsheet.Cells[7, 1 + d] = ostalsa;
-                wsheet.Cells[8, 1 + d] = subscriptions.Where(x => x.Value.BuyDate.Date == new DateTime(year, month, d)).Count();
-            }
+                trainings = trainings.OrderBy(x => x.StartTime).ToList();
 
-            WriteOstalisByTrainer(wsheet);
+                for (int i = 0; i < trainings.Count; i++)
+                {
+                    trainings[i] = TrainingDAL.Get(trainings[i].Id);
+                }
 
-            //WriteByTraining(trainings, wsheet);
+                wsheet.Cells[27, 2] = DateTime.DaysInMonth(year, month);
 
-            WriteSubs(subs, wsheet);
+                var subs = SubscriptionB.GetForBranch(branchId, dateStart.AddMonths(-12), dateEnd.AddYears(3));
 
-            WriteAllInOutCome(wsheet);
+                subscriptions = subs.ToDictionary(x => x.Id, x => x);
 
-            wb.Save();
-            wb.Close();
+                for (int d = 1; d <= DateTime.DaysInMonth(year, month); d++)
+                {
+                    var trainingsDay = TrainingsDay(trainings, d, month);
+
+                    var allCount = 0;
+                    var byAbon = 0;
+                    var razovoe = 0;
+                    var trial = 0;
+                    var ostalsa = 0;
+                    var fired = 0;
+
+                    foreach (var t in trainingsDay)
+                    {
+                        if (t.Name[1] != individ[1] && t.Name[2] != individ[2])
+                        {
+                            var trialTI = TrialTIs(t.TrainingItems);
+                            var abonTI = BySubscription(t.TrainingItems);
+                            var ostalis = Ostalis(trialTI);
+                            var razovoeTI = RazovoeTIs(t.TrainingItems);
+                            var firedTI = FiredBySubscription(abonTI);
+
+                            allCount += AllValueTrainingItems(t.TrainingItems).Count;
+                            byAbon += abonTI.Count;
+                            fired += firedTI.Count;
+                            razovoe += razovoeTI.Count;
+                            trial += trialTI.Count;
+                            ostalsa += ostalis.Count;
+
+                            TrialByTrainer(trialTI, ostalis);
+
+                            TrainingValue(abonTI, razovoeTI, trialTI, firedTI, wsheet);
+                        }
+                        else
+                        {
+                        }
+                    }
+
+                    wsheet.Cells[3, 1 + d] = byAbon;
+                    wsheet.Cells[4, 1 + d] = razovoe;
+                    wsheet.Cells[5, 1 + d] = trial;
+                    wsheet.Cells[6, 1 + d] = fired;
+                    wsheet.Cells[7, 1 + d] = ostalsa;
+                    wsheet.Cells[8, 1 + d] = subscriptions.Where(x => x.Value.BuyDate.Date == new DateTime(year, month, d)).Count();
+                }
+
+                WriteOstalisByTrainer(wsheet);
+
+                //WriteByTraining(trainings, wsheet);
+
+                WriteSubs(subs, wsheet);
+
+                WriteAllInOutCome(wsheet);
+
+                wb.Save();
+                wb.Close();
+            });
 
             return filePath;
         }

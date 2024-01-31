@@ -7,6 +7,7 @@ using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Z.EntityFramework.Plus;
 
 namespace ElasticaClients.DAL.Data
@@ -71,7 +72,18 @@ namespace ElasticaClients.DAL.Data
 				.ToList();			
 		}
 
-		public static List<Account> GetAll()
+		public static async Task<List<Account>> GetWithFilterAsync(int page, int count, string filter)
+		{
+			IsLoaded();
+
+            return await Task.Run(() => accounts
+				.Where(x => x.Name.Contains(filter, StringComparison.CurrentCultureIgnoreCase))
+				.Skip((page - 1) * count)
+				.Take(count)
+				.ToList());
+		}
+
+        public static List<Account> GetAll()
 		{
 			sw.Restart();
 

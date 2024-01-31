@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -40,18 +41,18 @@ namespace ElasticaClients.Controllers
 
         [HttpPost]
         [Authorize(Roles = "admin")]
-        public ActionResult Report(int branchId, int year, int month)
+        public async Task<ActionResult> Report(int branchId, int year, int month)
         {
             ExcelGenerator excel = new ExcelGenerator();
 
-            var path = excel.MonthReport(branchId, year, month);
+            var path = await excel.MonthReportAsync(branchId, year, month);
 
             var fileBytes = System.IO.File.ReadAllBytes(path);
 
             var branch = BranchB.GetAll().Where(x => x.Id == branchId).First();
             var fileName = $"{branch.Name}.{month}.{year}.xlst";
 
-            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+			return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
         }
 
         [Authorize(Roles = "admin")]

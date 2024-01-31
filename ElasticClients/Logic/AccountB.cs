@@ -6,6 +6,7 @@ using ElasticaClients.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace ElasticaClients.Logic
@@ -40,7 +41,12 @@ namespace ElasticaClients.Logic
 			return AccountDAL.GetWithFilter(page, count, filter);
 		}
 
-		public static List<Account> GetAll()
+        public static async Task< List<Account>> GetWithFilterAsync(int page, int count, string filter)
+        {
+            return await AccountDAL.GetWithFilterAsync(page, count, filter);
+        }
+
+        public static List<Account> GetAll()
 		{
 			return AccountDAL.GetAll();
 		}

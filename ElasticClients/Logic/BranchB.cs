@@ -4,6 +4,7 @@ using ElasticaClients.DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -19,7 +20,15 @@ namespace ElasticaClients.Logic
 			return branches;
 		}
 
-		public static IEnumerable<SelectListItem> ToSelectListItems(int selectedId = 0)
+		public static async Task<List<Branch>> GetAllAsync()
+		{
+			var branches = await BranchDAL.GetAllAsync();
+			branches.Remove(branches.First(x => x.Id == 4));
+
+			return branches;
+		}
+
+        public static IEnumerable<SelectListItem> ToSelectListItems(int selectedId = 0)
 		{
 			List<Branch> accounts = GetAll();
 

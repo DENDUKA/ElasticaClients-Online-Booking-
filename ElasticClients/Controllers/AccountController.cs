@@ -2,24 +2,26 @@
 using ElasticaClients.Logic;
 using ElasticaClients.Models;
 using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Security;
 
 namespace ElasticaClients.Controllers
 {
-	public class AccountController : Controller
+    public class AccountController : Controller
 	{
 		[Authorize(Roles = "admin")]
-		public ActionResult Index(int page = 1, int count = 1000000, string filter = "")
+		public async Task<ActionResult> Index(int page = 1, int count = 1000000, string filter = "")
 		{
-			var accs = AccountB.GetWithFilter(page, count, filter);
+			var accs = await AccountB.GetWithFilterAsync(page, count, filter);
 
 			var model = AccountModel.ToModelList(accs);
 
-			return View(model);
+			var res = await Task.Run(() => View(model));
+
+			return res;
 		}
 		
 		public ActionResult Details(int id)

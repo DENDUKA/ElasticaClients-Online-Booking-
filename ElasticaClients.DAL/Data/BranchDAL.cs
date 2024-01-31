@@ -1,7 +1,9 @@
 ﻿using ElasticaClients.DAL.Entities;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ElasticaClients.DAL.Data
 {
@@ -22,6 +24,14 @@ namespace ElasticaClients.DAL.Data
 				return db.Branches.Where(g => g.Id == id)
 					   .Include(g => g.Gyms)
 					   .First();
+			}
+		}
+
+		public static async Task<List<Branch>> GetAllAsync()
+		{
+			using (BranchContext db = new BranchContext())
+			{
+				return await Task.Run(() => db.Branches.ToList());
 			}
 		}
 	}
