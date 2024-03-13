@@ -93,6 +93,12 @@ namespace ElasticaClients.Logic
 			return false;
 		}
 
+		//public static void Activate(int id, DateTime activateDate)
+		//{
+		//	SubscriptionDAL.Activate(id, activateDate);
+  //          RecalculateValues(id);
+  //      }
+
 		public static void Update(Subscription sub)
 		{
 			SubscriptionDAL.Update(sub);
@@ -234,11 +240,10 @@ namespace ElasticaClients.Logic
 
 			if (sub.StatusId == (int)SubscriptionStatus.NotActivated)
 			{
-				sub.ActivateDate = activateDate;
-				sub.StatusId = (int)SubscriptionStatus.Activated;
-			}
+				sub.ActivateDate = activateDate;				
 
-			Update(sub);
+                SubscriptionDAL.Activate(id, activateDate);
+            }
 		}
 	}
 }

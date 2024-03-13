@@ -80,6 +80,25 @@ namespace ElasticaClients.DAL.Data
 			}
 		}
 
+		public static void Activate(int id, DateTime activateTime)
+		{
+			var activatedSub = new Subscription() { 
+				Id = id, 
+				StatusId = (int)SubscriptionStatus.Activated,
+				ActivateDate = activateTime,
+			};
+
+			using (SubscriptionContext db = new SubscriptionContext())
+			{
+				db.Subscriptions.Attach(activatedSub);
+
+                db.Entry(activatedSub).Property(x => x.ActivateDate).IsModified = true;
+                db.Entry(activatedSub).Property(x => x.StatusId).IsModified = true;
+
+                db.SaveChanges();
+            }
+		}
+
 		public static void Update(Subscription sub)
 		{
 			var oldSub = Get(sub.Id);
