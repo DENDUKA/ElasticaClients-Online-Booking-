@@ -78,7 +78,7 @@ namespace ElasticaClients.Models
 			{
 				if (StatusId == (int)SubscriptionStatus.Freezed)
 				{
-					if (FreezeSubscriptionList.Any())
+					if (FreezeSubscriptionList != null && FreezeSubscriptionList.Any())
 					{
 						return FreezeSubscriptionList.First(x => x.Id == FreezeSubscriptionList.Max(y => y.Id));
 					}

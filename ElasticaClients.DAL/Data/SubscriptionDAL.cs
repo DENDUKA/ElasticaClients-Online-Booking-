@@ -116,9 +116,15 @@ namespace ElasticaClients.DAL.Data
 
 				if (sub.StatusId == (int)SubscriptionStatus.Activated)
 				{
-					db.Entry(sub).Property(x => x.ActivateDate).IsModified = true;
-					sub.ActivateDate = oldSub.ActivateDate;
+					if (sub.ActivateDate is null && oldSub.ActivateDate != null)
+					{
+						sub.ActivateDate = oldSub.ActivateDate;
+					}
 
+					if (sub.ActivateDate != null)
+					{
+                        db.Entry(sub).Property(x => x.ActivateDate).IsModified = true;
+                    }
                 }					
 
 				db.SaveChanges();
