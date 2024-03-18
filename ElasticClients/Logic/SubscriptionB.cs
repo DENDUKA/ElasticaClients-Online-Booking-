@@ -189,6 +189,14 @@ namespace ElasticaClients.Logic
 					SubscriptionDAL.Update(sub);
 					SubscriptionDAL.UpdateFreeze(freeze);
 				}
+
+				if (freeze.Start > DateTime.Today)
+				{
+                    sub.StatusId = (int)SubscriptionStatus.Activated;
+
+                    SubscriptionDAL.Update(sub);
+                    SubscriptionDAL.UpdateFreeze(freeze);
+                }
 			}
 		}
 
