@@ -101,7 +101,7 @@ namespace ElasticaClients.Logic
 				return 250;
 			}
 
-			return 500;
+			return 600;
 		}
 
 		/// <summary>
