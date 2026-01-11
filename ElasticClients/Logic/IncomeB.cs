@@ -1,5 +1,4 @@
-﻿using ElasticaClients.DAL.Accessory;
-using ElasticaClients.DAL.Data;
+﻿using ElasticaClients.DAL.Data.Interfaces;
 using ElasticaClients.DAL.Entities;
 using System;
 using System.Collections.Generic;
@@ -8,48 +7,55 @@ using System.Web.Mvc;
 
 namespace ElasticaClients.Logic
 {
-	public static class IncomeB
-	{
-		public static Income Get(int id)
-		{
-			return IncomeDAL.Get(id);
-		}
+    public class IncomeB
+    {
+        private readonly IIncomeDAL _incomeDAL;
 
-		public static void Delete(int id)
-		{
-			IncomeDAL.Delete(id);
-		}
+        public IncomeB(IIncomeDAL incomeDAL)
+        {
+            _incomeDAL = incomeDAL;
+        }
 
-		public static void Add(Income income)
-		{
-			IncomeDAL.Add(income);
-		}
+        public Income Get(int id)
+        {
+            return _incomeDAL.Get(id);
+        }
 
-		public static void Update(Income income)
-		{
-			IncomeDAL.Update(income);
-		}
+        public void Delete(int id)
+        {
+            _incomeDAL.Delete(id);
+        }
 
-		public static List<Income> GetAll(int gymId, DateTime start, DateTime end)
-		{
-			return IncomeDAL.GetAll(gymId, start, end);
-		}
+        public void Add(Income income)
+        {
+            _incomeDAL.Add(income);
+        }
 
-		public static IEnumerable<SelectListItem> ToSelectListItems(int selectedId = 0)
-		{
-			var typesList = Income.IncomeTypeNameDictionary.Values.ToList();
+        public void Update(Income income)
+        {
+            _incomeDAL.Update(income);
+        }
 
-			List<SelectListItem> res = new List<SelectListItem>
-			{
-				new SelectListItem() { Text = "", Value = "" }
-			};
+        public List<Income> GetAll(int gymId, DateTime start, DateTime end)
+        {
+            return _incomeDAL.GetAll(gymId, start, end);
+        }
 
-			foreach (var x in Income.IncomeTypeNameDictionary)
-			{
-				res.Add(new SelectListItem() { Text = x.Value, Value = ((int)x.Key).ToString() });
-			}
+        public IEnumerable<SelectListItem> ToSelectListItems(int selectedId = 0)
+        {
+            var typesList = Income.IncomeTypeNameDictionary.Values.ToList();
 
-			return res;
-		}
-	}
+            List<SelectListItem> res = new List<SelectListItem>
+            {
+                new SelectListItem() { Text = "", Value = "" }
+            };
+
+            foreach (var x in Income.IncomeTypeNameDictionary)
+            {
+                res.Add(new SelectListItem() { Text = x.Value, Value = ((int)x.Key).ToString() });
+            }
+
+            return res;
+        }
+    }
 }

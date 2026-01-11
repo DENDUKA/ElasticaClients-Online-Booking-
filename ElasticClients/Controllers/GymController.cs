@@ -1,45 +1,49 @@
-﻿using ElasticaClients.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using ElasticaClients.Logic;
+using ElasticaClients.Models;
 using System.Web.Mvc;
 
 namespace ElasticaClients.Controllers
 {
     public class GymController : Controller
     {
-		[Authorize(Roles = "admin")]
-		public ActionResult Index(int branchId)
+        private readonly GymB _gymB;
+
+        public GymController(GymB gymB)
         {
-			return null;
+            _gymB = gymB;
         }
 
-		[Authorize(Roles = "admin")]
-		public ActionResult Details(int id)
-		{
-			var model = GymModel.Get(id);
+        [Authorize(Roles = "admin")]
+        public ActionResult Index(int branchId)
+        {
+            return null;
+        }
 
-			return View(model);
-		}
+        [Authorize(Roles = "admin")]
+        public ActionResult Details(int id)
+        {
+            var model = (GymModel)_gymB.Get(id);
 
-		[Authorize(Roles = "admin")]
-		public ActionResult Create()
-		{
-			return View();
-		}
+            return View(model);
+        }
 
-		[HttpPost]
-		[Authorize(Roles = "admin")]
-		public ActionResult Create(GymModel model)
-		{
-			return View();
-		}
-		[HttpPost]
-		[Authorize(Roles = "admin")]
-		public ActionResult Delete(int id)
-		{
-			return View();
-		}
-	}
+        [Authorize(Roles = "admin")]
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public ActionResult Create(GymModel model)
+        {
+            return View();
+        }
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public ActionResult Delete(int id)
+        {
+            return View();
+        }
+    }
 }

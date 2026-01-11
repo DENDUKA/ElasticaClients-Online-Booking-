@@ -2,11 +2,11 @@
 
 namespace ElasticaClients.DAL.Entities
 {
-	public class RoleContext : DbContext
-	{
-		public RoleContext() : base("FlyStretch")
-		{ }
+    public class RoleContext : DbContext
+    {
+        public RoleContext() : base("FlyStretch")
+        { }
 
-		public DbSet<Role> Roles { get; set; }
-	}
+        public DbSet<Role> Roles { get; set; }
+    }
 }

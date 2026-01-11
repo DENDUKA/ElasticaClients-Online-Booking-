@@ -1,6 +1,10 @@
-﻿@if (User.Identity != null && User.Identity.IsAuthenticated)
+@{
+    var AccountB = System.Web.Mvc.DependencyResolver.Current.GetService<ElasticaClients.Logic.AccountB>();
+}
+
+@if (User.Identity != null && User.Identity.IsAuthenticated)
 {
-	var currentAcc = ElasticaClients.Logic.AccountB.GetLite(Convert.ToInt32(User.Identity.Name));
+	var currentAcc = AccountB.GetLite(Convert.ToInt32(User.Identity.Name));
 
 	<li class="nav-item active">
 		@Html.ActionLink(currentAcc.Name, "Details", "Account", new { id = User.Identity.Name }, new { @class = "nav-link" })

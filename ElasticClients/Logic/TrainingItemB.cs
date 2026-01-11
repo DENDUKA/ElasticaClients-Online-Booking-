@@ -1,155 +1,167 @@
 ﻿using ElasticaClients.DAL.Accessory;
-using ElasticaClients.DAL.Data;
+using ElasticaClients.DAL.Data.Interfaces;
 using ElasticaClients.DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using Telegram.Bot.Types;
 
 namespace ElasticaClients.Logic
 {
-	public static class TrainingItemB
-	{
-		public static void ChangeStatus(int tiid, TrainingItemStatus tiStatus)
-		{
-			TrainingItemDAL.ChangeStatus(tiid, tiStatus);
+    public class TrainingItemB
+    {
+        private readonly ITrainingItemDAL _trainingItemDAL;
+        private readonly SubscriptionB _subscriptionB;
+        private readonly TrainingB _trainingB;
+        private readonly AccountB _accountB;
+        private readonly LogB _logB;
 
-			var ti = TrainingItemB.Get(tiid);
+        public TrainingItemB(ITrainingItemDAL trainingItemDAL, SubscriptionB subscriptionB, TrainingB trainingB, AccountB accountB, LogB logB)
+        {
+            _trainingItemDAL = trainingItemDAL;
+            _subscriptionB = subscriptionB;
+            _trainingB = trainingB;
+            _accountB = accountB;
+            _logB = logB;
+        }
+        public void ChangeStatus(int tiid, TrainingItemStatus tiStatus)
+        {
+            _trainingItemDAL.ChangeStatus(tiid, tiStatus);
 
-			SubscriptionB.RecalculateValues(ti.SubscriptionId);
-			TrainingB.ReacalculateValues(ti.TrainingId);
-			AccountB.ReacalculateBonuses(ti.AccountId);
-		}
+            var ti = Get(tiid);
 
-		public static void ChangePayStatus(int tiid, TrainingItemPayStatus tiPayStatus)
-		{
-			TrainingItemDAL.ChangePayStatus(tiid, tiPayStatus);
-		}
+            _subscriptionB.RecalculateValues(ti.SubscriptionId);
+            _trainingB.ReacalculateValues(ti.TrainingId);
+            _accountB.ReacalculateBonuses(ti.AccountId);
+        }
 
-		public static bool Add(TrainingItem trainingItem)
-		{
+        public void ChangePayStatus(int tiid, TrainingItemPayStatus tiPayStatus)
+        {
+            _trainingItemDAL.ChangePayStatus(tiid, tiPayStatus);
+        }
+
+        public bool Add(TrainingItem trainingItem)
+        {
             if (!IsAddValid(trainingItem))
-			{
-				return false;
-			}
+            {
+                return false;
+            }
 
-			if (trainingItem.Razovoe)
-			{
-				var training = TrainingB.Get(trainingItem.TrainingId);
+            if (trainingItem.Razovoe)
+            {
+                var training = _trainingB.Get(trainingItem.TrainingId);
 
-				var razovoe = SubscriptionB.GetRazovoe(trainingItem.AccountId, training.Gym.BranchId);
+                var razovoe = _subscriptionB.GetRazovoe(trainingItem.AccountId, training.Gym.BranchId);
 
-				trainingItem.SubscriptionId = razovoe.Id;
-				trainingItem.StatusPayId = (int)TrainingItemPayStatus.no;
-			}
-			else
-			{
-				IsFirstTrainingItemInSubscription(trainingItem);
-			}
+                trainingItem.SubscriptionId = razovoe.Id;
+                trainingItem.StatusPayId = (int)TrainingItemPayStatus.no;
+            }
+            else
+            {
+                IsFirstTrainingItemInSubscription(trainingItem);
+            }
 
-			trainingItem.StatusId = (int)TrainingItemStatus.unKnown;
+            trainingItem.StatusId = (int)TrainingItemStatus.unKnown;
 
-			TrainingItemDAL.Add(trainingItem);
+            _trainingItemDAL.Add(trainingItem);
 
-			TrainingB.ReacalculateValues(trainingItem.TrainingId);
-			SubscriptionB.RecalculateValues(trainingItem.SubscriptionId);
+            _trainingB.ReacalculateValues(trainingItem.TrainingId);
+            _subscriptionB.RecalculateValues(trainingItem.SubscriptionId);
 
-			LogB.NewTrainingItem(trainingItem);
+            _logB.NewTrainingItem(trainingItem);
 
-			return true;
-		}
+            return true;
+        }
 
-		internal static List<TrainingItem> GetAllForBranch(int branchId, DateTime start, DateTime end, bool onlyRazovoe)
-		{
-			return TrainingItemDAL.GetAllForBranch(branchId, start, end, onlyRazovoe);
-		}
+        internal List<TrainingItem> GetAllForBranch(int branchId, DateTime start, DateTime end, bool onlyRazovoe)
+        {
+            return _trainingItemDAL.GetAllForBranch(branchId, start, end, onlyRazovoe);
+        }
 
-		private static void IsFirstTrainingItemInSubscription(TrainingItem trainingItem)
-		{
-			var sub = SubscriptionB.Get(trainingItem.SubscriptionId);
-			if (sub.StatusId == (int)SubscriptionStatus.NotActivated && sub.TrainingItems.Count == 0)
-			{
-				Training training = TrainingB.Get(trainingItem.TrainingId);
-				sub.StatusId = (int)SubscriptionStatus.Activated;
-				sub.ActivateDate = training.StartTime.Date;
-				SubscriptionB.Update(sub);
-			}
-		}
+        private void IsFirstTrainingItemInSubscription(TrainingItem trainingItem)
+        {
+            var sub = _subscriptionB.Get(trainingItem.SubscriptionId);
+            if (sub.StatusId == (int)SubscriptionStatus.NotActivated && sub.TrainingItems.Count == 0)
+            {
+                Training training = _trainingB.Get(trainingItem.TrainingId);
+                sub.StatusId = (int)SubscriptionStatus.Activated;
+                sub.ActivateDate = training.StartTime.Date;
+                _subscriptionB.Update(sub);
+            }
+        }
 
-		public static TrainingItem Get(int id)
-		{
-			return TrainingItemDAL.Get(id);
-		}
+        public TrainingItem Get(int id)
+        {
+            return _trainingItemDAL.Get(id);
+        }
 
-		public static void Delete(int id)
-		{
-			var ti = TrainingItemB.Get(id);
+        public void Delete(int id)
+        {
+            var ti = Get(id);
 
-			TrainingItemDAL.Delete(id);
+            _trainingItemDAL.Delete(id);
 
-            LogB.DeleteTrainingItem(ti);
+            _logB.DeleteTrainingItem(ti);
 
-            SubscriptionB.RecalculateValues(ti.SubscriptionId);
-			TrainingB.ReacalculateValues(ti.TrainingId);
-		}
+            _subscriptionB.RecalculateValues(ti.SubscriptionId);
+            _trainingB.ReacalculateValues(ti.TrainingId);
+        }
 
-		public static int GetRazovoeCost(int accountId, int branchId)
-		{
-			if (AccountB.IsFirstTime(accountId))
-			{
-				return 400;
-			}
+        public int GetRazovoeCost(int accountId, int branchId)
+        {
+            if (_accountB.IsFirstTime(accountId))
+            {
+                return 400;
+            }
 
-			return 700;
-		}
+            return 700;
+        }
 
-		/// <summary>
-		/// Добавление всех предстоящих разовых тренировок в абонемент на чиная с дня покупки абонемента
-		/// </summary>
-		/// <param name="id"></param>
-		public static void AddRazovoesToSubscription(int accId, int subId)
-		{
-			Subscription sub = SubscriptionB.Get(subId);
+        /// <summary>
+        /// Добавление всех предстоящих разовых тренировок в абонемент на чиная с дня покупки абонемента
+        /// </summary>
+        /// <param name="id"></param>
+        public void AddRazovoesToSubscription(int accId, int subId)
+        {
+            Subscription sub = _subscriptionB.Get(subId);
 
-			var tis = TrainingItemB.GetAllForAccount(accId, sub.BuyDate, sub.BuyDate.AddDays(20))
-				.Where(x => x.Razovoe && x.StatusId != (int)TrainingItemStatus.canceledByAdmin);
+            var tis = GetAllForAccount(accId, sub.BuyDate, sub.BuyDate.AddDays(20))
+                .Where(x => x.Razovoe && x.StatusId != (int)TrainingItemStatus.canceledByAdmin);
 
-			foreach (var ti in tis)
-			{
-				ti.Razovoe = false;
-				ti.SubscriptionId = subId;
-				TrainingItemDAL.Update(ti);
-			}
-		}
+            foreach (var ti in tis)
+            {
+                ti.Razovoe = false;
+                ti.SubscriptionId = subId;
+                _trainingItemDAL.Update(ti);
+            }
+        }
 
-		public static List<TrainingItem> GetAllForAccount(int accountId)
-		{
-			var tis = TrainingItemDAL.GetAllForAccount(accountId);
+        public List<TrainingItem> GetAllForAccount(int accountId)
+        {
+            var tis = _trainingItemDAL.GetAllForAccount(accountId);
 
-			return tis is null ? new List<TrainingItem>() : tis;
-		}
+            return tis is null ? new List<TrainingItem>() : tis;
+        }
 
-		public static List<TrainingItem> GetAllForAccount(int accountId, DateTime start, DateTime end)
-		{
-			var tis = TrainingItemDAL.GetAllForAccount(accountId, start, end);
+        public List<TrainingItem> GetAllForAccount(int accountId, DateTime start, DateTime end)
+        {
+            var tis = _trainingItemDAL.GetAllForAccount(accountId, start, end);
 
-			return tis is null ? new List<TrainingItem>() : tis;
-		}
+            return tis is null ? new List<TrainingItem>() : tis;
+        }
 
-		private static bool IsAddValid(TrainingItem ti)
-		{
-			if (!ti.Razovoe)
-			{
-				Subscription sub = SubscriptionB.Get(ti.SubscriptionId);
+        private bool IsAddValid(TrainingItem ti)
+        {
+            if (!ti.Razovoe)
+            {
+                Subscription sub = _subscriptionB.Get(ti.SubscriptionId);
 
-				if (sub.TrainingsLeft <= 0)
-				{
-					return false;
-				}
-			}
+                if (sub.TrainingsLeft <= 0)
+                {
+                    return false;
+                }
+            }
 
-			return true;
-		}
-	}
+            return true;
+        }
+    }
 }

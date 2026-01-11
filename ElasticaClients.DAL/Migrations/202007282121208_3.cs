@@ -1,8 +1,7 @@
 ﻿namespace ElasticaClients.DAL.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class _3 : DbMigration
     {
         public override void Up()
@@ -14,7 +13,7 @@
             DropColumn("dbo.SubscriptionBuys", "Price");
             DropColumn("dbo.SubscriptionBuys", "CountTrainings");
         }
-        
+
         public override void Down()
         {
             AddColumn("dbo.SubscriptionBuys", "CountTrainings", c => c.Int(nullable: false));

@@ -1,18 +1,19 @@
-﻿@model ElasticaClients.Models.SubscriptionModel
+@model ElasticaClients.Models.SubscriptionModel
 
 @{
 	ViewBag.Title = "Details";
+	var AccountB = System.Web.Mvc.DependencyResolver.Current.GetService<ElasticaClients.Logic.AccountB>();
 }
 
 <div class="btn-group" role="group">
 
 	<button type="button" class="btn btn-secondary" onclick="GoBack()">Назад</button>
-	@if (ElasticaClients.Logic.AccountB.IsCurrentUserAdmin())
+	@if (AccountB.IsCurrentUserAdmin())
 	{
 		<button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Index", "Subscription")'">К списку абонементов</button>
 	}
 
-	@if (ElasticaClients.Logic.AccountB.IsCurrentUserAdmin())
+	@if (AccountB.IsCurrentUserAdmin())
 	{
 		using (Html.BeginForm("Reacalculate", "Subscription", new { id = Model.Id }, FormMethod.Post))
 		{

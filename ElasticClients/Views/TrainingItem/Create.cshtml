@@ -1,9 +1,11 @@
-﻿@model ElasticaClients.Models.TrainingItemModel
+@model ElasticaClients.Models.TrainingItemModel
 
 @{
 	ViewBag.Title = "Create";
+	var AccountB = System.Web.Mvc.DependencyResolver.Current.GetService<ElasticaClients.Logic.AccountB>();
+	var TrainingB = System.Web.Mvc.DependencyResolver.Current.GetService<ElasticaClients.Logic.TrainingB>();
 	int trainingid = Convert.ToInt32(Request.QueryString["trainingid"]);
-	var t = ElasticaClients.DAL.Data.TrainingDAL.Get(trainingid);
+	var t = TrainingB.Get(trainingid);
 	string startTimeFormat = $"{ElasticaClients.Models.ModelHelper.GetTimeFormat(t.StartTime)} {t.Name}";
 }
 
@@ -30,7 +32,7 @@
 			@Html.LabelFor(model => model.AccountId, htmlAttributes: new { @class = "control-label col-md-3" })
 			<div class="col-md-9">
 				<div class="row-fluid">
-					@Html.DropDownListFor(model => model.AccountId, ElasticaClients.Logic.AccountB.ToSelectListItems(), new { id = "accs", @class = "selectpicker", data_show_subtext = "true", data_live_search = "true" })
+					@Html.DropDownListFor(model => model.AccountId, AccountB.ToSelectListItems(), new { id = "accs", @class = "selectpicker", data_show_subtext = "true", data_live_search = "true" })
 				</div>
 				@Html.ValidationMessageFor(model => model.AccountId, "", new { @class = "text-danger" })
 			</div>

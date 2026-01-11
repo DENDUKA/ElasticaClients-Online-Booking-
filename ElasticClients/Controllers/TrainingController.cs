@@ -8,157 +8,168 @@ using System.Web.Mvc;
 
 namespace ElasticaClients.Controllers
 {
-	public class TrainingController : Controller
-	{
-		public ActionResult Index(int gymid)
-		{
-			var model = GymModel.Get(gymid);
+    public class TrainingController : Controller
+    {
+        private readonly TrainingB _trainingB;
+        private readonly GymB _gymB;
+        private readonly TrainingItemB _trainingItemB;
 
-			return View(model);
-		}
+        public TrainingController(TrainingB trainingB, GymB gymB, TrainingItemB trainingItemB)
+        {
+            _trainingB = trainingB;
+            _gymB = gymB;
+            _trainingItemB = trainingItemB;
+        }
 
-		public ActionResult Details(int id)
-		{
-			TrainingModel model = (TrainingModel)TrainingB.Get(id);
+        public ActionResult Index(int gymid)
+        {
+            var model = (GymModel)_gymB.Get(gymid);
 
-			return View(model);
-		}
+            return View(model);
+        }
 
-		[Authorize(Roles = "admin")]
-		public ActionResult Create(int gymid)
-		{
-			var gym = GymB.Get(gymid);
-			ViewData["GymId"] = gymid;
-			ViewData["GymName"] = gym.Name;
-			TrainingModel model = new TrainingModel();
-			model.Duration = new TimeSpan(1, 0, 0);
+        public ActionResult Details(int id)
+        {
+            TrainingModel model = (TrainingModel)_trainingB.Get(id);
 
-			return View(model);
-		}
+            return View(model);
+        }
 
-		[HttpPost]
-		[Authorize(Roles = "admin")]
-		public ActionResult Create(TrainingModel model)
-		{
-			try
-			{
-				if (ModelState.IsValid)
-				{
-					model.StartTime = model.StartDay.AddHours(model.StartTime.Hour).AddMinutes(model.StartTime.Minute);
+        [Authorize(Roles = "admin")]
+        public ActionResult Create(int gymid)
+        {
+            var gym = _gymB.Get(gymid);
+            ViewData["GymId"] = gymid;
+            ViewData["GymName"] = gym.Name;
+            TrainingModel model = new TrainingModel();
+            model.Duration = new TimeSpan(1, 0, 0);
 
-					model.StatusId = (int)TrainingStatus.Active;
-					int id = TrainingB.Add((Training)model);
+            return View(model);
+        }
 
-					return RedirectToAction("Details", "Training", new { id });
-				}
-			}
-			catch (Exception ex)
-			{
-				ModelState.AddModelError(string.Empty, ex.InnerException.InnerException.Message);
-			}
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public ActionResult Create(TrainingModel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    model.StartTime = model.StartDay.AddHours(model.StartTime.Hour).AddMinutes(model.StartTime.Minute);
 
-			var gym = GymB.Get(model.GymId);
-			ViewData["GymId"] = gym.Id;
-			ViewData["GymName"] = gym.Name;
-			model.StatusId = (int)TrainingStatus.Active;
+                    model.StatusId = (int)TrainingStatus.Active;
+                    int id = _trainingB.Add((Training)model);
 
-			return View(model);
-		}
+                    return RedirectToAction("Details", "Training", new { id });
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.InnerException.InnerException.Message);
+            }
 
-		[Authorize(Roles = "admin")]
-		public ActionResult Edit(int id)
-		{
-			var model = TrainingModel.Get(id);
-			return View(model);
-		}
+            var gym = _gymB.Get(model.GymId);
+            ViewData["GymId"] = gym.Id;
+            ViewData["GymName"] = gym.Name;
+            model.StatusId = (int)TrainingStatus.Active;
 
-		[HttpPost]
-		[Authorize(Roles = "admin")]
-		public ActionResult Edit(int id, TrainingModel model)
-		{
-			if (ModelState.IsValid)
-			{
-				model.StartTime = new DateTime(model.StartDay.Year, model.StartDay.Month, model.StartDay.Day, model.StartTime.Hour, model.StartTime.Minute, 0);
-				TrainingB.Update((Training)model);
+            return View(model);
+        }
 
-				return RedirectToAction("Details", new { id = model.Id });
-			}
+        [Authorize(Roles = "admin")]
+        public ActionResult Edit(int id)
+        {
+            var model = (TrainingModel)_trainingB.Get(id);
+            return View(model);
+        }
 
-			return View(model);
-		}
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public ActionResult Edit(int id, TrainingModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                model.StartTime = new DateTime(model.StartDay.Year, model.StartDay.Month, model.StartDay.Day, model.StartTime.Hour, model.StartTime.Minute, 0);
+                _trainingB.Update((Training)model);
 
-		[HttpPost]
-		[Authorize(Roles = "admin")]
-		public ActionResult Delete(int id)
-		{
-			try
-			{
-				Training t = TrainingB.Get(id);
+                return RedirectToAction("Details", new { id = model.Id });
+            }
 
-				TrainingB.Delete(id);
+            return View(model);
+        }
 
-				return RedirectToAction("Index", new { gymid = t.GymId });
-			}
-			catch (Exception ex)
-			{
-				return RedirectToAction("Index", "Gym");
-			}
-		}
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                Training t = _trainingB.Get(id);
 
-		[HttpPost]
-		[Authorize(Roles = "admin")]
-		public ActionResult Cancel(int id)
-		{
-			try
-			{
-				TrainingB.Cancel(id);
+                _trainingB.Delete(id);
 
-				return RedirectToAction("Details", new { id });
-			}
-			catch (Exception ex)
-			{
-				return RedirectToAction("Index", "Gym");
-			}
-		}
+                return RedirectToAction("Index", new { gymid = t.GymId });
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Index", "Gym");
+            }
+        }
 
-		[HttpPost]
-		[Authorize(Roles = "admin")]
-		public ActionResult Restore(int id)
-		{
-			try
-			{
-				TrainingB.Restore(id);
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public ActionResult Cancel(int id)
+        {
+            try
+            {
+                _trainingB.Cancel(id);
 
-				return RedirectToAction("Details", new { id });
-			}
-			catch (Exception ex)
-			{
-				return RedirectToAction("Index", "Gym");
-			}
-		}
+                return RedirectToAction("Details", new { id });
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Index", "Gym");
+            }
+        }
 
-		[HttpPost]
-		[Authorize(Roles = "admin,trainer")]
-		public void ChangeStatus(int tiid, int statusid)
-		{
-			Debug.WriteLine("ChangeStatus");
-			TrainingItemB.ChangeStatus(tiid, (TrainingItemStatus)statusid);
-		}
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public ActionResult Restore(int id)
+        {
+            try
+            {
+                _trainingB.Restore(id);
 
-		[HttpPost]
-		[Authorize(Roles = "admin,trainer")]
-		public void ChangePayStatus(int tiid, int statusid)
-		{
-			Debug.WriteLine("ChangePayStatus");
-			TrainingItemB.ChangePayStatus(tiid, (TrainingItemPayStatus)statusid);
-		}
+                return RedirectToAction("Details", new { id });
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Index", "Gym");
+            }
+        }
 
-		[HttpPost]
-		[Authorize(Roles = "admin")]
-		public ActionResult Reacalculate(int id)
-		{
-			TrainingB.ReacalculateValues(id);
-			return RedirectToAction("Details", new { id });
-		}
-	}
+        [HttpPost]
+        [Authorize(Roles = "admin,trainer")]
+        public void ChangeStatus(int tiid, int statusid)
+        {
+            Debug.WriteLine("ChangeStatus");
+            _trainingItemB.ChangeStatus(tiid, (TrainingItemStatus)statusid);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "admin,trainer")]
+        public void ChangePayStatus(int tiid, int statusid)
+        {
+            Debug.WriteLine("ChangePayStatus");
+            _trainingItemB.ChangePayStatus(tiid, (TrainingItemPayStatus)statusid);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public ActionResult Reacalculate(int id)
+        {
+            _trainingB.ReacalculateValues(id);
+            return RedirectToAction("Details", new { id });
+        }
+    }
 }

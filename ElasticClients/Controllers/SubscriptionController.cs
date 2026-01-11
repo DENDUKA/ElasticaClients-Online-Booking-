@@ -1,5 +1,6 @@
 ﻿using ElasticaClients.DAL.Accessory;
 using ElasticaClients.DAL.Entities;
+using ElasticaClients.Helpers;
 using ElasticaClients.Logic;
 using ElasticaClients.Models;
 using System;
@@ -8,162 +9,182 @@ using System.Web.Mvc;
 
 namespace ElasticaClients.Controllers
 {
-	public class SubscriptionController : Controller
-	{
-		[Authorize(Roles = "admin")]
-		public ActionResult Index()
-		{
-			int branchId = Helpers.NavigationHelper.GetBranchId(Session);
+    public class SubscriptionController : Controller
+    {
+        private readonly SubscriptionB _subscriptionB;
+        private readonly AccountB _accountB;
+        private readonly BranchB _branchB;
+        private readonly TrainingItemB _trainingItemB;
+        private readonly NavigationHelper _navigationHelper;
 
-			var subs = SubscriptionB.GetForBranch(branchId);
+        public SubscriptionController(
+            SubscriptionB subscriptionB, 
+            AccountB accountB, 
+            BranchB branchB, 
+            TrainingItemB trainingItemB,
+            NavigationHelper navigationHelper)
+        {
+            _subscriptionB = subscriptionB;
+            _accountB = accountB;
+            _branchB = branchB;
+            _trainingItemB = trainingItemB;
+            _navigationHelper = navigationHelper;
+        }
 
-			List<SubscriptionModel> model = new List<SubscriptionModel>();
+        [Authorize(Roles = "admin")]
+        public ActionResult Index()
+        {
+            int branchId = _navigationHelper.GetBranchId(Session);
 
-			foreach (var a in subs)
-			{
-				model.Add((SubscriptionModel)a);
-			}
+            var subs = _subscriptionB.GetForBranch(branchId);
 
-			return View(model);
-		}
+            List<SubscriptionModel> model = new List<SubscriptionModel>();
 
-		[Authorize]
-		public ActionResult Details(int id)
-		{
-			var model = (SubscriptionModel)SubscriptionB.Get(id);
+            foreach (var a in subs)
+            {
+                model.Add((SubscriptionModel)a);
+            }
 
-			var currentAccount = AccountB.GetCurrentUser();
-			if (currentAccount != null && currentAccount.RoleId == Role.clientId)
-			{
-				if (model.AccountId != currentAccount.Id)
-				{
-					return RedirectToAction("Details", "Account", new { id = currentAccount.Id });
-				}
-			}
+            return View(model);
+        }
 
-			return View(model);
-		}
+        [Authorize]
+        public ActionResult Details(int id)
+        {
+            var model = (SubscriptionModel)_subscriptionB.Get(id);
 
-		[Authorize(Roles = "admin,trainer")]
-		public ActionResult Create(int? branchId, int AccountId = 0)
-		{
-			SubscriptionModel model = new SubscriptionModel
-			{
-				BuyDate = DateTime.Today,
-				BranchId = BranchB.GetBranchId(Session),
-				ActiveDays = 31,
-			};
+            var currentAccount = _accountB.GetCurrentUser();
+            if (currentAccount != null && currentAccount.RoleId == Role.clientId)
+            {
+                if (model.AccountId != currentAccount.Id)
+                {
+                    return RedirectToAction("Details", "Account", new { id = currentAccount.Id });
+                }
+            }
 
-			if (AccountId != 0)
-			{
-				model.AccountId = AccountId;
-			}
+            return View(model);
+        }
 
-			return View(model);
-		}
+        [Authorize(Roles = "admin,trainer")]
+        public ActionResult Create(int? branchId, int AccountId = 0)
+        {
+            SubscriptionModel model = new SubscriptionModel
+            {
+                BuyDate = DateTime.Today,
+                BranchId = _branchB.GetBranchId(Session),
+                ActiveDays = 31,
+            };
 
-		[HttpPost]
-		[Authorize(Roles = "admin,trainer")]
-		public ActionResult Create(SubscriptionModel model)
-		{
-			try
-			{
-				if (ModelState.IsValid)
-				{
-					var sub = (Subscription)model;
-					sub.StatusId = (int)SubscriptionStatus.NotActivated;
-					
-					SubscriptionB.Add(sub);
+            if (AccountId != 0)
+            {
+                model.AccountId = AccountId;
+            }
 
-					if (model.TiToThisSub)
-					{
-						TrainingItemB.AddRazovoesToSubscription(sub.AccountId, sub.Id);
-					}
+            return View(model);
+        }
 
-					return RedirectToAction("Details", "Subscription", new { id = sub.Id });
-				}
+        [HttpPost]
+        [Authorize(Roles = "admin,trainer")]
+        public ActionResult Create(SubscriptionModel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var sub = (Subscription)model;
+                    sub.StatusId = (int)SubscriptionStatus.NotActivated;
 
-				return View(model);
-			}
-			catch (Exception ex)
-			{
-				return View(model);
-			}
-		}
+                    _subscriptionB.Add(sub);
 
-		[Authorize(Roles = "admin")]
-		public ActionResult Edit(int id)
-		{
-			var model = (SubscriptionModel)SubscriptionB.Get(id);
-			return View(model);
-		}
+                    if (model.TiToThisSub)
+                    {
+                        _trainingItemB.AddRazovoesToSubscription(sub.AccountId, sub.Id);
+                    }
 
-		[HttpPost]
-		[Authorize(Roles = "admin")]
-		public ActionResult Edit(int id, SubscriptionModel model)
-		{
-			if (ModelState.IsValid)
-			{
-				SubscriptionB.Update((Subscription)model);
+                    return RedirectToAction("Details", "Subscription", new { id = sub.Id });
+                }
 
-				return RedirectToAction("Index");
-			}
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                return View(model);
+            }
+        }
 
-			return View(model);
-		}
+        [Authorize(Roles = "admin")]
+        public ActionResult Edit(int id)
+        {
+            var model = (SubscriptionModel)_subscriptionB.Get(id);
+            return View(model);
+        }
 
-		[HttpPost]
-		[Authorize(Roles = "owner")]
-		public ActionResult Delete(int id)
-		{
-			try
-			{
-				SubscriptionB.Delete(id);
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public ActionResult Edit(int id, SubscriptionModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                _subscriptionB.Update((Subscription)model);
 
-				return RedirectToAction("Index");
-			}
-			catch (Exception ex)
-			{
-				return RedirectToAction("Index");
-			}
-		}
+                return RedirectToAction("Index");
+            }
 
-		[Authorize(Roles = "admin")]
-		public ActionResult Activate(int id)
-		{
-			Subscription sub = SubscriptionB.Get(id);
+            return View(model);
+        }
 
-			if (sub.StatusId != (int)SubscriptionStatus.NotActivated)
-			{
-				return RedirectToAction("Details", new { id });
-			}
+        [HttpPost]
+        [Authorize(Roles = "owner")]
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                _subscriptionB.Delete(id);
 
-			var model = (SubscriptionModel)sub;
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Index");
+            }
+        }
 
-			model.ActivateDate = model.BuyDate;
+        [Authorize(Roles = "admin")]
+        public ActionResult Activate(int id)
+        {
+            Subscription sub = _subscriptionB.Get(id);
 
-			return View(model);
-		}
+            if (sub.StatusId != (int)SubscriptionStatus.NotActivated)
+            {
+                return RedirectToAction("Details", new { id });
+            }
 
-		[HttpPost]
-		[Authorize(Roles = "admin")]
-		[ValidateAntiForgeryToken]
-		public ActionResult Activate(SubscriptionModel model)
-		{
-			if (model.ActivateDate != null)
-			{
-				SubscriptionB.Activate(model.Id, (DateTime)model.ActivateDate);
-			}
+            var model = (SubscriptionModel)sub;
 
-			return RedirectToAction("Details", new { model.Id });
-		}		
+            model.ActivateDate = model.BuyDate;
 
-		[HttpPost]
-		[Authorize(Roles = "admin")]
-		public ActionResult Reacalculate(int id)
-		{
-			SubscriptionB.RecalculateValues(id);
-			return RedirectToAction("Details", new { id });
-		}
-	}
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        [ValidateAntiForgeryToken]
+        public ActionResult Activate(SubscriptionModel model)
+        {
+            if (model.ActivateDate != null)
+            {
+                _subscriptionB.Activate(model.Id, (DateTime)model.ActivateDate);
+            }
+
+            return RedirectToAction("Details", new { model.Id });
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public ActionResult Reacalculate(int id)
+        {
+            _subscriptionB.RecalculateValues(id);
+            return RedirectToAction("Details", new { id });
+        }
+    }
 }

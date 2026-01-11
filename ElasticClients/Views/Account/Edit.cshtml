@@ -2,6 +2,7 @@
 
 @{
 	ViewBag.Title = "Edit";
+	var roleB = System.Web.Mvc.DependencyResolver.Current.GetService<ElasticaClients.Logic.RoleB>();
 }
 
 <h2>Редактирование</h2>
@@ -28,7 +29,7 @@
 	<div class="form-group">
 		@Html.LabelFor(model => model.RoleId, htmlAttributes: new { @class = "control-label col-md-2" })
 		<div class="col-md-10">
-			@Html.DropDownListFor(model => model.RoleId, ElasticaClients.Models.RoleModel.GetSelectListItems(Model.Id), new { id = "subs", @class = "form-control" })
+			@Html.DropDownListFor(model => model.RoleId, ElasticaClients.Models.RoleModel.GetSelectListItems(roleB, Model.Id), new { id = "subs", @class = "form-control" })
 			@Html.ValidationMessageFor(model => model.RoleId, "", new { @class = "text-danger" })
 		</div>
 	</div>

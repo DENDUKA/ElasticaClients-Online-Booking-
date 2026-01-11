@@ -1,13 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace ElasticaClients.Logic
 {
     public class ExcelHelper
     {
-        internal static string ExcelStats()
+        private readonly TrainingB _trainingB;
+
+        public ExcelHelper(TrainingB trainingB)
+        {
+            _trainingB = trainingB;
+        }
+
+        internal string ExcelStats()
         {
             var ObjExcel = new Microsoft.Office.Interop.Excel.Application();
             var ObjWorkBook = ObjExcel.Workbooks.Add(System.Reflection.Missing.Value);
@@ -21,34 +26,34 @@ namespace ElasticaClients.Logic
             ObjWorkSheet.Cells[5, 1] = "Кол-во посетителей (Солнечный)";
             ObjWorkSheet.Cells[6, 1] = "Кол-во новичков (Центр)";
 
-            var sunTrainings = TrainingB.GetAllForGym(11).OrderBy(x=>x.StartTime).ToList();
-            var centerTrainings = TrainingB.GetAllForGym(3).OrderBy(x => x.StartTime).ToList();
+            var sunTrainings = _trainingB.GetAllForGym(11).OrderBy(x => x.StartTime).ToList();
+            var centerTrainings = _trainingB.GetAllForGym(3).OrderBy(x => x.StartTime).ToList();
 
             int dateCell = 2;
 
-            DateTime dt = new DateTime(2021,11,01);
+            DateTime dt = new DateTime(2021, 11, 01);
 
 
-            for (int i =0;i< sunTrainings.Count;i++)
+            for (int i = 0; i < sunTrainings.Count; i++)
             {
-				sunTrainings[i] = TrainingB.Get(sunTrainings[i].Id);
+                sunTrainings[i] = _trainingB.Get(sunTrainings[i].Id);
             }
 
             for (int i = 0; i < centerTrainings.Count; i++)
             {
-                centerTrainings[i] = TrainingB.Get(centerTrainings[i].Id);
+                centerTrainings[i] = _trainingB.Get(centerTrainings[i].Id);
             }
 
             while (dt <= DateTime.Today)
             {
                 ObjWorkSheet.Cells[2, dateCell] = dt.ToString();
 
-                var sunTs = sunTrainings.Where(x=>x.StartTime.Year == dt.Year && x.StartTime.Month == dt.Month && x.StartTime.Day == dt.Day).ToList();
+                var sunTs = sunTrainings.Where(x => x.StartTime.Year == dt.Year && x.StartTime.Month == dt.Month && x.StartTime.Day == dt.Day).ToList();
                 var cenTs = centerTrainings.Where(x => x.StartTime.Year == dt.Year && x.StartTime.Month == dt.Month && x.StartTime.Day == dt.Day).ToList();
 
 
 
-                ObjWorkSheet.Cells[3, dateCell] = sunTs.Sum(x=>x.SeatsTaken);
+                ObjWorkSheet.Cells[3, dateCell] = sunTs.Sum(x => x.SeatsTaken);
 
                 var xxxx = sunTs.Select(x => x.TrainingItems.Where(y => y.IsTrial)).ToList();
                 ObjWorkSheet.Cells[4, dateCell] = sunTs.Select(x => x.TrainingItems.Where(y => y.IsTrial)).Count();

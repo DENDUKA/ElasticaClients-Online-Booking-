@@ -1,8 +1,7 @@
 ﻿namespace ElasticaClients.DAL.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class _20 : DbMigration
     {
         public override void Up()
@@ -14,12 +13,12 @@
             CreateTable(
                 "dbo.Branches",
                 c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(),
-                    })
+                {
+                    Id = c.Int(nullable: false, identity: true),
+                    Name = c.String(),
+                })
                 .PrimaryKey(t => t.Id);
-            
+
             AddColumn("dbo.Subscriptions", "BranchId", c => c.Int(nullable: false));
             AddColumn("dbo.Incomes", "BranchId", c => c.Int(nullable: false));
             CreateIndex("dbo.Subscriptions", "BranchId");
@@ -29,7 +28,7 @@
             DropColumn("dbo.Subscriptions", "GymId");
             DropColumn("dbo.Incomes", "GymId");
         }
-        
+
         public override void Down()
         {
             AddColumn("dbo.Incomes", "GymId", c => c.Int(nullable: false));

@@ -1,8 +1,7 @@
 ﻿using ElasticaClients.DAL.Accessory;
 using ElasticaClients.DAL.Cache;
-using ElasticaClients.DAL.Data;
+using ElasticaClients.DAL.Data.Interfaces;
 using ElasticaClients.DAL.Entities;
-using ElasticaClients.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,202 +10,219 @@ using System.Web.Mvc;
 
 namespace ElasticaClients.Logic
 {
-	public static class AccountB
-	{
-		public static IEnumerable<SelectListItem> ToSelectListItems(int selectedId = 0)
-		{
-			List<Account> accounts = AccountDAL.GetAll();
+    public class AccountB
+    {
+        private readonly IAccountDAL _accountDAL;
+        private readonly ISubscriptionDAL _subscriptionDAL;
+        private readonly ITrainingItemDAL _trainingItemDAL;
+        private readonly BranchB _branchB;
 
-			List<SelectListItem> x = new List<SelectListItem>
-			{
-				new SelectListItem() { Text = "", Value = "" }
-			};
-
-			x.AddRange(accounts
-					  .Select(g =>
-						  new SelectListItem
-						  {
-							  Selected = (g.Id == selectedId),
-							  Text = g.Name,
-							  Value = g.Id.ToString()
-						  })
-						  .OrderBy(y => y.Text)
-						  .ToList());
-
-			return x;
-		}
-
-		public static List<Account> GetWithFilter(int page, int count, string filter)
-		{
-			return AccountDAL.GetWithFilter(page, count, filter);
-		}
-
-        public static async Task< List<Account>> GetWithFilterAsync(int page, int count, string filter)
+        public AccountB(IAccountDAL accountDAL, ISubscriptionDAL subscriptionDAL, ITrainingItemDAL trainingItemDAL, BranchB branchB)
         {
-            return await AccountDAL.GetWithFilterAsync(page, count, filter);
+            _accountDAL = accountDAL;
+            _subscriptionDAL = subscriptionDAL;
+            _trainingItemDAL = trainingItemDAL;
+            _branchB = branchB;
         }
 
-        public static List<Account> GetAll()
-		{
-			return AccountDAL.GetAll();
-		}
+        public IEnumerable<SelectListItem> ToSelectListItems(int selectedId = 0)
+        {
+            List<Account> accounts = _accountDAL.GetAll();
 
-		public static int GetSettingsBranchId()
-		{
-			int branchId = 0;
-			Account acc = null;
+            List<SelectListItem> x = new List<SelectListItem>
+            {
+                new SelectListItem() { Text = "", Value = "" }
+            };
 
-			if (System.Web.HttpContext.Current != null &&
-				System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
-			{
-				var accId = System.Web.HttpContext.Current.User.Identity.Name;
+            x.AddRange(accounts
+                      .Select(g =>
+                          new SelectListItem
+                          {
+                              Selected = (g.Id == selectedId),
+                              Text = g.Name,
+                              Value = g.Id.ToString()
+                          })
+                          .OrderBy(y => y.Text)
+                          .ToList());
 
-				acc = AccountDAL.GetLite(int.Parse(accId));
-				if (acc != null)
-				{
-					branchId = acc.SettingsBranchId;
-				}
-			}
+            return x;
+        }
 
-			if (branchId == 0)
-			{
-				branchId = BranchB.GetAll().First().Id;
-				if (acc != null)
-				{
-					acc.SettingsBranchId = branchId;
-					AccountDAL.Update(acc);
-				}
-			}
+        public List<Account> GetWithFilter(int page, int count, string filter)
+        {
+            return _accountDAL.GetWithFilter(page, count, filter);
+        }
 
-			return branchId;
-		}
+        public async Task<List<Account>> GetWithFilterAsync(int page, int count, string filter)
+        {
+            return await _accountDAL.GetWithFilterAsync(page, count, filter);
+        }
 
-		public static Account GetTrainer(int id)
-		{
-			return AccountDAL.GetTrainer(id);
-		}
+        public List<Account> GetAll()
+        {
+            return _accountDAL.GetAll();
+        }
 
-		public static Account Get(int id, DateTime trainingsFrom, DateTime trainingsTo)
-		{
-			return AccountDAL.Get(id, trainingsFrom, trainingsTo);
-		}
+        public int GetSettingsBranchId()
+        {
+            int branchId = 0;
+            Account acc = null;
 
-		public static bool IsFirstTime(int accountId)
-		{
-			var tis = TrainingItemB.GetAllForAccount(accountId);
+            if (System.Web.HttpContext.Current != null &&
+                System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
+            {
+                var accId = System.Web.HttpContext.Current.User.Identity.Name;
 
-			return !tis.Any(x => x.StatusId == (int)TrainingItemStatus.yes || x.StatusId == (int)TrainingItemStatus.unKnown || x.StatusId == (int)TrainingItemStatus.no);
-		}
+                acc = _accountDAL.GetLite(int.Parse(accId));
+                if (acc != null)
+                {
+                    branchId = acc.SettingsBranchId;
+                }
+            }
 
-		internal static Account Get(int id)
-		{
-			var acc = AccountDAL.Get(id);
-			return AccountDAL.Get(id);
-		}
+            if (branchId == 0)
+            {
+                branchId = _branchB.GetAll().First().Id;
+                if (acc != null)
+                {
+                    acc.SettingsBranchId = branchId;
+                    _accountDAL.Update(acc);
+                }
+            }
 
-		public static void Delete(int id)
-		{
-			AccountDAL.Delete(id);
-		}
+            return branchId;
+        }
 
-		public static void Add(Account account)
-		{
-			AccountDAL.Add(account); 
-			CreateRazovoeSubs(account);
-		}
+        public Account GetTrainer(int id)
+        {
+            return _accountDAL.GetTrainer(id);
+        }
 
-		public static void Update(Account account)
-		{
-			AccountDAL.Update(account);
-		}
+        public Account Get(int id, DateTime trainingsFrom, DateTime trainingsTo)
+        {
+            return _accountDAL.Get(id, trainingsFrom, trainingsTo);
+        }
 
-		public static Account GetLite(int id)
-		{
-			return AccountDAL.GetLite(id);
-		}
+        public bool IsFirstTime(int accountId)
+        {
+            var tis = _trainingItemDAL.GetAllForAccount(accountId);
 
-		public static Account GetCurrentUser()
-		{
-			if (System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
-			{
-				return GetLite(int.Parse(System.Web.HttpContext.Current.User.Identity.Name));
-			}
+            if (tis == null)
+            {
+                return true;
+            }
 
-			return null;
-		}
+            return !tis.Any(x => x.StatusId == (int)TrainingItemStatus.yes || x.StatusId == (int)TrainingItemStatus.unKnown || x.StatusId == (int)TrainingItemStatus.no);
+        }
 
-		public static bool IsCurrentUserOwner()
-		{
-			return System.Web.HttpContext.Current.User.IsInRole(Role.owner);
-		}
+        internal Account Get(int id)
+        {
+            return _accountDAL.Get(id);
+        }
 
-		internal static void BonusesOff(int accountId, int bonusesOff)
-		{
-			var acc = Get(accountId);
-			acc.BonusesOff += bonusesOff;
-			Update(acc);
-		}
+        public void Delete(int id)
+        {
+            _accountDAL.Delete(id);
+        }
 
-		public static bool IsCurrentUserAdmin()
-		{
-			return System.Web.HttpContext.Current.User.IsInRole(Role.admin);
-		}
+        public void Add(Account account)
+        {
+            _accountDAL.Add(account);
+            CreateRazovoeSubs(account);
+        }
 
-		public static bool IsCurrentUserAdminTrainer()
-		{
-			return System.Web.HttpContext.Current.User.IsInRole(Role.trainer);
-		}
+        public void Update(Account account)
+        {
+            _accountDAL.Update(account);
+        }
 
-		public static bool IsCurrentUserClient()
-		{
-			if (!System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
-			{
-				return true;
-			}
+        public Account GetLite(int id)
+        {
+            return _accountDAL.GetLite(id);
+        }
 
-			Account acc = GetLite(int.Parse(System.Web.HttpContext.Current.User.Identity.Name));
-			return acc.RoleId == Role.clientId;
-		}
+        public Account GetCurrentUser()
+        {
+            if (System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
+            {
+                return GetLite(int.Parse(System.Web.HttpContext.Current.User.Identity.Name));
+            }
 
-		private static readonly DateTime bonusesDateStart = new DateTime(2021, 11, 20, 0, 0, 0);
-		private static readonly DateTime bonusesDateEnd = new DateTime(2022, 3, 1, 0, 0, 0);
+            return null;
+        }
 
-		public static void ReacalculateBonuses(int id)
-		{
-			var acc = AccountDAL.Get(id);
+        public bool IsCurrentUserOwner()
+        {
+            return System.Web.HttpContext.Current.User.IsInRole(Role.owner);
+        }
 
-			acc.Bonuses = acc.TrainingItems.Count(x => x.Date >= bonusesDateStart && x.Date < bonusesDateEnd && !x.Razovoe && x.StatusId == (int)TrainingItemStatus.yes);
+        internal void BonusesOff(int accountId, int bonusesOff)
+        {
+            var acc = Get(accountId);
+            acc.BonusesOff += bonusesOff;
+            Update(acc);
+        }
 
-			AccountDAL.UpdateBonuses(acc);
+        public bool IsCurrentUserAdmin()
+        {
+            return System.Web.HttpContext.Current.User.IsInRole(Role.admin);
+        }
 
-			AccountCache.BonusesChanged(acc.Id, acc.Bonuses);
-		}
+        public bool IsCurrentUserAdminTrainer()
+        {
+            return System.Web.HttpContext.Current.User.IsInRole(Role.trainer);
+        }
 
-		private static void CreateRazovoeSubs(Account account)
-		{
-			foreach (var b in BranchB.GetAll())
-			{
-				Subscription sub = new Subscription()
-				{
-					AccountId = account.Id,
-					BuyDate = DateTime.Today,
-					BranchId = b.Id,
-					Cost = 0,
-					ActiveDays = 0,
-					ByCash = false,
-					TrainingCount = 0,
-					StatusId = (int)SubscriptionStatus.Razovoe,
-					Name = "Разовый",
-					ActivateDate = null,
-				};
+        public bool IsCurrentUserClient()
+        {
+            if (!System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
+            {
+                return true;
+            }
 
-				SubscriptionDAL.Add(sub);
-			}
-		}
+            Account acc = GetLite(int.Parse(System.Web.HttpContext.Current.User.Identity.Name));
+            return acc.RoleId == Role.clientId;
+        }
 
-		internal static Account GetByPhone(string phone)
-		{
-			return AccountDAL.GetByPhone(phone);
-		}
-	}
+        private static readonly DateTime bonusesDateStart = new DateTime(2021, 11, 20, 0, 0, 0);
+        private static readonly DateTime bonusesDateEnd = new DateTime(2022, 3, 1, 0, 0, 0);
+
+        public void ReacalculateBonuses(int id)
+        {
+            var acc = _accountDAL.Get(id);
+
+            acc.Bonuses = acc.TrainingItems.Count(x => x.Date >= bonusesDateStart && x.Date < bonusesDateEnd && !x.Razovoe && x.StatusId == (int)TrainingItemStatus.yes);
+
+            _accountDAL.UpdateBonuses(acc);
+
+            AccountCache.BonusesChanged(acc.Id, acc.Bonuses);
+        }
+
+        private void CreateRazovoeSubs(Account account)
+        {
+            foreach (var b in _branchB.GetAll())
+            {
+                Subscription sub = new Subscription()
+                {
+                    AccountId = account.Id,
+                    BuyDate = DateTime.Today,
+                    BranchId = b.Id,
+                    Cost = 0,
+                    ActiveDays = 0,
+                    ByCash = false,
+                    TrainingCount = 0,
+                    StatusId = (int)SubscriptionStatus.Razovoe,
+                    Name = "Разовый",
+                    ActivateDate = null,
+                };
+
+                _subscriptionDAL.Add(sub);
+            }
+        }
+
+        internal Account GetByPhone(string phone)
+        {
+            return _accountDAL.GetByPhone(phone);
+        }
+    }
 }

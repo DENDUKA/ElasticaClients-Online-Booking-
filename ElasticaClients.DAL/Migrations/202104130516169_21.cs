@@ -1,8 +1,7 @@
 ﻿namespace ElasticaClients.DAL.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class _21 : DbMigration
     {
         public override void Up()
@@ -11,7 +10,7 @@
             CreateIndex("dbo.Gyms", "BranchId");
             AddForeignKey("dbo.Gyms", "BranchId", "dbo.Branches", "Id", cascadeDelete: true);
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.Gyms", "BranchId", "dbo.Branches");

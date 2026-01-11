@@ -1,11 +1,11 @@
-﻿
-@{
+﻿@{
 	ViewBag.Title = "MainPage";
+	var AccountB = System.Web.Mvc.DependencyResolver.Current.GetService<ElasticaClients.Logic.AccountB>();
 }
 
 <div class="row">
 
-	@if (ElasticaClients.Logic.AccountB.IsCurrentUserAdmin())
+	@if (AccountB.IsCurrentUserAdmin())
 	{
 		<div class="col-md-4  navpanel">
 			<button type="button" class="btn mb-2 mb-md-0 btn-info btn-block h-100"

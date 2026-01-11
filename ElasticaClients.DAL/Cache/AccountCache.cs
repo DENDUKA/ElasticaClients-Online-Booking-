@@ -1,44 +1,44 @@
-﻿using ElasticaClients.DAL.Data;
+﻿using ElasticaClients.DAL.Data.Interfaces;
 using ElasticaClients.DAL.Entities;
 using System.Collections.Generic;
 
 namespace ElasticaClients.DAL.Cache
 {
-	public static class AccountCache
-	{
-		private static bool lightIsFill = false;
-		private static Dictionary<int, Account> lightAccounts = new Dictionary<int, Account>();
+    public static class AccountCache
+    {
+        private static bool lightIsFill = false;
+        private static Dictionary<int, Account> lightAccounts = new Dictionary<int, Account>();
 
-		public static Account GetLite(int id)
-		{
-			if (!lightIsFill)
-			{
-				lightAccounts.Clear();
+        public static Account GetLite(int id)
+        {
+            if (!lightIsFill)
+            {
+                lightAccounts.Clear();
 
-				lightAccounts = AccountDAL.GetAllLight();
+                lightAccounts = new AccountDAL().GetAllLight();
 
-				lightIsFill = true;
-			}
+                lightIsFill = true;
+            }
 
-			if (lightAccounts.ContainsKey(id))
-			{
-				return lightAccounts[id];
-			}
+            if (lightAccounts.ContainsKey(id))
+            {
+                return lightAccounts[id];
+            }
 
-			return null;
-		}
+            return null;
+        }
 
-		public static void BonusesChanged(int id, int bonuses)
-		{
-			if (lightAccounts.ContainsKey(id))
-			{
-				lightAccounts[id].Bonuses = bonuses;
-			}
-		}
+        public static void BonusesChanged(int id, int bonuses)
+        {
+            if (lightAccounts.ContainsKey(id))
+            {
+                lightAccounts[id].Bonuses = bonuses;
+            }
+        }
 
-		public static void AccontChanged()
-		{
-			lightIsFill = false;
-		}
-	}
+        public static void AccontChanged()
+        {
+            lightIsFill = false;
+        }
+    }
 }

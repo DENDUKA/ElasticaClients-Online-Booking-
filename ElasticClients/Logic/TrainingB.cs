@@ -1,180 +1,186 @@
 ﻿using ElasticaClients.DAL.Accessory;
-using ElasticaClients.DAL.Data;
+using ElasticaClients.DAL.Data.Interfaces;
 using ElasticaClients.DAL.Entities;
-using ElasticaClients.Models;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 
 namespace ElasticaClients.Logic
 {
-	public static class TrainingB
-	{
-		private static Stopwatch sw = new Stopwatch();
+    public class TrainingB
+    {
+        private static Stopwatch sw = new Stopwatch();
+        private readonly ITrainingDAL _trainingDAL;
+        private readonly ITrainingItemDAL _trainingItemDAL;
 
-		public static Training Get(int id)
-		{
-			return TrainingDAL.Get(id);
-		}
+        public TrainingB(ITrainingDAL trainingDAL, ITrainingItemDAL trainingItemDAL)
+        {
+            _trainingDAL = trainingDAL;
+            _trainingItemDAL = trainingItemDAL;
+        }
 
-		public static void Update(Training t)
-		{
-			TrainingDAL.Update(t);
-			ReacalculateValues(t.Id);
-		}
+        public Training Get(int id)
+        {
+            return _trainingDAL.Get(id);
+        }
 
-		public static List<Training> GetAllForGym(int gymId)
-		{
-			return TrainingDAL.GetAllForGym(gymId);
-		}
+        public void Update(Training t)
+        {
+            _trainingDAL.Update(t);
+            ReacalculateValues(t.Id);
+        }
 
-		public static List<Training> GetAllForGym(int gymId, DateTime start, DateTime end)
-		{
-			return TrainingDAL.GetAllForGym(gymId, start, end);
-		}
+        public List<Training> GetAllForGym(int gymId)
+        {
+            return _trainingDAL.GetAllForGym(gymId);
+        }
 
-		internal static List<Training> GetAllForTrainer(int trainerId, DateTime start, DateTime end)
-		{
-			return TrainingDAL.GetAllForTrainer(trainerId, start, end);
-		}
+        public List<Training> GetAllForGym(int gymId, DateTime start, DateTime end)
+        {
+            return _trainingDAL.GetAllForGym(gymId, start, end);
+        }
 
-		//public static void UpdateStatusBatch(DateTime start, DateTime end)
-		//{
-		//	using (TrainingContext db = new TrainingContext())
-		//	{
-		//		var ts = db.Trainings
-		//			.Include(x => x.TrainingItems)
-		//			.Where(x => x.StartTime > start && x.StartTime < end && x.StatusId == Status.willId);
+        internal List<Training> GetAllForTrainer(int trainerId, DateTime start, DateTime end)
+        {
+            return _trainingDAL.GetAllForTrainer(trainerId, start, end);
+        }
 
-		//		foreach (var x in ts)
-		//		{
-		//			if (x.StatusId == Status.willId)
-		//			{
-		//				if (x.TrainingItems.Count == 0)
-		//				{
-		//					x.StatusId = Status.canceledId;
-		//					Update(x);
-		//				}
-		//				if (x.TrainingItems.Count != 0 && x.StartTime < DateTime.Now)
-		//				{
-		//					x.StatusId = Status.completedId;
-		//					Update(x);
-		//				}
-		//			}
-		//		}
-		//	}
-		//}
+        //public  static void UpdateStatusBatch(DateTime start, DateTime end)
+        //{
+        //	using (TrainingContext db = new TrainingContext())
+        //	{
+        //		var ts = db.Trainings
+        //			.Include(x => x.TrainingItems)
+        //			.Where(x => x.StartTime > start && x.StartTime < end && x.StatusId == Status.willId);
 
-		public static int GetPay(int count)
-		{
-			if (count == 0) return 0;
-			if (count > 10) count = 10;
+        //		foreach (var x in ts)
+        //		{
+        //			if (x.StatusId == Status.willId)
+        //			{
+        //				if (x.TrainingItems.Count == 0)
+        //				{
+        //					x.StatusId = Status.canceledId;
+        //					Update(x);
+        //				}
+        //				if (x.TrainingItems.Count != 0 && x.StartTime < DateTime.Now)
+        //				{
+        //					x.StatusId = Status.completedId;
+        //					Update(x);
+        //				}
+        //			}
+        //		}
+        //	}
+        //}
 
-			return trainerPay[count];
-		}
+        public int GetPay(int count)
+        {
+            if (count == 0) return 0;
+            if (count > 10) count = 10;
 
-		internal static int Add(Training training)
-		{
-			return TrainingDAL.Add(training);
-		}
+            return trainerPay[count];
+        }
 
-		/// <summary>
-		/// Поля SeatsLeft, TrainerPay - вычисляемые
-		/// </summary>
-		public static void ReacalculateValues(int id)
-		{
-			sw.Restart();
+        internal int Add(Training training)
+        {
+            return _trainingDAL.Add(training);
+        }
 
-			var training = TrainingB.Get(id);
-			if (training is null)
-			{
-				return;
-			}
+        /// <summary>
+        /// Поля SeatsLeft, TrainerPay - вычисляемые
+        /// </summary>
+        public void ReacalculateValues(int id)
+        {
+            sw.Restart();
 
-			//пришли на тренировку
-			var onTraining = training.TrainingItems.Where(x =>
-			x.StatusId == (int)TrainingItemStatus.yes);
+            var training = Get(id);
+            if (training is null)
+            {
+                return;
+            }
 
-			training.TrainerPay = GetPay(onTraining.Count());
+            //пришли на тренировку
+            var onTraining = training.TrainingItems.Where(x =>
+            x.StatusId == (int)TrainingItemStatus.yes);
 
-			//записано на тренировку
-			var signToTraining = training.TrainingItems.Where(x =>
-				x.StatusId == (int)TrainingItemStatus.yes ||
-				x.StatusId == (int)TrainingItemStatus.unKnown);
+            training.TrainerPay = GetPay(onTraining.Count());
 
-			training.SeatsTaken = signToTraining.Count();
+            //записано на тренировку
+            var signToTraining = training.TrainingItems.Where(x =>
+                x.StatusId == (int)TrainingItemStatus.yes ||
+                x.StatusId == (int)TrainingItemStatus.unKnown);
 
-			TrainingDAL.Update(training);
+            training.SeatsTaken = signToTraining.Count();
 
-			sw.Stop();
-			Debug.WriteLine($"Training ReacalculateValues {sw.ElapsedMilliseconds}");
-		}
+            _trainingDAL.Update(training);
+
+            sw.Stop();
+            Debug.WriteLine($"Training ReacalculateValues {sw.ElapsedMilliseconds}");
+        }
 
 
-		public static bool IsTimeFree(int gymId, DateTime startTime, DateTime endTime, int currentTrainingId)
-		{
-			var trainings = TrainingDAL.GetAllForGym(gymId, startTime.AddHours(-12), startTime.AddHours(12));
+        public bool IsTimeFree(int gymId, DateTime startTime, DateTime endTime, int currentTrainingId)
+        {
+            var trainings = _trainingDAL.GetAllForGym(gymId, startTime.AddHours(-12), startTime.AddHours(12));
 
-			foreach (var t in trainings)
-			{
-				if (startTime >= t.EndTime || t.StartTime >= endTime)
-				{
+            foreach (var t in trainings)
+            {
+                if (startTime >= t.EndTime || t.StartTime >= endTime)
+                {
 
-				}
-				else
-				{
-					if(t.Id != currentTrainingId)
-					return false;
-				}
-			}
+                }
+                else
+                {
+                    if (t.Id != currentTrainingId)
+                        return false;
+                }
+            }
 
-			return true;
-		}
+            return true;
+        }
 
-		//Записан ли человек на тренировку
-		public static bool IsAccountSigned(int trainingId, int accountId)
-		{
-			var training = TrainingDAL.Get(trainingId);
+        //Записан ли человек на тренировку
+        public bool IsAccountSigned(int trainingId, int accountId)
+        {
+            var training = _trainingDAL.Get(trainingId);
 
-			return training.TrainingItems.Exists(x => x.AccountId == accountId);
-		}
+            return training.TrainingItems.Exists(x => x.AccountId == accountId);
+        }
 
-		//Есть ли места на тренировке
-		public static bool IsHaveSeat(int trainingId)
-		{
-			var training = TrainingDAL.Get(trainingId);
+        //Есть ли места на тренировке
+        public bool IsHaveSeat(int trainingId)
+        {
+            var training = _trainingDAL.Get(trainingId);
 
-			return training.Seats - training.SeatsTaken > 0;
-		}
+            return training.Seats - training.SeatsTaken > 0;
+        }
 
-		public static void Cancel(int id)
-		{
-			Training t = Get(id);
-			t.StatusId = (int)TrainingStatus.Canceled;
-			Update(t);
+        public void Cancel(int id)
+        {
+            Training t = Get(id);
+            t.StatusId = (int)TrainingStatus.Canceled;
+            Update(t);
 
-			foreach (var ti in t.TrainingItems)
-			{
-				TrainingItemB.ChangeStatus(ti.Id, TrainingItemStatus.canceledByAdmin);
-			}
-		}
+            foreach (var ti in t.TrainingItems)
+            {
+                _trainingItemDAL.ChangeStatus(ti.Id, TrainingItemStatus.canceledByAdmin);
+            }
+        }
 
-		internal static void Restore(int id)
-		{
-			Training t = Get(id);
-			t.StatusId = (int)TrainingStatus.Active;
-			Update(t);
-		}
+        internal void Restore(int id)
+        {
+            Training t = Get(id);
+            t.StatusId = (int)TrainingStatus.Active;
+            Update(t);
+        }
 
-		public static void Delete(int id)
-		{
-			TrainingDAL.Delete(id);
-		}
+        public void Delete(int id)
+        {
+            _trainingDAL.Delete(id);
+        }
 
-		private static readonly Dictionary<int, int> trainerPay = new Dictionary<int, int>()
-		{
+        private static readonly Dictionary<int, int> trainerPay = new Dictionary<int, int>()
+        {
             { 1, 300 },
             { 2, 300 },
             { 3, 300 },
@@ -208,7 +214,7 @@ namespace ElasticaClients.Logic
         };
 
         private static readonly Dictionary<int, int> trainerCenterGroup = new Dictionary<int, int>()
-		{
+        {
             { 1, 300 },
             { 2, 300 },
             { 3, 300 },

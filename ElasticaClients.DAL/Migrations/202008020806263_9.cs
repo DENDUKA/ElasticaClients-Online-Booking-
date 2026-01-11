@@ -1,8 +1,7 @@
 ﻿namespace ElasticaClients.DAL.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class _9 : DbMigration
     {
         public override void Up()
@@ -14,7 +13,7 @@
             CreateIndex("dbo.Subscriptions", "SubscriptionStatusId");
             AddForeignKey("dbo.Subscriptions", "SubscriptionStatusId", "dbo.SubscriptionStatus", "Id", cascadeDelete: false);
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.Subscriptions", "SubscriptionStatusId", "dbo.SubscriptionStatus");

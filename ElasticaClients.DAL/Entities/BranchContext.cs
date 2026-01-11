@@ -2,11 +2,11 @@
 
 namespace ElasticaClients.DAL.Entities
 {
-	class BranchContext : DbContext
-	{
-		public BranchContext() : base("FlyStretch")
-		{ }
+    class BranchContext : DbContext
+    {
+        public BranchContext() : base("FlyStretch")
+        { }
 
-		public DbSet<Branch> Branches { get; set; }	
-	}
+        public DbSet<Branch> Branches { get; set; }
+    }
 }

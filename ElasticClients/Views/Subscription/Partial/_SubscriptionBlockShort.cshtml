@@ -1,6 +1,10 @@
-﻿@using ElasticaClients.DAL.Accessory;
+@using ElasticaClients.DAL.Accessory;
 
 @model ElasticaClients.Models.SubscriptionModel
+
+@{
+    var AccountB = System.Web.Mvc.DependencyResolver.Current.GetService<ElasticaClients.Logic.AccountB>();
+}
 
 <div class="subscription rounded">
 	<div class="subscription-line">
@@ -11,7 +15,7 @@
 		<span>Номер абонемента: <b>@Html.ActionLink($"№{Model.Id.ToString()}", "Details", "Subscription", new { @Id = Model.Id }, new { })</b> на <b>@Model.TrainingCount</b> занятий</span>
 	</div>
 
-	@if (ElasticaClients.Logic.AccountB.IsCurrentUserAdmin())
+	@if (AccountB.IsCurrentUserAdmin())
 	{
 		<div class="subscription-line">
 			<span>Куплен: <b>@Model.Branch.Name</b></span>
@@ -51,7 +55,7 @@
 		<span>Осталось занятий: <b>@Model.TrainingsLeft</b></span>
 	</div>
 
-	@if (ElasticaClients.Logic.AccountB.IsCurrentUserAdmin())
+	@if (AccountB.IsCurrentUserAdmin())
 	{
 		<div class="btn-group" role="group">
 			<button type="button" class="btn btn-secondary" onclick="location.href='@Url.Action("Edit", "Subscription", new { Id = Model.Id })'">Редактировать</button>
@@ -63,14 +67,14 @@
 			{
 				<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("Activate", "Subscription", new { Id = Model.Id })'">Активация</button>
 			}
-			@if (Model.StatusId == (int)SubscriptionStatus.Freezed && ElasticaClients.Logic.AccountB.IsCurrentUserAdmin())
+			@if (Model.StatusId == (int)SubscriptionStatus.Freezed && AccountB.IsCurrentUserAdmin())
 			{
 				using (Html.BeginForm("UnFreeze", "SubscriptionFreeze", new { SubscriptionId = Model.Id }))
 				{
 					<button type="submit" class="btn btn-info">Разморозить</button>
 				}
 			}
-			@if (ElasticaClients.Logic.AccountB.IsCurrentUserOwner())
+			@if (AccountB.IsCurrentUserOwner())
 			{
 				using (Html.BeginForm("Delete", "Subscription", new { Id = Model.Id }, FormMethod.Post, new { @class = "inline", onsubmit = "return confirm('Удалить " + @Model.Id + "?');" }))
 				{

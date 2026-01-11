@@ -1,5 +1,4 @@
 ﻿using ElasticaClients.DAL.Accessory;
-using ElasticaClients.DAL.Data;
 using ElasticaClients.DAL.Entities;
 using ElasticaClients.Logic;
 using System;
@@ -9,157 +8,168 @@ using System.Linq;
 
 namespace ElasticaClients.Models
 {
-	public class IncomeTotalModel
-	{
-		private Stopwatch sw = new Stopwatch();
+    public class IncomeTotalModel
+    {
+        private Stopwatch sw = new Stopwatch();
+        private readonly IncomeB _incomeB;
+        private readonly BranchB _branchB;
+        private readonly TrainingB _trainingB;
+        private readonly SubscriptionB _subscriptionB;
+        private readonly TrainingItemB _trainingItemB;
 
-		public IncomeTotalModel(int branchId, DateTime start, DateTime end)
-		{
-			Trainings = new List<Training>();
+        public IncomeTotalModel(IncomeB incomeB, BranchB branchB, TrainingB trainingB, SubscriptionB subscriptionB, TrainingItemB trainingItemB, int branchId, DateTime start, DateTime end)
+        {
+            _incomeB = incomeB;
+            _branchB = branchB;
+            _trainingB = trainingB;
+            _subscriptionB = subscriptionB;
+            _trainingItemB = trainingItemB;
 
-			BranchId = branchId;
-			Start = start;
-			End = end;
+            Trainings = new List<Training>();
 
-			LoadIncomes();
-			LoadSubscriptions();
-			LoadRazovoes();
-			LoadSalary();
+            BranchId = branchId;
+            Start = start;
+            End = end;
 
-			SetAllIncome();
-		}
-	
-		public List<IIncome> AllIncomes { get; set; }
+            LoadIncomes();
+            LoadSubscriptions();
+            LoadRazovoes();
+            LoadSalary();
 
-		public List<Income> Incomes { get; set; }
+            SetAllIncome();
+        }
 
-		public List<Subscription> Subscriptions { get; set; }
+        public List<IIncome> AllIncomes { get; set; }
 
-		public List<TrainingItem> Razovoes { get; set; }
+        public List<Income> Incomes { get; set; }
 
-		public List<Training> Trainings  { get; set; }
+        public List<Subscription> Subscriptions { get; set; }
 
-		public int BranchId { get; set; }
-		public DateTime Start { get; set; }
-		public DateTime End { get; set; }
+        public List<TrainingItem> Razovoes { get; set; }
 
-		private int salaryTotal = 0;
-		public int SalaryTotal
-		{
-			get
-			{
-				return salaryTotal;
-			}
-		}
+        public List<Training> Trainings { get; set; }
 
-		private int subscriptionsTotal = 0;
-		public int SubscriptionsTotal
-		{
-			get
-			{
-				return subscriptionsTotal;
-			}
-		}
+        public int BranchId { get; set; }
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
 
-		private int razovoesTotal = 0;
-		public int RazovoesTotal
-		{
-			get
-			{
-				return razovoesTotal;
-			}
-		}
+        private int salaryTotal = 0;
+        public int SalaryTotal
+        {
+            get
+            {
+                return salaryTotal;
+            }
+        }
 
-		public int TotalIncome
-		{
-			get
-			{
-				return AllIncomes.Sum(x => x.Cost);
-			}
-		}
+        private int subscriptionsTotal = 0;
+        public int SubscriptionsTotal
+        {
+            get
+            {
+                return subscriptionsTotal;
+            }
+        }
 
-		public void SetAllIncome()
-		{
-			sw.Restart();
+        private int razovoesTotal = 0;
+        public int RazovoesTotal
+        {
+            get
+            {
+                return razovoesTotal;
+            }
+        }
 
-			AllIncomes = new List<IIncome>();
+        public int TotalIncome
+        {
+            get
+            {
+                return AllIncomes.Sum(x => x.Cost);
+            }
+        }
 
-			foreach (var inc in Incomes)
-			{
-				AllIncomes.Add(inc);
-			}
+        public void SetAllIncome()
+        {
+            sw.Restart();
 
-			foreach (var sub in Subscriptions)
-			{
-				AllIncomes.Add(sub);
-			}
+            AllIncomes = new List<IIncome>();
 
-			foreach (var raz in Razovoes)
-			{
-				AllIncomes.Add(raz);
-			}
+            foreach (var inc in Incomes)
+            {
+                AllIncomes.Add(inc);
+            }
 
-			var trainersPay = Trainings.GroupBy(x => x.Trainer.Name).Select(s => new { Name = s.Key, Salary = s.Sum(z => z.TrainerPay) });
+            foreach (var sub in Subscriptions)
+            {
+                AllIncomes.Add(sub);
+            }
 
-			foreach (var tp in trainersPay)
-			{
-				AllIncomes.Add(new Salary() { Cost = tp.Salary * -1, Date = End, IncomeId = 0, IncomeName = $"{tp.Name} Зарплата", Type = IncomeType.Salary });
-			}
+            foreach (var raz in Razovoes)
+            {
+                AllIncomes.Add(raz);
+            }
 
-			AllIncomes = AllIncomes.OrderBy(x => x.Date).ToList();
+            var trainersPay = Trainings.GroupBy(x => x.Trainer.Name).Select(s => new { Name = s.Key, Salary = s.Sum(z => z.TrainerPay) });
 
-			sw.Stop();
-			Debug.WriteLine($"SetAllIncome() {sw.ElapsedMilliseconds}");
-		}
+            foreach (var tp in trainersPay)
+            {
+                AllIncomes.Add(new Salary() { Cost = tp.Salary * -1, Date = End, IncomeId = 0, IncomeName = $"{tp.Name} Зарплата", Type = IncomeType.Salary });
+            }
 
-		private void LoadIncomes()
-		{
-			sw.Restart();
+            AllIncomes = AllIncomes.OrderBy(x => x.Date).ToList();
 
-			Incomes = IncomeB.GetAll(BranchId, Start, End);
+            sw.Stop();
+            Debug.WriteLine($"SetAllIncome() {sw.ElapsedMilliseconds}");
+        }
 
-			sw.Stop();
-			Debug.WriteLine($"LoadIncomes() {sw.ElapsedMilliseconds}");
-		}
+        private void LoadIncomes()
+        {
+            sw.Restart();
 
-		private void LoadSalary()
-		{
-			sw.Restart();
+            Incomes = _incomeB.GetAll(BranchId, Start, End);
 
-			var branch = BranchDAL.Get(BranchId);
+            sw.Stop();
+            Debug.WriteLine($"LoadIncomes() {sw.ElapsedMilliseconds}");
+        }
 
-			foreach (var gym in branch.Gyms)
-			{
-				Trainings.AddRange(TrainingB.GetAllForGym(gym.Id, Start, End));
-			}
+        private void LoadSalary()
+        {
+            sw.Restart();
 
-			Trainings = Trainings.Where(x => x.StatusId == (int)TrainingStatus.Active).ToList();
-			salaryTotal = Trainings.Sum(x => x.TrainerPay);
+            var branch = _branchB.Get(BranchId);
 
-			sw.Stop();
-			Debug.WriteLine($"LoadSubscriptions() {sw.ElapsedMilliseconds}");
-		}
+            foreach (var gym in branch.Gyms)
+            {
+                Trainings.AddRange(_trainingB.GetAllForGym(gym.Id, Start, End));
+            }
 
-		private void LoadSubscriptions()
-		{
-			sw.Restart();
+            Trainings = Trainings.Where(x => x.StatusId == (int)TrainingStatus.Active).ToList();
+            salaryTotal = Trainings.Sum(x => x.TrainerPay);
 
-			Subscriptions = SubscriptionB.GetForBranch(BranchId, Start, End, false);
-			subscriptionsTotal = Subscriptions.Sum(x => x.Cost);
+            sw.Stop();
+            Debug.WriteLine($"LoadSubscriptions() {sw.ElapsedMilliseconds}");
+        }
 
-			sw.Stop();
-			Debug.WriteLine($"LoadSubscriptions() {sw.ElapsedMilliseconds}");
-		}
+        private void LoadSubscriptions()
+        {
+            sw.Restart();
 
-		private void LoadRazovoes()
-		{
-			sw.Restart();
+            Subscriptions = _subscriptionB.GetForBranch(BranchId, Start, End, false);
+            subscriptionsTotal = Subscriptions.Sum(x => x.Cost);
 
-			Razovoes = TrainingItemB.GetAllForBranch(BranchId, Start, End, true);
-			razovoesTotal = Razovoes.Sum(x => x.RazovoeCost);
+            sw.Stop();
+            Debug.WriteLine($"LoadSubscriptions() {sw.ElapsedMilliseconds}");
+        }
 
-			sw.Stop();
-			Debug.WriteLine($"LoadRazovoes() {sw.ElapsedMilliseconds}");
-		}
-	}
+        private void LoadRazovoes()
+        {
+            sw.Restart();
+
+            Razovoes = _trainingItemB.GetAllForBranch(BranchId, Start, End, true);
+            razovoesTotal = Razovoes.Sum(x => x.RazovoeCost);
+
+            sw.Stop();
+            Debug.WriteLine($"LoadRazovoes() {sw.ElapsedMilliseconds}");
+        }
+    }
 }

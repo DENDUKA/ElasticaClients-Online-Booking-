@@ -7,7 +7,7 @@ namespace ElasticaClients.DAL.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class _16 : IMigrationMetadata
+    public  sealed partial class _16 : IMigrationMetadata
     {
         private readonly ResourceManager Resources = new ResourceManager(typeof(_16));
         

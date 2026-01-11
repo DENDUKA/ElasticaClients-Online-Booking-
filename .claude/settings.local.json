@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dotnet build:*)",
+      "Bash(where:*)",
+      "Bash(git checkout:*)",
+      "Bash(dir:*)",
+      "Bash(dotnet add:*)",
+      "Bash(nuget restore:*)",
+      "Bash(msbuild:*)",
+      "Bash(dotnet restore:*)",
+      "Bash(powershell -Command \"Invoke-WebRequest -Uri ''https://www.nuget.org/api/v2/package/Microsoft.Extensions.DependencyInjection/8.0.0'' -OutFile ''packages/Microsoft.Extensions.DependencyInjection.8.0.0.nupkg'' && Expand-Archive -Path ''packages/Microsoft.Extensions.DependencyInjection.8.0.0.nupkg'' -DestinationPath ''packages/Microsoft.Extensions.DependencyInjection.8.0.0'' -Force\")",
+      "Bash(powershell -Command:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

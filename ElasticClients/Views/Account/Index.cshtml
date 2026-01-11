@@ -1,10 +1,11 @@
-﻿@model IEnumerable<ElasticaClients.Models.AccountModel>
+@model IEnumerable<ElasticaClients.Models.AccountModel>
 
 @{
 	ViewBag.Title = "Index";
+	var AccountB = System.Web.Mvc.DependencyResolver.Current.GetService<ElasticaClients.Logic.AccountB>();
 }
 
-@if (ElasticaClients.Logic.AccountB.IsCurrentUserAdmin())
+@if (AccountB.IsCurrentUserAdmin())
 {
 	<button class="btn btn-primary" onclick="location.href='@Url.Action("Create", "Account")'"><i class="bi bi-plus-circle mr-1"></i> Добавить новый</button>
 }

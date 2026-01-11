@@ -1,29 +1,30 @@
-﻿using System;
-using System.Timers;
+﻿using System.Timers;
 
 namespace ElasticaClients.Logic
 {
-	public class Batches
-	{
-		public Batches()
-		{
-			EveryHour.Elapsed += EveryHourEvent;
-			EveryHour.Start();
+    public class Batches
+    {
+        private readonly SubscriptionB _subscriptionB;
+        private readonly Timer _everyHour = new Timer(2000000);
 
-			EveryHourEvent(null, null);
-		}
+        public Batches(SubscriptionB subscriptionB)
+        {
+            _subscriptionB = subscriptionB;
+            _everyHour.Elapsed += EveryHourEvent;
+            _everyHour.Start();
 
-		private static void EveryHourEvent(object source, ElapsedEventArgs e)
-		{
-			//TrainingB.UpdateStatusBatch(DateTime.Now.AddHours(-2), DateTime.Now.AddHours(1));
+            EveryHourEvent(null, null);
+        }
 
-			SubscriptionB.BatchUnfreeze();
+        private void EveryHourEvent(object source, ElapsedEventArgs e)
+        {
+            //TrainingB.UpdateStatusBatch(DateTime.Now.AddHours(-2), DateTime.Now.AddHours(1));
 
-			SubscriptionB.BatchCloseSubscription();
+            _subscriptionB.BatchUnfreeze();
 
-			SubscriptionB.BatchActivateByTime();
-		}
-		
-		private static readonly Timer EveryHour = new Timer(2000000);
-	}
+            _subscriptionB.BatchCloseSubscription();
+
+            _subscriptionB.BatchActivateByTime();
+        }
+    }
 }

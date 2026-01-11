@@ -1,20 +1,23 @@
-﻿@using ElasticaClients.Models;
+@using ElasticaClients.Models;
 @model ElasticaClients.Models.AccountModel
 
+@{
+    var AccountB = System.Web.Mvc.DependencyResolver.Current.GetService<ElasticaClients.Logic.AccountB>();
+}
 
 <div class="btn-group" role="group" aria-label="Basic example">
-    @if (ElasticaClients.Logic.AccountB.IsCurrentUserAdmin())
+    @if (AccountB.IsCurrentUserAdmin())
     {
         <button class="btn btn-info" onclick="location.href='@Url.Action("Edit", new { id = Model.Id })'"><i class="bi bi-pencil-square"></i> Редактировать</button>
     }
 
 
-    @if (ElasticaClients.Logic.AccountB.IsCurrentUserAdminTrainer())
+    @if (AccountB.IsCurrentUserAdminTrainer())
     {
         <button class="btn btn-primary" onclick="location.href='@Url.Action("Create", "Subscription", new { AccountId = Model.Id })'"><i class="bi bi-receipt"></i> Добавить абонемент</button>
     }
 
-    @if (ElasticaClients.Logic.AccountB.IsCurrentUserAdmin())
+    @if (AccountB.IsCurrentUserAdmin())
     {
         <button class="btn btn-danger" onclick="location.href='@Url.Action("BonusesOff", "Account", new { AccountId = Model.Id })'"><i class="bi bi-scissors"></i>Списать баллы</button>
     }
@@ -30,7 +33,7 @@
         </dd>
 
 
-        @if (ElasticaClients.Logic.AccountB.IsCurrentUserAdminTrainer() || System.Web.HttpContext.Current.User.Identity.Name == Model.Id.ToString())
+        @if (AccountB.IsCurrentUserAdminTrainer() || System.Web.HttpContext.Current.User.Identity.Name == Model.Id.ToString())
         {
             @*<dt>
                     @Html.DisplayNameFor(model => model.Bonuses)
@@ -38,7 +41,7 @@
                 <dd>
                     @Model.BonusesSummary
                 </dd>
-                if (ElasticaClients.Logic.AccountB.IsCurrentUserAdmin())
+                if (AccountB.IsCurrentUserAdmin())
                 {
                     <dt>
                         @Html.DisplayNameFor(model => model.BonusesOff)
@@ -48,7 +51,7 @@
                     </dd>
                 }*@
 
-            if (ElasticaClients.Logic.AccountB.IsCurrentUserAdmin())
+            if (AccountB.IsCurrentUserAdmin())
             {
                 <dt>
                     @Html.DisplayNameFor(model => model.Instagram)
@@ -66,10 +69,10 @@
                     @Html.DisplayNameFor(model => model.Phone)
                 </dt>
                 <dd>
-                    +7<span>@Html.DisplayFor(model => model.Phone)
+                    +7<span>@Html.DisplayFor(model => model.Phone)</span>
                 </dd>
             }
-            if (ElasticaClients.Logic.AccountB.IsCurrentUserAdminTrainer())
+            if (AccountB.IsCurrentUserAdminTrainer())
             {
                 <dt>
                     Роль :

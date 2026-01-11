@@ -4,6 +4,8 @@
 
 @{
 	ViewBag.Title = "Edit";
+	var gymB = System.Web.Mvc.DependencyResolver.Current.GetService<ElasticaClients.Logic.GymB>();
+	var accountB = System.Web.Mvc.DependencyResolver.Current.GetService<ElasticaClients.Logic.AccountB>();
 }
 
 <h2>Редактирование</h2>
@@ -62,7 +64,7 @@
 		<div class="form-group">
 			@Html.LabelFor(model => model.TrainerId, htmlAttributes: new { @class = "control-label col-md-2" })
 			<div class="col-md-10">
-				@Html.DropDownListFor(model => model.TrainerId, ElasticaClients.Models.AccountModel.TrainersToSelectListItems(Model.TrainerId), new { @class = "form-control" })
+				@Html.DropDownListFor(model => model.TrainerId, ElasticaClients.Models.AccountModel.TrainersToSelectListItems(accountB, Model.TrainerId), new { @class = "form-control" })
 				@Html.ValidationMessageFor(model => model.TrainerId, "", new { @class = "text-danger" })
 			</div>
 		</div>
@@ -70,7 +72,7 @@
 		<div class="form-group">
 			@Html.LabelFor(model => model.GymId, htmlAttributes: new { @class = "control-label col-md-2" })
 			<div class="col-md-10">
-				@Html.DropDownListFor(model => model.GymId, ElasticaClients.Logic.GymB.ToSelectListItems(Model.GymId), new { @class = "form-control", @disabled = "true" })
+				@Html.DropDownListFor(model => model.GymId, gymB.ToSelectListItems(Model.GymId), new { @class = "form-control", @disabled = "true" })
 				@Html.ValidationMessageFor(model => model.GymId, "", new { @class = "text-danger" })
 			</div>
 		</div>

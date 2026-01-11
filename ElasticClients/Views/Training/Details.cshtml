@@ -1,13 +1,12 @@
-﻿@model ElasticaClients.Models.TrainingModel
+@model ElasticaClients.Models.TrainingModel
+
 @{
 	/**/
 
 	ViewBag.Title = "Details";
-}
-
-@{
-	bool isAdminTrainer = ElasticaClients.Logic.AccountB.IsCurrentUserAdminTrainer();
-	bool isAdmin = ElasticaClients.Logic.AccountB.IsCurrentUserAdmin();
+	var AccountB = System.Web.Mvc.DependencyResolver.Current.GetService<ElasticaClients.Logic.AccountB>();
+	bool isAdminTrainer = AccountB.IsCurrentUserAdminTrainer();
+	bool isAdmin = AccountB.IsCurrentUserAdmin();
 }
 
 <h2>Тренировка</h2>
@@ -166,13 +165,13 @@
 
 	@if (Model.StatusId == (int)ElasticaClients.DAL.Accessory.TrainingStatus.Active)
 	{
-		if (ElasticaClients.Logic.AccountB.IsCurrentUserAdminTrainer())
+		if (AccountB.IsCurrentUserAdminTrainer())
 		{
 			<button class="btn btn-primary" onclick="location.href='@Url.Action("Create", "TrainingItem", new { trainingid = Model.Id })'"><i class="bi bi-plus-circle mr-1"></i> Записать клиента</button>
 		}
 	}
 
-	@if (ElasticaClients.Logic.AccountB.IsCurrentUserAdmin())
+	@if (AccountB.IsCurrentUserAdmin())
 	{
 		if (Model.StatusId == (int)ElasticaClients.DAL.Accessory.TrainingStatus.Active)
 		{
@@ -201,7 +200,7 @@
 		}
 	}
 
-	@if (ElasticaClients.Logic.AccountB.IsCurrentUserClient() && Model.StatusId == (int)ElasticaClients.DAL.Accessory.TrainingStatus.Active)
+	@if (AccountB.IsCurrentUserClient() && Model.StatusId == (int)ElasticaClients.DAL.Accessory.TrainingStatus.Active)
 	{
 		<button class="btn btn-primary" onclick="location.href='@Url.Action("SignUp", "TrainingItem", new { trainingid = Model.Id })'"><i class="bi bi-plus-circle mr-1"></i> Записаться на тренировку</button>
 	}

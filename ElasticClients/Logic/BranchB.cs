@@ -1,7 +1,5 @@
-﻿
-using ElasticaClients.DAL.Data;
+﻿using ElasticaClients.DAL.Data.Interfaces;
 using ElasticaClients.DAL.Entities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,76 +8,117 @@ using System.Web.Mvc;
 
 namespace ElasticaClients.Logic
 {
-	public static class BranchB
-	{
-		public static List<Branch> GetAll()
-		{
-			var branches = BranchDAL.GetAll();
-			branches.Remove(branches.First(x=>x.Id == 4));
+    public class BranchB
+    {
+        private readonly IBranchDAL _branchDAL;
+        private readonly IAccountDAL _accountDAL;
 
-			return branches;
-		}
+        public BranchB(IBranchDAL branchDAL, IAccountDAL accountDAL)
+        {
+            _branchDAL = branchDAL;
+            _accountDAL = accountDAL;
+        }
 
-		public static async Task<List<Branch>> GetAllAsync()
-		{
-			var branches = await BranchDAL.GetAllAsync();
-			branches.Remove(branches.First(x => x.Id == 4));
+        public Branch Get(int branchId)
+        {
+            return _branchDAL.Get(branchId);
+        }
 
-			return branches;
-		}
+        public List<Branch> GetAll()
+        {
+            var branches = _branchDAL.GetAll();
 
-        public static IEnumerable<SelectListItem> ToSelectListItems(int selectedId = 0)
-		{
-			List<Branch> accounts = GetAll();
+            var forDelete = branches.FirstOrDefault(x => x.Id == 4);
+            if (forDelete != null) branches.Remove(forDelete);
 
-			List<SelectListItem> x = new List<SelectListItem>
-			{
-				new SelectListItem() { Text = "", Value = "" }
-			};
+            return branches;
+        }
 
-			x.AddRange(accounts
-					  .Select(g =>
-						  new SelectListItem
-						  {
-							  Selected = (g.Id == selectedId),
-							  Text = g.Name,
-							  Value = g.Id.ToString()
-						  })
-						  .OrderBy(y => y.Text)
-						  .ToList());
+        public async Task<List<Branch>> GetAllAsync()
+        {
+            var branches = await _branchDAL.GetAllAsync();
 
-			return x;
-		}
+            var forDelete = branches.FirstOrDefault(x => x.Id == 4);
+            if(forDelete != null) branches.Remove(forDelete);
 
-		public static bool ChangeCurrentBranch(int branchId)
-		{
-			if (HttpContext.Current != null &&
-				HttpContext.Current.User.Identity.IsAuthenticated)
-			{
-				var accId = HttpContext.Current.User.Identity.Name;
-				var acc = AccountDAL.GetLite(int.Parse(accId));
-				if (acc != null && acc.SettingsBranchId != branchId)
-				{
-					acc.SettingsBranchId = branchId;
-					AccountDAL.Update(acc);
-				}
-			}
+            return branches;
+        }
 
-			return true;
-		}
+        public IEnumerable<SelectListItem> ToSelectListItems(int selectedId = 0)
+        {
+            List<Branch> accounts = GetAll();
 
-		public static int GetBranchId(HttpSessionStateBase session)
-		{
-			if (session != null && session["branchid"] == null)
-			{
-				var id = AccountB.GetSettingsBranchId();
-				session["branchid"] = id;
-				return id;
-			}
+            List<SelectListItem> x = new List<SelectListItem>
+            {
+                new SelectListItem() { Text = "", Value = "" }
+            };
 
-			int.TryParse(session["branchid"].ToString(), out int branchId);
+            x.AddRange(accounts
+                      .Select(g =>
+                          new SelectListItem
+                          {
+                              Selected = (g.Id == selectedId),
+                              Text = g.Name,
+                              Value = g.Id.ToString()
+                          })
+                          .OrderBy(y => y.Text)
+                          .ToList());
 
-			return branchId;
-		}
-	}
+            return x;
+        }
+
+        public bool ChangeCurrentBranch(int branchId)
+        {
+            if (HttpContext.Current != null &&
+                HttpContext.Current.User.Identity.IsAuthenticated)
+            {
+                var accId = HttpContext.Current.User.Identity.Name;
+                var acc = _accountDAL.GetLite(int.Parse(accId));
+                if (acc != null && acc.SettingsBranchId != branchId)
+                {
+                    acc.SettingsBranchId = branchId;
+                    _accountDAL.Update(acc);
+                }
+            }
+
+            return true;
+        }
+
+        public int GetBranchId(HttpSessionStateBase session)
+        {
+            if (session != null && session["branchid"] == null)
+            {
+                int branchId = 0;
+                Account acc = null;
+
+                if (HttpContext.Current != null &&
+                    HttpContext.Current.User.Identity.IsAuthenticated)
+                {
+                    var accId = HttpContext.Current.User.Identity.Name;
+                    acc = _accountDAL.GetLite(int.Parse(accId));
+                    if (acc != null)
+                    {
+                        branchId = acc.SettingsBranchId;
+                    }
+                }
+
+                if (branchId == 0)
+                {
+                    branchId = GetAll().First().Id;
+                    if (acc != null)
+                    {
+                        acc.SettingsBranchId = branchId;
+                        _accountDAL.Update(acc);
+                    }
+                }
+
+                session["branchid"] = branchId;
+                return branchId;
+            }
+
+            int.TryParse(session["branchid"].ToString(), out int resultBranchId);
+
+            return resultBranchId;
+        }
+    }
 }

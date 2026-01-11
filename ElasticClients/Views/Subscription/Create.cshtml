@@ -1,7 +1,9 @@
-﻿@model ElasticaClients.Models.SubscriptionModel
+@model ElasticaClients.Models.SubscriptionModel
 
 @{
 	ViewBag.Title = "Create";
+	var AccountB = System.Web.Mvc.DependencyResolver.Current.GetService<ElasticaClients.Logic.AccountB>();
+	var BranchB = System.Web.Mvc.DependencyResolver.Current.GetService<ElasticaClients.Logic.BranchB>();
 }
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
@@ -20,7 +22,7 @@
 		<div class="form-group">
 			@Html.LabelFor(model => model.BranchId, htmlAttributes: new { @class = "control-label col-md-3" })
 			<div class="col-md-9">
-				@Html.DropDownListFor(model => model.BranchId, ElasticaClients.Logic.BranchB.ToSelectListItems(Model.BranchId), new { @class = "form-control" })
+				@Html.DropDownListFor(model => model.BranchId, BranchB.ToSelectListItems(Model.BranchId), new { @class = "form-control" })
 				@Html.ValidationMessageFor(model => model.BranchId, "", new { @class = "text-danger" })
 			</div>
 		</div>
@@ -29,7 +31,7 @@
 			@Html.LabelFor(model => model.AccountId, htmlAttributes: new { @class = "control-label col-md-3" })
 			<div class="col-md-9">
 				<div class="row-fluid">
-					@Html.DropDownListFor(model => model.AccountId, ElasticaClients.Logic.AccountB.ToSelectListItems(), new { @class = "selectpicker", data_show_subtext = "true", data_live_search = "true" })
+					@Html.DropDownListFor(model => model.AccountId, AccountB.ToSelectListItems(), new { @class = "selectpicker", data_show_subtext = "true", data_live_search = "true" })
 				</div>
 				@Html.ValidationMessageFor(model => model.AccountId, "", new { @class = "text-danger" })
 			</div>

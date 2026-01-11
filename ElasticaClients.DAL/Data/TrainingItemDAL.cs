@@ -4,140 +4,141 @@ using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using ElasticaClients.DAL.Accessory;
+using ElasticaClients.DAL.Data.Interfaces;
 using ElasticaClients.DAL.Entities;
 using Z.EntityFramework.Plus;
 
 namespace ElasticaClients.DAL.Data
 {
-	public static class TrainingItemDAL
-	{
-		public static void Delete(int id)
-		{
-			using (TrainingItemContext db = new TrainingItemContext())
-			{
-				db.TrainingItems.Where(ti => ti.Id == id).Delete();
-			}
-		}
+    public class TrainingItemDAL : ITrainingItemDAL
+    {
+        public void Delete(int id)
+        {
+            using (TrainingItemContext db = new TrainingItemContext())
+            {
+                db.TrainingItems.Where(ti => ti.Id == id).Delete();
+            }
+        }
 
-		public static TrainingItem Get(int id)
-		{
-			using (TrainingItemContext db = new TrainingItemContext())
-			{
-				return db.TrainingItems
-					.Where(x => x.Id == id)
+        public TrainingItem Get(int id)
+        {
+            using (TrainingItemContext db = new TrainingItemContext())
+            {
+                return db.TrainingItems
+                    .Where(x => x.Id == id)
                     .Include(x => x.Training.Gym.Branch)
                     .Include(x => x.Account)
                     .FirstOrDefault();
-			}
-		}
+            }
+        }
 
-		public static void ChangeStatus(int tiid, TrainingItemStatus tiStatus)
-		{
-			TrainingItem ti = new TrainingItem
-			{
-				Id = tiid,
-				StatusId = (int)tiStatus
-			};
+        public void ChangeStatus(int tiid, TrainingItemStatus tiStatus)
+        {
+            TrainingItem ti = new TrainingItem
+            {
+                Id = tiid,
+                StatusId = (int)tiStatus
+            };
 
-			using (TrainingItemContext db = new TrainingItemContext())
-			{
-				db.TrainingItems.Attach(ti);
-				db.Entry(ti).Property(x => x.StatusId).IsModified = true;
-				db.SaveChanges();
-			}
-		}
+            using (TrainingItemContext db = new TrainingItemContext())
+            {
+                db.TrainingItems.Attach(ti);
+                db.Entry(ti).Property(x => x.StatusId).IsModified = true;
+                db.SaveChanges();
+            }
+        }
 
-		public static void ChangePayStatus(int tiid, TrainingItemPayStatus tiPayStatus)
-		{
-			TrainingItem ti = new TrainingItem
-			{
-				Id = tiid,
-				StatusPayId = (int)tiPayStatus
-			};
+        public void ChangePayStatus(int tiid, TrainingItemPayStatus tiPayStatus)
+        {
+            TrainingItem ti = new TrainingItem
+            {
+                Id = tiid,
+                StatusPayId = (int)tiPayStatus
+            };
 
-			using (TrainingItemContext db = new TrainingItemContext())
-			{
-				db.TrainingItems.Attach(ti);
-				db.Entry(ti).Property(x => x.StatusPayId).IsModified = true;
-				db.SaveChanges();
-			}
-		}
+            using (TrainingItemContext db = new TrainingItemContext())
+            {
+                db.TrainingItems.Attach(ti);
+                db.Entry(ti).Property(x => x.StatusPayId).IsModified = true;
+                db.SaveChanges();
+            }
+        }
 
-		public static List<TrainingItem> GetAll()
-		{
-			using (TrainingItemContext db = new TrainingItemContext())
-			{
-				return db.TrainingItems
-					.Include(x => x.Subscription)
-					.ToList();
-			}
-		}
+        public List<TrainingItem> GetAll()
+        {
+            using (TrainingItemContext db = new TrainingItemContext())
+            {
+                return db.TrainingItems
+                    .Include(x => x.Subscription)
+                    .ToList();
+            }
+        }
 
-		public static List<TrainingItem> GetAllForBranch(int branchId, DateTime start, DateTime end, bool onlyRazovoe)
-		{
-			var tiList = new List<TrainingItem>();
-			
-			using (TrainingItemContext db = new TrainingItemContext())
-			{
-				var result = db.TrainingItems
-					.Where(x => x.Subscription.BranchId == branchId);
+        public List<TrainingItem> GetAllForBranch(int branchId, DateTime start, DateTime end, bool onlyRazovoe)
+        {
+            var tiList = new List<TrainingItem>();
 
-				if (onlyRazovoe)
-				{
-					result = result.Where(x => x.Razovoe);
-				}
+            using (TrainingItemContext db = new TrainingItemContext())
+            {
+                var result = db.TrainingItems
+                    .Where(x => x.Subscription.BranchId == branchId);
 
-				result = result
-					.Where(x => x.Training.StartTime >= start && x.Training.StartTime <= end)
-					.Include(x=>x.Training);
+                if (onlyRazovoe)
+                {
+                    result = result.Where(x => x.Razovoe);
+                }
 
-				tiList = result.ToList();
-			}
+                result = result
+                    .Where(x => x.Training.StartTime >= start && x.Training.StartTime <= end)
+                    .Include(x => x.Training);
 
-			return tiList;
-		}
+                tiList = result.ToList();
+            }
 
-		public static void Update(TrainingItem ti)
-		{
-			using (TrainingItemContext db = new TrainingItemContext())
-			{
-				db.TrainingItems.AddOrUpdate(ti);
-				db.SaveChanges();
-			}
-		}
+            return tiList;
+        }
 
-		public static void Add(TrainingItem ti)
-		{
-			using (TrainingItemContext db = new TrainingItemContext())
-			{
-				db.TrainingItems.Add(ti);
-				db.SaveChanges();
-			}
-		}
+        public void Update(TrainingItem ti)
+        {
+            using (TrainingItemContext db = new TrainingItemContext())
+            {
+                db.TrainingItems.AddOrUpdate(ti);
+                db.SaveChanges();
+            }
+        }
 
-		public static TrainingItem GetByYClients(int id)
-		{
-			using (TrainingItemContext db = new TrainingItemContext())
-			{
-				return db.TrainingItems
-					.Where(x => x.YClientsId == id)
-					.FirstOrDefault();
-			}
-		}
+        public void Add(TrainingItem ti)
+        {
+            using (TrainingItemContext db = new TrainingItemContext())
+            {
+                db.TrainingItems.Add(ti);
+                db.SaveChanges();
+            }
+        }
 
-		public static List<TrainingItem> GetAllForAccount(int accountId, DateTime? start = null, DateTime? end = null)
-		{
-			DateTime StartDate = start is null ? DateTime.Today.AddMonths(-200) : (DateTime)start;
-			DateTime EndDate = end is null ? DateTime.Today.AddMonths(200) : (DateTime)end;
+        public TrainingItem GetByYClients(int id)
+        {
+            using (TrainingItemContext db = new TrainingItemContext())
+            {
+                return db.TrainingItems
+                    .Where(x => x.YClientsId == id)
+                    .FirstOrDefault();
+            }
+        }
 
-			using (TrainingItemContext db = new TrainingItemContext())
-			{
-				return db.TrainingItems
-					.Where(x => x.Training.StartTime > StartDate && x.Training.StartTime < EndDate)
-					.Where(x => x.AccountId == accountId)
-					.Include(x => x.Training)
-					.ToList();
-			}
-		}
-	}
+        public List<TrainingItem> GetAllForAccount(int accountId, DateTime? start = null, DateTime? end = null)
+        {
+            DateTime StartDate = start is null ? DateTime.Today.AddMonths(-200) : (DateTime)start;
+            DateTime EndDate = end is null ? DateTime.Today.AddMonths(200) : (DateTime)end;
+
+            using (TrainingItemContext db = new TrainingItemContext())
+            {
+                return db.TrainingItems
+                    .Where(x => x.Training.StartTime > StartDate && x.Training.StartTime < EndDate)
+                    .Where(x => x.AccountId == accountId)
+                    .Include(x => x.Training)
+                    .ToList();
+            }
+        }
+    }
 }

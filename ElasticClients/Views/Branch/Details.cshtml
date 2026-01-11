@@ -1,7 +1,8 @@
-﻿@model ElasticaClients.Models.BranchModel
+@model ElasticaClients.Models.BranchModel
 
 @{
 	ViewBag.Title = "Index";
+	var AccountB = System.Web.Mvc.DependencyResolver.Current.GetService<ElasticaClients.Logic.AccountB>();
 }
 
 <h2></h2>
@@ -47,7 +48,7 @@
 </div>
 
 
-@if (ElasticaClients.Logic.AccountB.IsCurrentUserAdmin())
+@if (AccountB.IsCurrentUserAdmin())
 {
 	<h3>Абонементы</h3>
 
@@ -62,7 +63,7 @@
 }
 
 
-@if (ElasticaClients.Logic.AccountB.IsCurrentUserAdmin())
+@if (AccountB.IsCurrentUserAdmin())
 {
 	<h3>Бухгалтерия</h3>
 

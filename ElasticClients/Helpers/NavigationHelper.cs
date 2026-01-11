@@ -1,22 +1,28 @@
-﻿
-using System.Web.Mvc;
+﻿using ElasticaClients.Logic;
 
 namespace ElasticaClients.Helpers
 {
-	public static class NavigationHelper
-	{
-		public static int GetBranchId(System.Web.HttpSessionStateBase session)
-		{
-			if (session != null && session["branchid"] == null)
-			{
-				var id = Logic.AccountB.GetSettingsBranchId();
-				session["branchid"] = id;
-				return id;
-			}
+    public class NavigationHelper
+    {
+        private readonly AccountB _accountB;
 
-			int.TryParse(session["branchid"].ToString(), out int branchId);
+        public NavigationHelper(AccountB accountB)
+        {
+            _accountB = accountB;
+        }
 
-			return branchId;
-		}
-	}
+        public int GetBranchId(System.Web.HttpSessionStateBase session)
+        {
+            if (session != null && session["branchid"] == null)
+            {
+                var id = _accountB.GetSettingsBranchId();
+                session["branchid"] = id;
+                return id;
+            }
+
+            int.TryParse(session["branchid"].ToString(), out int branchId);
+
+            return branchId;
+        }
+    }
 }

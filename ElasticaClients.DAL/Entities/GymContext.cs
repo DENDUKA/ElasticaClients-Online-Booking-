@@ -2,11 +2,11 @@
 
 namespace ElasticaClients.DAL.Entities
 {
-	public class GymContext : DbContext
-	{
-		public GymContext()	: base("FlyStretch")
-		{ }
+    public class GymContext : DbContext
+    {
+        public GymContext() : base("FlyStretch")
+        { }
 
-		public DbSet<Gym> Gyms { get; set; }
-	}
+        public DbSet<Gym> Gyms { get; set; }
+    }
 }

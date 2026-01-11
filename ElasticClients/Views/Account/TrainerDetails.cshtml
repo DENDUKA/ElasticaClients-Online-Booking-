@@ -1,4 +1,4 @@
-﻿@using FullCalendar
+@using FullCalendar
 
 @model ElasticaClients.Models.AccountModel
 
@@ -12,6 +12,7 @@
 
 @{
 	ViewBag.Title = "Страница тренера";
+	var AccountB = System.Web.Mvc.DependencyResolver.Current.GetService<ElasticaClients.Logic.AccountB>();
 }
 
 <div>
@@ -30,7 +31,7 @@
 		<dd>
 			@Html.DisplayFor(model => model.Instagram)
 		</dd>
-		@if (ElasticaClients.Logic.AccountB.IsCurrentUserAdmin())
+		@if (AccountB.IsCurrentUserAdmin())
 		{
 			<dt>
 				@Html.DisplayNameFor(model => model.Email)
@@ -82,11 +83,11 @@
 	settings.EventStartEditable = false;
 
 	settings.ClientSideEvents.EventClick = $"function (event, element) {{document.location.href = '{Url.Action("Details", "Training")}/' + event.id }}";
-	settings.ClientSideEvents.ViewRender = ElasticaClients.Logic.AccountB.IsCurrentUserAdmin() ? $"function (json) {{RerenderPageInfo() }}" : "";
+	settings.ClientSideEvents.ViewRender = AccountB.IsCurrentUserAdmin() ? $"function (json) {{RerenderPageInfo() }}" : "";
 })
 </div>
 
-@if (ElasticaClients.Logic.AccountB.IsCurrentUserAdmin())
+@if (AccountB.IsCurrentUserAdmin())
 {
 	<script>
 	function RerenderPageInfo() {

@@ -71,7 +71,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// Object.prototype.hasOwnProperty.call
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
-/******/ 	// __webpack_public_path__
+/******/ 	// __webpack_public _path__
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
@@ -3390,7 +3390,7 @@ var InteractiveDateComponent = /** @class */ (function (_super) {
             $(ev.target).is('.fc-resizer');
     };
     // Kills all in-progress dragging.
-    // Useful for when public API methods that result in re-rendering are invoked during a drag.
+    // Useful for when public  API methods that result in re-rendering are invoked during a drag.
     // Also useful for when touch devices misbehave and don't fire their touchend.
     InteractiveDateComponent.prototype.endInteractions = function () {
         [
@@ -3712,13 +3712,13 @@ var View = /** @class */ (function (_super) {
         });
     };
     View.prototype.triggerViewRender = function () {
-        this.publiclyTrigger('viewRender', {
+        this.public lyTrigger('viewRender', {
             context: this,
             args: [this, this.el]
         });
     };
     View.prototype.triggerViewDestroy = function () {
-        this.publiclyTrigger('viewDestroy', {
+        this.public lyTrigger('viewDestroy', {
             context: this,
             args: [this, this.el]
         });
@@ -3891,7 +3891,7 @@ var View = /** @class */ (function (_super) {
     };
     // Triggers event-drop handlers that have subscribed via the API
     View.prototype.triggerEventDrop = function (eventInstance, dateDelta, undoFunc, el, ev) {
-        this.publiclyTrigger('eventDrop', {
+        this.public lyTrigger('eventDrop', {
             context: el[0],
             args: [
                 eventInstance.toLegacy(),
@@ -3917,7 +3917,7 @@ var View = /** @class */ (function (_super) {
     // Triggers external-drop handlers that have subscribed via the API
     View.prototype.triggerExternalDrop = function (singleEventDef, isEvent, el, ev, ui) {
         // trigger 'drop' regardless of whether element represents an event
-        this.publiclyTrigger('drop', {
+        this.public lyTrigger('drop', {
             context: el[0],
             args: [
                 singleEventDef.dateProfile.start.clone(),
@@ -3928,7 +3928,7 @@ var View = /** @class */ (function (_super) {
         });
         if (isEvent) {
             // signal an external event landed
-            this.publiclyTrigger('eventReceive', {
+            this.public lyTrigger('eventReceive', {
                 context: this,
                 args: [
                     singleEventDef.buildInstance().toLegacy(),
@@ -3949,7 +3949,7 @@ var View = /** @class */ (function (_super) {
     };
     // Triggers event-resize handlers that have subscribed via the API
     View.prototype.triggerEventResize = function (eventInstance, durationDelta, undoFunc, el, ev) {
-        this.publiclyTrigger('eventResize', {
+        this.public lyTrigger('eventResize', {
             context: el[0],
             args: [
                 eventInstance.toLegacy(),
@@ -3986,7 +3986,7 @@ var View = /** @class */ (function (_super) {
     // Triggers handlers to 'select'
     View.prototype.triggerSelect = function (footprint, ev) {
         var dateProfile = this.calendar.footprintToDateProfile(footprint); // abuse of "Event"DateProfile?
-        this.publiclyTrigger('select', {
+        this.public lyTrigger('select', {
             context: this,
             args: [
                 dateProfile.start,
@@ -4005,7 +4005,7 @@ var View = /** @class */ (function (_super) {
                 this['destroySelection'](); // TODO: deprecate
             }
             this.unrenderSelection();
-            this.publiclyTrigger('unselect', {
+            this.public lyTrigger('unselect', {
                 context: this,
                 args: [ev, this]
             });
@@ -4076,13 +4076,13 @@ var View = /** @class */ (function (_super) {
     /* Triggers
     ------------------------------------------------------------------------------------------------------------------*/
     View.prototype.triggerBaseRendered = function () {
-        this.publiclyTrigger('viewRender', {
+        this.public lyTrigger('viewRender', {
             context: this,
             args: [this, this.el]
         });
     };
     View.prototype.triggerBaseUnrendered = function () {
-        this.publiclyTrigger('viewDestroy', {
+        this.public lyTrigger('viewDestroy', {
             context: this,
             args: [this, this.el]
         });
@@ -4091,7 +4091,7 @@ var View = /** @class */ (function (_super) {
     // Span has start/end of the clicked area. Only the start is useful.
     View.prototype.triggerDayClick = function (footprint, dayEl, ev) {
         var dateProfile = this.calendar.footprintToDateProfile(footprint); // abuse of "Event"DateProfile?
-        this.publiclyTrigger('dayClick', {
+        this.public lyTrigger('dayClick', {
             context: dayEl,
             args: [dateProfile.start, ev, this]
         });
@@ -4345,7 +4345,7 @@ var EventRenderer = /** @class */ (function () {
     EventRenderer.prototype.renderFgSegEls = function (segs, disableResizing) {
         var _this = this;
         if (disableResizing === void 0) { disableResizing = false; }
-        var hasEventRenderHandlers = this.view.hasPublicHandlers('eventRender');
+        var hasEventRenderHandlers = this.view.haspublic Handlers('eventRender');
         var html = '';
         var renderedSegs = [];
         var i;
@@ -4401,7 +4401,7 @@ var EventRenderer = /** @class */ (function () {
     // Basically runs events and elements through the eventRender hook.
     EventRenderer.prototype.filterEventRenderEl = function (eventFootprint, el) {
         var legacy = eventFootprint.getEventLegacy();
-        var custom = this.view.publiclyTrigger('eventRender', {
+        var custom = this.view.public lyTrigger('eventRender', {
             context: legacy,
             args: [legacy, el, this.view]
         });
@@ -6587,7 +6587,7 @@ var EventPointing = /** @class */ (function (_super) {
     }
     /*
     component must implement:
-      - publiclyTrigger
+      - public lyTrigger
     */
     EventPointing.prototype.bindToEl = function (el) {
         var component = this.component;
@@ -6596,7 +6596,7 @@ var EventPointing = /** @class */ (function (_super) {
         component.bindSegHandlerToEl(el, 'mouseleave', this.handleMouseout.bind(this));
     };
     EventPointing.prototype.handleClick = function (seg, ev) {
-        var res = this.component.publiclyTrigger('eventClick', {
+        var res = this.component.public lyTrigger('eventClick', {
             context: seg.el[0],
             args: [seg.footprint.getEventLegacy(), ev, this.view]
         });
@@ -6613,7 +6613,7 @@ var EventPointing = /** @class */ (function (_super) {
             if (this.view.isEventDefResizable(seg.footprint.eventDef)) {
                 seg.el.addClass('fc-allow-mouse-resize');
             }
-            this.component.publiclyTrigger('eventMouseover', {
+            this.component.public lyTrigger('eventMouseover', {
                 context: seg.el[0],
                 args: [seg.footprint.getEventLegacy(), ev, this.view]
             });
@@ -6628,7 +6628,7 @@ var EventPointing = /** @class */ (function (_super) {
             if (this.view.isEventDefResizable(seg.footprint.eventDef)) {
                 seg.el.removeClass('fc-allow-mouse-resize');
             }
-            this.component.publiclyTrigger('eventMouseout', {
+            this.component.public lyTrigger('eventMouseout', {
                 context: seg.el[0],
                 args: [
                     seg.footprint.getEventLegacy(),
@@ -6767,7 +6767,7 @@ var DayGrid = /** @class */ (function (_super) {
         // trigger dayRender with each cell's element
         for (row = 0; row < rowCnt; row++) {
             for (col = 0; col < colCnt; col++) {
-                this.publiclyTrigger('dayRender', {
+                this.public lyTrigger('dayRender', {
                     context: view,
                     args: [
                         this.getCellDate(row, col),
@@ -7134,7 +7134,7 @@ var DayGrid = /** @class */ (function (_super) {
             var reslicedHiddenSegs = _this.resliceDaySegs(hiddenSegs, date);
             if (typeof clickOption === 'function') {
                 // the returned value can be an atomic option
-                clickOption = _this.publiclyTrigger('eventLimitClick', {
+                clickOption = _this.public lyTrigger('eventLimitClick', {
                     context: view,
                     args: [
                         {
@@ -8771,21 +8771,21 @@ var DateComponent = /** @class */ (function (_super) {
     DateComponent.prototype.opt = function (name) {
         return this._getView().opt(name); // default implementation
     };
-    DateComponent.prototype.publiclyTrigger = function () {
+    DateComponent.prototype.public lyTrigger = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
         var calendar = this._getCalendar();
-        return calendar.publiclyTrigger.apply(calendar, args);
+        return calendar.public lyTrigger.apply(calendar, args);
     };
-    DateComponent.prototype.hasPublicHandlers = function () {
+    DateComponent.prototype.haspublic Handlers = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
         var calendar = this._getCalendar();
-        return calendar.hasPublicHandlers.apply(calendar, args);
+        return calendar.haspublic Handlers.apply(calendar, args);
     };
     // Date
     // -----------------------------------------------------------------------------------------------------------------
@@ -8890,7 +8890,7 @@ var DateComponent = /** @class */ (function (_super) {
     // -----------------------------------------------------------------------------------------------------------------
     DateComponent.prototype.triggerAfterEventsRendered = function () {
         this.triggerAfterEventSegsRendered(this.getEventSegs());
-        this.publiclyTrigger('eventAfterAllRender', {
+        this.public lyTrigger('eventAfterAllRender', {
             context: this,
             args: [this]
         });
@@ -8898,12 +8898,12 @@ var DateComponent = /** @class */ (function (_super) {
     DateComponent.prototype.triggerAfterEventSegsRendered = function (segs) {
         var _this = this;
         // an optimization, because getEventLegacy is expensive
-        if (this.hasPublicHandlers('eventAfterRender')) {
+        if (this.haspublic Handlers('eventAfterRender')) {
             segs.forEach(function (seg) {
                 var legacy;
                 if (seg.el) {
                     legacy = seg.footprint.getEventLegacy();
-                    _this.publiclyTrigger('eventAfterRender', {
+                    _this.public lyTrigger('eventAfterRender', {
                         context: legacy,
                         args: [legacy, seg.el, _this]
                     });
@@ -8916,12 +8916,12 @@ var DateComponent = /** @class */ (function (_super) {
     };
     DateComponent.prototype.triggerBeforeEventSegsDestroyed = function (segs) {
         var _this = this;
-        if (this.hasPublicHandlers('eventDestroy')) {
+        if (this.haspublic Handlers('eventDestroy')) {
             segs.forEach(function (seg) {
                 var legacy;
                 if (seg.el) {
                     legacy = seg.footprint.getEventLegacy();
-                    _this.publiclyTrigger('eventDestroy', {
+                    _this.public lyTrigger('eventDestroy', {
                         context: legacy,
                         args: [legacy, seg.el, _this]
                     });
@@ -9330,7 +9330,7 @@ var Calendar = /** @class */ (function () {
     Calendar.prototype.getView = function () {
         return this.view;
     };
-    Calendar.prototype.publiclyTrigger = function (name, triggerInfo) {
+    Calendar.prototype.public lyTrigger = function (name, triggerInfo) {
         var optHandler = this.opt(name);
         var context;
         var args;
@@ -9352,13 +9352,13 @@ var Calendar = /** @class */ (function () {
             return optHandler.apply(context, args);
         }
     };
-    Calendar.prototype.hasPublicHandlers = function (name) {
+    Calendar.prototype.haspublic Handlers = function (name) {
         return this.hasHandlers(name) ||
             this.opt(name); // handler specified in options
     };
-    // Options Public API
+    // Options public  API
     // -----------------------------------------------------------------------------------------------------------------
-    // public getter/setter
+    // public  getter/setter
     Calendar.prototype.option = function (name, value) {
         var newOptionHash;
         if (typeof name === 'string') {
@@ -9473,13 +9473,13 @@ var Calendar = /** @class */ (function () {
     // Should be called when any type of async data fetching begins
     Calendar.prototype.pushLoading = function () {
         if (!(this.loadingLevel++)) {
-            this.publiclyTrigger('loading', [true, this.view]);
+            this.public lyTrigger('loading', [true, this.view]);
         }
     };
     // Should be called when any type of async data fetching completes
     Calendar.prototype.popLoading = function () {
         if (!(--this.loadingLevel)) {
-            this.publiclyTrigger('loading', [false, this.view]);
+            this.public lyTrigger('loading', [false, this.view]);
         }
     };
     // High-level Rendering
@@ -9489,7 +9489,7 @@ var Calendar = /** @class */ (function () {
             this.initialRender();
         }
         else if (this.elementVisible()) {
-            // mainly for the public API
+            // mainly for the public  API
             this.calcSize();
             this.updateViewSize();
         }
@@ -9718,7 +9718,7 @@ var Calendar = /** @class */ (function () {
             this.view &&
             this.view.isDatesRendered) {
             if (this.updateViewSize(true)) {
-                this.publiclyTrigger('windowResize', [this.view]);
+                this.public lyTrigger('windowResize', [this.view]);
             }
         }
     };
@@ -9813,7 +9813,7 @@ var Calendar = /** @class */ (function () {
     };
     // Selection
     // -----------------------------------------------------------------------------------------------------------------
-    // this public method receives start/end dates in any format, with any timezone
+    // this public  method receives start/end dates in any format, with any timezone
     Calendar.prototype.select = function (zonedStartInput, zonedEndInput) {
         this.view.select(this.buildSelectFootprint.apply(this, arguments));
     };
@@ -10067,7 +10067,7 @@ var Calendar = /** @class */ (function () {
         }
         return end;
     };
-    // Public Events API
+    // public  Events API
     // -----------------------------------------------------------------------------------------------------------------
     Calendar.prototype.rerenderEvents = function () {
         this.view.flash('displayingEvents');
@@ -10144,7 +10144,7 @@ var Calendar = /** @class */ (function () {
             this.eventManager.mutateEventsWithId(eventDef.id, eventDefMutation); // will release
         }
     };
-    // Public Event Sources API
+    // public  Event Sources API
     // ------------------------------------------------------------------------------------
     Calendar.prototype.getEventSources = function () {
         return this.eventManager.otherSources.slice(); // clone
@@ -10720,7 +10720,7 @@ var EventResizing = /** @class */ (function (_super) {
     /*
     component impements:
       - bindSegHandlerToEl
-      - publiclyTrigger
+      - public lyTrigger
       - diffDates
       - eventRangesToEventFootprints
       - isEventInstanceGroupAllowed
@@ -10837,7 +10837,7 @@ var EventResizing = /** @class */ (function (_super) {
     // Called before event segment resizing starts
     EventResizing.prototype.segResizeStart = function (seg, ev) {
         this.isResizing = true;
-        this.component.publiclyTrigger('eventResizeStart', {
+        this.component.public lyTrigger('eventResizeStart', {
             context: seg.el[0],
             args: [
                 seg.footprint.getEventLegacy(),
@@ -10850,7 +10850,7 @@ var EventResizing = /** @class */ (function (_super) {
     // Called after event segment resizing stops
     EventResizing.prototype.segResizeStop = function (seg, ev) {
         this.isResizing = false;
-        this.component.publiclyTrigger('eventResizeStop', {
+        this.component.public lyTrigger('eventResizeStop', {
             context: seg.el[0],
             args: [
                 seg.footprint.getEventLegacy(),
@@ -10913,7 +10913,7 @@ var EventDragging = /** @class */ (function (_super) {
     /*
     component implements:
       - bindSegHandlerToEl
-      - publiclyTrigger
+      - public lyTrigger
       - diffDates
       - eventRangesToEventFootprints
       - isEventInstanceGroupAllowed
@@ -11109,7 +11109,7 @@ var EventDragging = /** @class */ (function (_super) {
     // Called before event segment dragging starts
     EventDragging.prototype.segDragStart = function (seg, ev) {
         this.isDragging = true;
-        this.component.publiclyTrigger('eventDragStart', {
+        this.component.public lyTrigger('eventDragStart', {
             context: seg.el[0],
             args: [
                 seg.footprint.getEventLegacy(),
@@ -11122,7 +11122,7 @@ var EventDragging = /** @class */ (function (_super) {
     // Called after event segment dragging stops
     EventDragging.prototype.segDragStop = function (seg, ev) {
         this.isDragging = false;
-        this.component.publiclyTrigger('eventDragStop', {
+        this.component.public lyTrigger('eventDragStop', {
             context: seg.el[0],
             args: [
                 seg.footprint.getEventLegacy(),

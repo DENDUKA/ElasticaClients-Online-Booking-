@@ -2,14 +2,14 @@
 <xs:schema id="FlyStretchDataSet" targetNamespace="http://tempuri.org/FlyStretchDataSet.xsd" xmlns:mstns="http://tempuri.org/FlyStretchDataSet.xsd" xmlns="http://tempuri.org/FlyStretchDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
   <xs:annotation>
     <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
-      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, public " SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
         <Connections>
           <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="FlyStretchConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="FlyStretchConnectionString (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.ConsoleApp1.Properties.Settings.GlobalReference.Default.FlyStretchConnectionString" Provider="System.Data.SqlClient" />
         </Connections>
         <Tables>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="__MigrationHistoryTableAdapter" GeneratorDataComponentClassName="__MigrationHistoryTableAdapter" Name="__MigrationHistory" UserDataComponentName="__MigrationHistoryTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, public " DataAccessorName="__MigrationHistoryTableAdapter" GeneratorDataComponentClassName="__MigrationHistoryTableAdapter" Name="__MigrationHistory" UserDataComponentName="__MigrationHistoryTableAdapter">
             <MainSource>
-              <DbSource ConnectionRef="FlyStretchConnectionString (Settings)" DbObjectName="FlyStretch.dbo.__MigrationHistory" DbObjectType="Table" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+              <DbSource ConnectionRef="FlyStretchConnectionString (Settings)" DbObjectName="FlyStretch.dbo.__MigrationHistory" DbObjectType="Table" FillMethodModifier="public " FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="public " GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, publicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
                 <DeleteCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="false">
                     <CommandText>DELETE FROM [dbo].[__MigrationHistory] WHERE (([MigrationId] = @Original_MigrationId) AND ([ContextKey] = @Original_ContextKey) AND ([ProductVersion] = @Original_ProductVersion))</CommandText>
@@ -63,9 +63,9 @@ SELECT MigrationId, ContextKey, Model, ProductVersion FROM __MigrationHistory WH
             </Mappings>
             <Sources />
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="AccountsTableAdapter" GeneratorDataComponentClassName="AccountsTableAdapter" Name="Accounts" UserDataComponentName="AccountsTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, public " DataAccessorName="AccountsTableAdapter" GeneratorDataComponentClassName="AccountsTableAdapter" Name="Accounts" UserDataComponentName="AccountsTableAdapter">
             <MainSource>
-              <DbSource ConnectionRef="FlyStretchConnectionString (Settings)" DbObjectName="FlyStretch.dbo.Accounts" DbObjectType="Table" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+              <DbSource ConnectionRef="FlyStretchConnectionString (Settings)" DbObjectName="FlyStretch.dbo.Accounts" DbObjectType="Table" FillMethodModifier="public " FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="public " GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, publicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
                 <DeleteCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="false">
                     <CommandText>DELETE FROM [dbo].[Accounts] WHERE (([Id] = @Original_Id) AND ([RoleId] = @Original_RoleId) AND ([SettingsBranchId] = @Original_SettingsBranchId) AND ([Verified] = @Original_Verified) AND ([Bonuses] = @Original_Bonuses) AND ([BonusesOff] = @Original_BonusesOff))</CommandText>
@@ -145,9 +145,9 @@ SELECT Id, Instagram, Name, Email, RoleId, Phone, Password, SettingsBranchId, Ve
             </Mappings>
             <Sources />
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="BranchesTableAdapter" GeneratorDataComponentClassName="BranchesTableAdapter" Name="Branches" UserDataComponentName="BranchesTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, public " DataAccessorName="BranchesTableAdapter" GeneratorDataComponentClassName="BranchesTableAdapter" Name="Branches" UserDataComponentName="BranchesTableAdapter">
             <MainSource>
-              <DbSource ConnectionRef="FlyStretchConnectionString (Settings)" DbObjectName="FlyStretch.dbo.Branches" DbObjectType="Table" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+              <DbSource ConnectionRef="FlyStretchConnectionString (Settings)" DbObjectName="FlyStretch.dbo.Branches" DbObjectType="Table" FillMethodModifier="public " FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="public " GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, publicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
                 <DeleteCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="false">
                     <CommandText>DELETE FROM [dbo].[Branches] WHERE (([Id] = @Original_Id))</CommandText>
@@ -190,9 +190,9 @@ SELECT Id, Name FROM Branches WHERE (Id = @Id)</CommandText>
             </Mappings>
             <Sources />
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="FreezeSubscriptionItemsTableAdapter" GeneratorDataComponentClassName="FreezeSubscriptionItemsTableAdapter" Name="FreezeSubscriptionItems" UserDataComponentName="FreezeSubscriptionItemsTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, public " DataAccessorName="FreezeSubscriptionItemsTableAdapter" GeneratorDataComponentClassName="FreezeSubscriptionItemsTableAdapter" Name="FreezeSubscriptionItems" UserDataComponentName="FreezeSubscriptionItemsTableAdapter">
             <MainSource>
-              <DbSource ConnectionRef="FlyStretchConnectionString (Settings)" DbObjectName="FlyStretch.dbo.FreezeSubscriptionItems" DbObjectType="Table" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+              <DbSource ConnectionRef="FlyStretchConnectionString (Settings)" DbObjectName="FlyStretch.dbo.FreezeSubscriptionItems" DbObjectType="Table" FillMethodModifier="public " FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="public " GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, publicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
                 <DeleteCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="false">
                     <CommandText>DELETE FROM [dbo].[FreezeSubscriptionItems] WHERE (([Id] = @Original_Id) AND ([Start] = @Original_Start) AND ([End] = @Original_End) AND ([SubscriptionId] = @Original_SubscriptionId))</CommandText>
@@ -250,9 +250,9 @@ SELECT Id, Start, [End], SubscriptionId, Description FROM FreezeSubscriptionItem
             </Mappings>
             <Sources />
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="GymsTableAdapter" GeneratorDataComponentClassName="GymsTableAdapter" Name="Gyms" UserDataComponentName="GymsTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, public " DataAccessorName="GymsTableAdapter" GeneratorDataComponentClassName="GymsTableAdapter" Name="Gyms" UserDataComponentName="GymsTableAdapter">
             <MainSource>
-              <DbSource ConnectionRef="FlyStretchConnectionString (Settings)" DbObjectName="FlyStretch.dbo.Gyms" DbObjectType="Table" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+              <DbSource ConnectionRef="FlyStretchConnectionString (Settings)" DbObjectName="FlyStretch.dbo.Gyms" DbObjectType="Table" FillMethodModifier="public " FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="public " GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, publicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
                 <DeleteCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="false">
                     <CommandText>DELETE FROM [dbo].[Gyms] WHERE (([Id] = @Original_Id) AND ([BranchId] = @Original_BranchId))</CommandText>
@@ -300,9 +300,9 @@ SELECT Id, Name, BranchId FROM Gyms WHERE (Id = @Id)</CommandText>
             </Mappings>
             <Sources />
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="IncomesTableAdapter" GeneratorDataComponentClassName="IncomesTableAdapter" Name="Incomes" UserDataComponentName="IncomesTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, public " DataAccessorName="IncomesTableAdapter" GeneratorDataComponentClassName="IncomesTableAdapter" Name="Incomes" UserDataComponentName="IncomesTableAdapter">
             <MainSource>
-              <DbSource ConnectionRef="FlyStretchConnectionString (Settings)" DbObjectName="FlyStretch.dbo.Incomes" DbObjectType="Table" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+              <DbSource ConnectionRef="FlyStretchConnectionString (Settings)" DbObjectName="FlyStretch.dbo.Incomes" DbObjectType="Table" FillMethodModifier="public " FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="public " GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, publicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
                 <DeleteCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="false">
                     <CommandText>DELETE FROM [dbo].[Incomes] WHERE (([Id] = @Original_Id) AND ([Cost] = @Original_Cost) AND ([Date] = @Original_Date) AND ([BranchId] = @Original_BranchId) AND ([Type] = @Original_Type))</CommandText>
@@ -365,9 +365,9 @@ SELECT Id, Name, Cost, Date, BranchId, Type FROM Incomes WHERE (Id = @Id)</Comma
             </Mappings>
             <Sources />
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="RolesTableAdapter" GeneratorDataComponentClassName="RolesTableAdapter" Name="Roles" UserDataComponentName="RolesTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, public " DataAccessorName="RolesTableAdapter" GeneratorDataComponentClassName="RolesTableAdapter" Name="Roles" UserDataComponentName="RolesTableAdapter">
             <MainSource>
-              <DbSource ConnectionRef="FlyStretchConnectionString (Settings)" DbObjectName="FlyStretch.dbo.Roles" DbObjectType="Table" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+              <DbSource ConnectionRef="FlyStretchConnectionString (Settings)" DbObjectName="FlyStretch.dbo.Roles" DbObjectType="Table" FillMethodModifier="public " FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="public " GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, publicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
                 <DeleteCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="false">
                     <CommandText>DELETE FROM [dbo].[Roles] WHERE (([Id] = @Original_Id))</CommandText>
@@ -410,9 +410,9 @@ SELECT Id, Name FROM Roles WHERE (Id = @Id)</CommandText>
             </Mappings>
             <Sources />
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="SubscriptionsTableAdapter" GeneratorDataComponentClassName="SubscriptionsTableAdapter" Name="Subscriptions" UserDataComponentName="SubscriptionsTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, public " DataAccessorName="SubscriptionsTableAdapter" GeneratorDataComponentClassName="SubscriptionsTableAdapter" Name="Subscriptions" UserDataComponentName="SubscriptionsTableAdapter">
             <MainSource>
-              <DbSource ConnectionRef="FlyStretchConnectionString (Settings)" DbObjectName="FlyStretch.dbo.Subscriptions" DbObjectType="Table" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+              <DbSource ConnectionRef="FlyStretchConnectionString (Settings)" DbObjectName="FlyStretch.dbo.Subscriptions" DbObjectType="Table" FillMethodModifier="public " FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="public " GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, publicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
                 <DeleteCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="false">
                     <CommandText>DELETE FROM [dbo].[Subscriptions] WHERE (([Id] = @Original_Id) AND ([AccountId] = @Original_AccountId) AND ([BuyDate] = @Original_BuyDate) AND ([BranchId] = @Original_BranchId) AND ([Cost] = @Original_Cost) AND ([ActiveDays] = @Original_ActiveDays) AND ([ByCash] = @Original_ByCash) AND ([TrainingCount] = @Original_TrainingCount) AND ([StatusId] = @Original_StatusId) AND ((@IsNull_ActivateDate = 1 AND [ActivateDate] IS NULL) OR ([ActivateDate] = @Original_ActivateDate)) AND ([TrainingsLeft] = @Original_TrainingsLeft))</CommandText>
@@ -507,9 +507,9 @@ SELECT Id, AccountId, BuyDate, BranchId, Cost, ActiveDays, ByCash, TrainingCount
             </Mappings>
             <Sources />
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="TrainingItemsTableAdapter" GeneratorDataComponentClassName="TrainingItemsTableAdapter" Name="TrainingItems" UserDataComponentName="TrainingItemsTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, public " DataAccessorName="TrainingItemsTableAdapter" GeneratorDataComponentClassName="TrainingItemsTableAdapter" Name="TrainingItems" UserDataComponentName="TrainingItemsTableAdapter">
             <MainSource>
-              <DbSource ConnectionRef="FlyStretchConnectionString (Settings)" DbObjectName="FlyStretch.dbo.TrainingItems" DbObjectType="Table" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+              <DbSource ConnectionRef="FlyStretchConnectionString (Settings)" DbObjectName="FlyStretch.dbo.TrainingItems" DbObjectType="Table" FillMethodModifier="public " FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="public " GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, publicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
                 <DeleteCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="false">
                     <CommandText>DELETE FROM [dbo].[TrainingItems] WHERE (([Id] = @Original_Id) AND ([SubscriptionId] = @Original_SubscriptionId) AND ([TrainingId] = @Original_TrainingId) AND ([AccountId] = @Original_AccountId) AND ([YClientsId] = @Original_YClientsId) AND ([Razovoe] = @Original_Razovoe) AND ([RazovoeCost] = @Original_RazovoeCost) AND ([StatusId] = @Original_StatusId) AND ([IsTrial] = @Original_IsTrial) AND ([StatusPayId] = @Original_StatusPayId))</CommandText>
@@ -594,9 +594,9 @@ SELECT Id, SubscriptionId, TrainingId, AccountId, YClientsId, Razovoe, RazovoeCo
             </Mappings>
             <Sources />
           </TableAdapter>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="TrainingsTableAdapter" GeneratorDataComponentClassName="TrainingsTableAdapter" Name="Trainings" UserDataComponentName="TrainingsTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, public " DataAccessorName="TrainingsTableAdapter" GeneratorDataComponentClassName="TrainingsTableAdapter" Name="Trainings" UserDataComponentName="TrainingsTableAdapter">
             <MainSource>
-              <DbSource ConnectionRef="FlyStretchConnectionString (Settings)" DbObjectName="FlyStretch.dbo.Trainings" DbObjectType="Table" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+              <DbSource ConnectionRef="FlyStretchConnectionString (Settings)" DbObjectName="FlyStretch.dbo.Trainings" DbObjectType="Table" FillMethodModifier="public " FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="public " GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, publicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
                 <DeleteCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="false">
                     <CommandText>DELETE FROM [dbo].[Trainings] WHERE (([Id] = @Original_Id) AND ([StartTime] = @Original_StartTime) AND ([Seats] = @Original_Seats) AND ([GymId] = @Original_GymId) AND ([StatusId] = @Original_StatusId) AND ([TrainerId] = @Original_TrainerId) AND ([YClientId] = @Original_YClientId) AND ([Duration] = @Original_Duration) AND ([TrainerPay] = @Original_TrainerPay) AND ([SeatsTaken] = @Original_SeatsTaken))</CommandText>

@@ -17,7 +17,7 @@ namespace ConsoleApp1.Properties {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
         
-        public static Settings Default {
+        public  static Settings Default {
             get {
                 return defaultInstance;
             }
@@ -28,7 +28,7 @@ namespace ConsoleApp1.Properties {
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=DENDUKA-PC\\SQLEXPRESS01;Initial Catalog=FlyStretch;Integrated Securit" +
             "y=True")]
-        public string FlyStretchConnectionString {
+        public  string FlyStretchConnectionString {
             get {
                 return ((string)(this["FlyStretchConnectionString"]));
             }

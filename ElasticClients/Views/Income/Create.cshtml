@@ -2,6 +2,8 @@
 
 @{
 	ViewBag.Title = "Create";
+	var incomeB = System.Web.Mvc.DependencyResolver.Current.GetService<ElasticaClients.Logic.IncomeB>();
+	var branchB = System.Web.Mvc.DependencyResolver.Current.GetService<ElasticaClients.Logic.BranchB>();
 }
 
 @using (Html.BeginForm())
@@ -31,7 +33,7 @@
 		<div class="form-group">
 			@Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label col-md-2" })
 			<div class="col-md-10">
-				@Html.DropDownListFor(model => model.Type, ElasticaClients.Logic.IncomeB.ToSelectListItems(-1), new { @class = "form-control" })
+				@Html.DropDownListFor(model => model.Type, incomeB.ToSelectListItems(-1), new { @class = "form-control" })
 				@Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
 			</div>
 		</div>
@@ -47,7 +49,7 @@
 		<div class="form-group">
 			@Html.LabelFor(model => model.BranchId, htmlAttributes: new { @class = "control-label col-md-2" })
 			<div class="col-md-10">
-				@Html.DropDownListFor(model => model.BranchId, ElasticaClients.Logic.BranchB.ToSelectListItems(Model.BranchId), new { @class = "form-control", @disabled = "true" })
+				@Html.DropDownListFor(model => model.BranchId, branchB.ToSelectListItems(Model.BranchId), new { @class = "form-control", @disabled = "true" })
 				@Html.ValidationMessageFor(model => model.BranchId, "", new { @class = "text-danger" })
 			</div>
 		</div>

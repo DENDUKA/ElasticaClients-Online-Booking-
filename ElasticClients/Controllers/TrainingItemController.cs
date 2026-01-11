@@ -7,123 +7,136 @@ using System.Web.Mvc;
 
 namespace ElasticaClients.Controllers
 {
-	public class TrainingItemController : Controller
-	{
-		public ActionResult Index()
-		{
-			return View();
-		}
+    public class TrainingItemController : Controller
+    {
+        private readonly TrainingItemB _trainingItemB;
+        private readonly TrainingB _trainingB;
+        private readonly AccountB _accountB;
+        private readonly SubscriptionB _subscriptionB;
 
-		public ActionResult Details(int id)
-		{
-			return View();
-		}
+        public TrainingItemController(TrainingItemB trainingItemB, TrainingB trainingB, AccountB accountB, SubscriptionB subscriptionB)
+        {
+            _trainingItemB = trainingItemB;
+            _trainingB = trainingB;
+            _accountB = accountB;
+            _subscriptionB = subscriptionB;
+        }
 
-		[Authorize(Roles = "admin, trainer")]
-		public ActionResult Create(int trainingId)
-		{
-			TrainingItemModel model = new TrainingItemModel();
-			model.RazovoeCost = 0;
-			return View(model);
-		}
+        public ActionResult Index()
+        {
+            return View();
+        }
 
-		[HttpPost]
-		[Authorize(Roles = "admin, trainer")]
-		public ActionResult Create(TrainingItemModel model)
-		{
-			if (ModelState.IsValid)
-			{
-				if (!TrainingItemB.Add((TrainingItem)model))
-				{
-					ModelState.AddModelError("", "Не смогли записать пользователя.");
-					return View(model);
-				}
+        public ActionResult Details(int id)
+        {
+            return View();
+        }
 
-				return RedirectToAction("Details", "Training", new { id = model.TrainingId });
-			}
+        [Authorize(Roles = "admin, trainer")]
+        public ActionResult Create(int trainingId)
+        {
+            TrainingItemModel model = new TrainingItemModel();
+            model.RazovoeCost = 0;
+            return View(model);
+        }
 
-			return View(model);
-		}
+        [HttpPost]
+        [Authorize(Roles = "admin, trainer")]
+        public ActionResult Create(TrainingItemModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (!_trainingItemB.Add((TrainingItem)model))
+                {
+                    ModelState.AddModelError("", "Не смогли записать пользователя.");
+                    return View(model);
+                }
 
-		[Authorize(Roles = "admin")]
-		public ActionResult Edit(int id)
-		{
-			return View();
-		}
+                return RedirectToAction("Details", "Training", new { id = model.TrainingId });
+            }
 
-		[HttpPost]
-		[Authorize(Roles = "admin")]
-		public ActionResult Edit(int id, FormCollection collection)
-		{
-			try
-			{
-				// TODO: Add update logic here
+            return View(model);
+        }
 
-				return RedirectToAction("Index");
-			}
-			catch
-			{
-				return View();
-			}
-		}
+        [Authorize(Roles = "admin")]
+        public ActionResult Edit(int id)
+        {
+            return View();
+        }
 
-		[Authorize(Roles = "admin")]
-		public ActionResult Delete(int id)
-		{
-			return View();
-		}
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public ActionResult Edit(int id, FormCollection collection)
+        {
+            try
+            {
+                // TODO: Add update logic here
 
-		[HttpPost]
-		[Authorize(Roles = "admin")]
-		public ActionResult Delete(int id, FormCollection collection)
-		{
-			var ti = TrainingItemB.Get(id);
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
 
-			TrainingItemB.Delete(id);
+        [Authorize(Roles = "admin")]
+        public ActionResult Delete(int id)
+        {
+            return View();
+        }
 
-			return RedirectToAction("Details", "Training", new { id = ti.TrainingId });
-		}
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public ActionResult Delete(int id, FormCollection collection)
+        {
+            var ti = _trainingItemB.Get(id);
 
-		[Authorize]
-		public ActionResult SignUp(int trainingId)
-		{
-			TrainingItemModel model = new TrainingItemModel
-			{
-				RazovoeCost = 0,
-				AccountId = int.Parse(System.Web.HttpContext.Current.User.Identity.Name)
-			};
+            _trainingItemB.Delete(id);
 
-			var training = TrainingB.Get(trainingId);
+            return RedirectToAction("Details", "Training", new { id = ti.TrainingId });
+        }
 
-			model.RazovoeCost = TrainingItemB.GetRazovoeCost(model.AccountId, training.Gym.BranchId);
+        [Authorize]
+        public ActionResult SignUp(int trainingId)
+        {
+            TrainingItemModel model = new TrainingItemModel
+            {
+                RazovoeCost = 0,
+                AccountId = int.Parse(System.Web.HttpContext.Current.User.Identity.Name)
+            };
 
-			return View(model);
-		}
+            var training = _trainingB.Get(trainingId);
 
-		[Authorize]
-		[HttpPost]
-		public ActionResult SignUp(TrainingItemModel model)
-		{
-			var training = TrainingB.Get(model.TrainingId);
+            model.RazovoeCost = _trainingItemB.GetRazovoeCost(model.AccountId, training.Gym.BranchId);
 
-			model.RazovoeCost = TrainingItemB.GetRazovoeCost(model.AccountId, training.Gym.BranchId);
+            return View(model);
+        }
 
-			if (ModelState.IsValid)
-			{
-				TrainingItem ti = (TrainingItem)model;
-				ti.IsTrial = AccountB.IsFirstTime(ti.AccountId);
+        [Authorize]
+        [HttpPost]
+        public ActionResult SignUp(TrainingItemModel model)
+        {
+            var training = _trainingB.Get(model.TrainingId);
 
-				TrainingItemB.Add(ti);
-				return RedirectToAction("Details", "Training", new { id = model.TrainingId });
-			}
+            model.RazovoeCost = _trainingItemB.GetRazovoeCost(model.AccountId, training.Gym.BranchId);
 
-			return View(model);
-		}
+            if (ModelState.IsValid)
+            {
+                TrainingItem ti = (TrainingItem)model;
+                ti.IsTrial = _accountB.IsFirstTime(ti.AccountId);
 
-		public ActionResult _GetSubscriptionsForAccount(int accId)
-		{
-			var model = SubscriptionB.GetForAccount(accId).Where(x => x.StatusId == (int)SubscriptionStatus.Activated || x.StatusId == (int)SubscriptionStatus.NotActivated).ToList();
-			return PartialView(model);
-		}
-	}
+                _trainingItemB.Add(ti);
+                return RedirectToAction("Details", "Training", new { id = model.TrainingId });
+            }
+
+            return View(model);
+        }
+
+        public ActionResult _GetSubscriptionsForAccount(int accId)
+        {
+            var model = _subscriptionB.GetForAccount(accId).Where(x => x.StatusId == (int)SubscriptionStatus.Activated || x.StatusId == (int)SubscriptionStatus.NotActivated).ToList();
+            return PartialView(model);
+        }
+    }
 }

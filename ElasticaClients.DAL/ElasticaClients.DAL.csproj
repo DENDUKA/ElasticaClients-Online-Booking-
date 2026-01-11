@@ -41,6 +41,12 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.8.0.0\lib\net462\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.8.0.0\lib\net462\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -68,11 +74,28 @@
     <Compile Include="Accessory\TrainingItemStatus.cs" />
     <Compile Include="Accessory\TrainingStatus.cs" />
     <Compile Include="Cache\AccountCache.cs" />
+    <Compile Include="ServiceConfiguration.cs" />
+    <Compile Include="Data\Interfaces\IAccountDAL.cs" />
+    <Compile Include="Data\Interfaces\IBranchDAL.cs" />
+    <Compile Include="Data\Interfaces\IGymDAL.cs" />
+    <Compile Include="Data\Interfaces\IIncomeDAL.cs" />
+    <Compile Include="Data\Interfaces\IRoleDAL.cs" />
+    <Compile Include="Data\Interfaces\ISubscriptionDAL.cs" />
+    <Compile Include="Data\Interfaces\ITrainingDAL.cs" />
+    <Compile Include="Data\Interfaces\ITrainingItemDAL.cs" />
     <Compile Include="Data\BranchDAL.cs" />
-    <Compile Include="Data\IncomeDAL.cs" />
+    <Compile Include="Data\Interfaces\IncomeDAL.cs" />
     <Compile Include="Data\SubscriptionDAL.cs" />
     <Compile Include="Data\TrainingDAL.cs" />
     <Compile Include="Data\TrainingItemDAL.cs" />
+    <Compile Include="Data\Mocks\MockAccountDAL.cs" />
+    <Compile Include="Data\Mocks\MockBranchDAL.cs" />
+    <Compile Include="Data\Mocks\MockGymDAL.cs" />
+    <Compile Include="Data\Mocks\MockRoleDAL.cs" />
+    <Compile Include="Data\Mocks\MockSubscriptionDAL.cs" />
+    <Compile Include="Data\Mocks\MockTrainingDAL.cs" />
+    <Compile Include="Data\Mocks\MockTrainingItemDAL.cs" />
+    <Compile Include="Data\Mocks\MockIncomeDAL.cs" />
     <Compile Include="Entities\Branch.cs" />
     <Compile Include="Entities\BranchContext.cs" />
     <Compile Include="Entities\FreezeSubscriptionItemContext.cs" />

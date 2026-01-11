@@ -1,5 +1,5 @@
 ﻿using ElasticaClients.DAL.Accessory;
-using ElasticaClients.DAL.Data;
+using ElasticaClients.DAL.Data.Interfaces;
 using ElasticaClients.DAL.Entities;
 using System;
 using System.Collections.Generic;
@@ -8,250 +8,261 @@ using System.Linq;
 
 namespace ElasticaClients.Logic
 {
-	public static class SubscriptionB
-	{
-		private static Stopwatch sw = new Stopwatch();
+    public class SubscriptionB
+    {
+        private static Stopwatch sw = new Stopwatch();
+        private readonly ISubscriptionDAL _subscriptionDAL;
 
-		public static void Add(Subscription sub)
-		{
-			SubscriptionDAL.Add(sub);
+        public SubscriptionB(ISubscriptionDAL subscriptionDAL)
+        {
+            _subscriptionDAL = subscriptionDAL;
+        }
 
-			RecalculateValues(sub.Id);
-		}
+        public void Add(Subscription sub)
+        {
+            _subscriptionDAL.Add(sub);
 
-		public static void BatchUnfreeze()
-		{
-			var freezeExpiredSubs = SubscriptionDAL.GetFreezeExpired();
+            RecalculateValues(sub.Id);
+        }
 
-			freezeExpiredSubs.ForEach(x => UnFreeze(x.Id));
-		}
+        public void BatchUnfreeze()
+        {
+            var freezeExpiredSubs = _subscriptionDAL.GetFreezeExpired();
 
-		public static void BatchActivateByTime()
-		{
-			var subs = SubscriptionDAL.GetAllWithStatus((int)SubscriptionStatus.NotActivated);
+            freezeExpiredSubs.ForEach(x => UnFreeze(x.Id));
+        }
 
-			var ss = subs.Where(x => x.BuyDate.AddDays(14) <= DateTime.Today).ToList();
+        public void BatchActivateByTime()
+        {
+            var subs = _subscriptionDAL.GetAllWithStatus((int)SubscriptionStatus.NotActivated);
 
-			foreach (var sub in ss)
-			{
-				//активация через 14 дней после покупки
-				if (sub.BuyDate.AddDays(14) <= DateTime.Today)
-				{
-					SubscriptionB.Activate(sub.Id, sub.BuyDate.AddDays(14));
-				}
-			}
-		}
+            var ss = subs.Where(x => x.BuyDate.AddDays(14) <= DateTime.Today).ToList();
 
-		public static void BatchCloseSubscription()
-		{
-			var subs = SubscriptionDAL.GetAllWithStatus((int)SubscriptionStatus.Activated);
+            foreach (var sub in ss)
+            {
+                //активация через 14 дней после покупки
+                if (sub.BuyDate.AddDays(14) <= DateTime.Today)
+                {
+                    Activate(sub.Id, sub.BuyDate.AddDays(14));
+                }
+            }
+        }
 
-			var byTyme = subs.Where(x => x.DaysLeft < 0).ToList();
-			//var byTrainingZero = 
+        public void BatchCloseSubscription()
+        {
+            var subs = _subscriptionDAL.GetAllWithStatus((int)SubscriptionStatus.Activated);
 
-			foreach (var sub in subs)
-			{
-				CloseByTimeLeft(sub);
-				CloseByTrainingsLeft(sub);
-			}
-		}
+            var byTyme = subs.Where(x => x.DaysLeft < 0).ToList();
+            //var byTrainingZero = 
 
-		private static void CloseByTimeLeft(Subscription sub)
-		{
-			if (sub.StatusId == (int)SubscriptionStatus.Activated && sub.DaysLeft < 0)
-			{
-				sub.StatusId = (int)SubscriptionStatus.Closed;
-				SubscriptionB.Update(sub);
-				Debug.WriteLine($"Закрыт по времени {sub.Id}");
-			}
-		}
+            foreach (var sub in subs)
+            {
+                CloseByTimeLeft(sub);
+                CloseByTrainingsLeft(sub);
+            }
+        }
 
-		public static void CloseByTrainingsLeft(Subscription sub)
-		{
-			if (sub.StatusId == (int)SubscriptionStatus.Activated)
-			{
-				int actualTiCount = sub.TrainingItems.Count(x => x.StatusId == (int)TrainingItemStatus.yes || x.StatusId == (int)TrainingItemStatus.no);
-				if (actualTiCount >= sub.TrainingCount)
-				{
-					sub.StatusId = (int)SubscriptionStatus.Closed;
-					SubscriptionB.Update(sub);
-					Debug.WriteLine($"Закрыт по окончанию тренировок {sub.Id} осталось {sub.TrainingCount - actualTiCount}");
-				}
-			}
-		}
+        private void CloseByTimeLeft(Subscription sub)
+        {
+            if (sub.StatusId == (int)SubscriptionStatus.Activated && sub.DaysLeft < 0)
+            {
+                sub.StatusId = (int)SubscriptionStatus.Closed;
+                Update(sub);
+                Debug.WriteLine($"Закрыт по времени {sub.Id}");
+            }
+        }
 
-		public static bool Delete(int id)
-		{
-			var sub = SubscriptionB.Get(id);
+        public void CloseByTrainingsLeft(Subscription sub)
+        {
+            if (sub.StatusId == (int)SubscriptionStatus.Activated)
+            {
+                int actualTiCount = sub.TrainingItems.Count(x => x.StatusId == (int)TrainingItemStatus.yes || x.StatusId == (int)TrainingItemStatus.no);
+                if (actualTiCount >= sub.TrainingCount)
+                {
+                    sub.StatusId = (int)SubscriptionStatus.Closed;
+                    Update(sub);
+                    Debug.WriteLine($"Закрыт по окончанию тренировок {sub.Id} осталось {sub.TrainingCount - actualTiCount}");
+                }
+            }
+        }
 
-			if (sub.TrainingItems.Count == 0)
-			{
-				SubscriptionDAL.Delete(id);
-				return true;
-			}
+        public bool Delete(int id)
+        {
+            var sub = Get(id);
 
-			return false;
-		}
+            if (sub.TrainingItems.Count == 0)
+            {
+                _subscriptionDAL.Delete(id);
+                return true;
+            }
 
-		//public static void Activate(int id, DateTime activateDate)
-		//{
-		//	SubscriptionDAL.Activate(id, activateDate);
-  //          RecalculateValues(id);
-  //      }
+            return false;
+        }
 
-		public static void Update(Subscription sub)
-		{
-			SubscriptionDAL.Update(sub);
-			RecalculateValues(sub.Id);
-		}
+        //public  static void Activate(int id, DateTime activateDate)
+        //{
+        //	_subscriptionDAL.Activate(id, activateDate);
+        //          RecalculateValues(id);
+        //      }
 
-		public static List<Subscription> GetForBranch(int branchId, bool includeRazovoe = false)
-		{
-			var subs = SubscriptionDAL.GetForBranch(branchId, includeRazovoe);
-			return subs;
-		}
+        public void Update(Subscription sub)
+        {
+            _subscriptionDAL.Update(sub);
+            RecalculateValues(sub.Id);
+        }
 
-		public static List<Subscription> GetForBranch(int branchId, DateTime start, DateTime end, bool includeRazovoe = false)
-		{
-			var subs = SubscriptionDAL.GetForBranch(branchId, includeRazovoe, start, end);
-			return subs;
-		}
+        public List<Subscription> GetForBranch(int branchId, bool includeRazovoe = false)
+        {
+            var subs = _subscriptionDAL.GetForBranch(branchId, includeRazovoe);
+            return subs;
+        }
 
-		public static List<Subscription> GetAll()
-		{
-			return SubscriptionDAL.GetAll();
-		}
+        public List<Subscription> GetForBranch(int branchId, DateTime start, DateTime end, bool includeRazovoe = false)
+        {
+            var subs = _subscriptionDAL.GetForBranch(branchId, includeRazovoe, start, end);
+            return subs;
+        }
 
-		public static Subscription Get(int id)
-		{
-			return SubscriptionDAL.Get(id);
-		}
+        public List<Subscription> GetAll()
+        {
+            return _subscriptionDAL.GetAll();
+        }
 
-		public static Subscription GetRazovoe(int accId, int branchId)
-		{
-			var subs = SubscriptionDAL.GetForAccount(accId, branchId, true);
+        public List<Subscription> GetAll(DateTime? start, DateTime? end)
+        {
+            return _subscriptionDAL.GetAll(start, end);
+        }
 
-			return subs.Where(x => x.StatusId == (int)SubscriptionStatus.Razovoe).First();
-		}
+        public Subscription Get(int id)
+        {
+            return _subscriptionDAL.Get(id);
+        }
 
-		//branchId == 0 - для всех филиалов
-		public static List<Subscription> GetForAccount(int accId, int branchId = 0)
-		{
-			var subs = SubscriptionDAL.GetForAccount(accId, branchId);
+        public Subscription GetRazovoe(int accId, int branchId)
+        {
+            var subs = _subscriptionDAL.GetForAccount(accId, branchId, true);
 
-			return subs.Where(x => x.StatusId != (int)SubscriptionStatus.Razovoe).ToList();
-		}
+            return subs.Where(x => x.StatusId == (int)SubscriptionStatus.Razovoe).First();
+        }
 
-		public static void AddFreeze(FreezeSubscriptionItem freeze)
-		{
-			Subscription sub = SubscriptionDAL.Get(freeze.SubscriptionId);
+        //branchId == 0 - для всех филиалов
+        public List<Subscription> GetForAccount(int accId, int branchId = 0)
+        {
+            var subs = _subscriptionDAL.GetForAccount(accId, branchId);
 
-			if (sub.StatusId == (int)SubscriptionStatus.Activated)
-			{
-				sub.ActiveDays += freeze.FreezeDays;
-				sub.StatusId = (int)SubscriptionStatus.Freezed;
+            return subs.Where(x => x.StatusId != (int)SubscriptionStatus.Razovoe).ToList();
+        }
 
-				SubscriptionDAL.Update(sub);
-				SubscriptionDAL.AddFreeze(freeze);
-			}
-		}
+        public void AddFreeze(FreezeSubscriptionItem freeze)
+        {
+            Subscription sub = _subscriptionDAL.Get(freeze.SubscriptionId);
 
-		public static void UnFreeze(int subscriptionId)
-		{
-			Subscription sub = SubscriptionDAL.Get(subscriptionId);
+            if (sub.StatusId == (int)SubscriptionStatus.Activated)
+            {
+                sub.ActiveDays += freeze.FreezeDays;
+                sub.StatusId = (int)SubscriptionStatus.Freezed;
 
-			UnFreeze(sub);
-		}
+                _subscriptionDAL.Update(sub);
+                _subscriptionDAL.AddFreeze(freeze);
+            }
+        }
 
-		public static void UnFreeze(Subscription sub)
-		{
-			if (sub.StatusId == (int)SubscriptionStatus.Freezed)
-			{
-				var freeze = sub.FreezeSubscriptionList.First(x => x.Id == sub.FreezeSubscriptionList.Max(y => y.Id));
+        public void UnFreeze(int subscriptionId)
+        {
+            Subscription sub = _subscriptionDAL.Get(subscriptionId);
 
-				if (freeze.Start <= DateTime.Today && freeze.End >= DateTime.Today)
-				{
-					int daysDiff = (freeze.End - DateTime.Today).Days;
+            UnFreeze(sub);
+        }
 
-					freeze.End = DateTime.Today;
+        public void UnFreeze(Subscription sub)
+        {
+            if (sub.StatusId == (int)SubscriptionStatus.Freezed)
+            {
+                var freeze = sub.FreezeSubscriptionList.First(x => x.Id == sub.FreezeSubscriptionList.Max(y => y.Id));
 
-					sub.StatusId = (int)SubscriptionStatus.Activated;
-					sub.ActiveDays -= daysDiff;
+                if (freeze.Start <= DateTime.Today && freeze.End >= DateTime.Today)
+                {
+                    int daysDiff = (freeze.End - DateTime.Today).Days;
 
-					SubscriptionDAL.Update(sub);
-					SubscriptionDAL.UpdateFreeze(freeze);
-				}
+                    freeze.End = DateTime.Today;
 
-				if (freeze.Start <= DateTime.Today && freeze.End <= DateTime.Today)
-				{
-					sub.StatusId = (int)SubscriptionStatus.Activated;
+                    sub.StatusId = (int)SubscriptionStatus.Activated;
+                    sub.ActiveDays -= daysDiff;
 
-					SubscriptionDAL.Update(sub);
-					SubscriptionDAL.UpdateFreeze(freeze);
-				}
+                    _subscriptionDAL.Update(sub);
+                    _subscriptionDAL.UpdateFreeze(freeze);
+                }
 
-				if (freeze.Start > DateTime.Today)
-				{
+                if (freeze.Start <= DateTime.Today && freeze.End <= DateTime.Today)
+                {
                     sub.StatusId = (int)SubscriptionStatus.Activated;
 
-                    SubscriptionDAL.Update(sub);
-                    SubscriptionDAL.UpdateFreeze(freeze);
+                    _subscriptionDAL.Update(sub);
+                    _subscriptionDAL.UpdateFreeze(freeze);
                 }
-			}
-		}
 
-		public static void RecalculateValues(int id)
-		{
-			sw.Restart();
+                if (freeze.Start > DateTime.Today)
+                {
+                    sub.StatusId = (int)SubscriptionStatus.Activated;
 
-			var sub = SubscriptionDAL.Get(id);
-
-			if (sub is null)
-			{
-				return;
-			}
-
-			//только те, которые учитываются в абонементе
-			var actualTrainingItems = sub.TrainingItems.Where(x =>
-			x.StatusId == (int)TrainingItemStatus.yes ||
-			x.StatusId == (int)TrainingItemStatus.unKnown ||
-			x.StatusId == (int)TrainingItemStatus.no).ToList();
-
-			sub.TrainingsLeft = sub.TrainingCount - actualTrainingItems.Count;
-
-			if (sub.TrainingsLeft < 0)
-			{
-				sub.TrainingsLeft = 0;
-			}
-
-			// Проверка даты активации
-
-			if (sub.StatusId == (int)SubscriptionStatus.Activated && actualTrainingItems.Count > 0)
-			{
-				var dateActivateByDate = sub.BuyDate.AddDays(14);
-				var firstTrainingDate = actualTrainingItems.Min(x => x.Date.Date);
-
-
-				sub.ActivateDate = dateActivateByDate < firstTrainingDate ? dateActivateByDate : firstTrainingDate;
-			}
-
-			SubscriptionDAL.Update(sub);
-
-			sw.Stop();
-
-			Debug.WriteLine($"SubscriptionB.RecalculateValues {sw.ElapsedMilliseconds}");
-		}
-
-		public static void Activate(int id, DateTime activateDate)
-		{
-			Subscription sub = Get(id);
-
-			if (sub.StatusId == (int)SubscriptionStatus.NotActivated)
-			{
-				sub.ActivateDate = activateDate;				
-
-                SubscriptionDAL.Activate(id, activateDate);
+                    _subscriptionDAL.Update(sub);
+                    _subscriptionDAL.UpdateFreeze(freeze);
+                }
             }
-		}
-	}
+        }
+
+        public void RecalculateValues(int id)
+        {
+            sw.Restart();
+
+            var sub = _subscriptionDAL.Get(id);
+
+            if (sub is null)
+            {
+                return;
+            }
+
+            //только те, которые учитываются в абонементе
+            var actualTrainingItems = sub.TrainingItems.Where(x =>
+            x.StatusId == (int)TrainingItemStatus.yes ||
+            x.StatusId == (int)TrainingItemStatus.unKnown ||
+            x.StatusId == (int)TrainingItemStatus.no).ToList();
+
+            sub.TrainingsLeft = sub.TrainingCount - actualTrainingItems.Count;
+
+            if (sub.TrainingsLeft < 0)
+            {
+                sub.TrainingsLeft = 0;
+            }
+
+            // Проверка даты активации
+
+            if (sub.StatusId == (int)SubscriptionStatus.Activated && actualTrainingItems.Count > 0)
+            {
+                var dateActivateByDate = sub.BuyDate.AddDays(14);
+                var firstTrainingDate = actualTrainingItems.Min(x => x.Date.Date);
+
+
+                sub.ActivateDate = dateActivateByDate < firstTrainingDate ? dateActivateByDate : firstTrainingDate;
+            }
+
+            _subscriptionDAL.Update(sub);
+
+            sw.Stop();
+
+            Debug.WriteLine($"RecalculateValues {sw.ElapsedMilliseconds}");
+        }
+
+        public void Activate(int id, DateTime activateDate)
+        {
+            Subscription sub = Get(id);
+
+            if (sub.StatusId == (int)SubscriptionStatus.NotActivated)
+            {
+                sub.ActivateDate = activateDate;
+
+                _subscriptionDAL.Activate(id, activateDate);
+            }
+        }
+    }
 }

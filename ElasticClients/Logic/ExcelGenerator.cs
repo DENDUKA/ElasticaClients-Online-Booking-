@@ -4,16 +4,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
-using Microsoft.Office.Interop;
-using ElasticaClients.DAL.Data;
 using ElasticaClients.DAL.Entities;
 using ElasticaClients.DAL.Accessory;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
-using System.Drawing;
 using ElasticaClients.Models;
+using ElasticaClients.DAL.Data.Interfaces;
 
 namespace ElasticaClients.Logic
 {
@@ -46,9 +40,30 @@ namespace ElasticaClients.Logic
         private Dictionary<int, Account> accounts;
         private Dictionary<int, Subscription> subscriptions;
 
-        public ExcelGenerator()
+        private readonly IAccountDAL _accountDAL;
+        private readonly IBranchDAL _branchDAL;
+        private readonly ITrainingDAL _trainingDAL;
+        private readonly ISubscriptionDAL _subscriptionDAL;
+        private readonly IIncomeDAL _incomeDAL;
+        private readonly SubscriptionB _subscriptionB;
+        private readonly IncomeB _incomeB;
+        private readonly BranchB _branchB;
+        private readonly TrainingB _trainingB;
+        private readonly TrainingItemB _trainingItemB;
+
+        public ExcelGenerator(IAccountDAL accountDAL, IBranchDAL branchDAL, ITrainingDAL trainingDAL, ISubscriptionDAL subscriptionDAL, IIncomeDAL incomeDAL, SubscriptionB subscriptionB, IncomeB incomeB, BranchB branchB, TrainingB trainingB, TrainingItemB trainingItemB)
         {
-            accounts = AccountDAL.GetAllLight();
+            _accountDAL = accountDAL;
+            _branchDAL = branchDAL;
+            _trainingDAL = trainingDAL;
+            _subscriptionDAL = subscriptionDAL;
+            _incomeDAL = incomeDAL;
+            _subscriptionB = subscriptionB;
+            _incomeB = incomeB;
+            _branchB = branchB;
+            _trainingB = trainingB;
+            _trainingItemB = trainingItemB;
+            accounts = _accountDAL.GetAllLight();
         }
 
         public async Task<string> MonthReportAsync(int branchId, int year, int month)
@@ -71,25 +86,25 @@ namespace ElasticaClients.Logic
                 dateStart = new DateTime(year, month, 1);
                 dateEnd = dateStart.AddMonths(1);
 
-                var branch = BranchDAL.Get(branchId);
+                var branch = _branchDAL.Get(branchId);
 
                 var trainings = new List<Training>();
 
                 foreach (var gym in branch.Gyms)
                 {
-                    trainings.AddRange(TrainingDAL.GetAllForGym(gym.Id, dateStart, dateEnd));
+                    trainings.AddRange(_trainingDAL.GetAllForGym(gym.Id, dateStart, dateEnd));
                 }
 
                 trainings = trainings.OrderBy(x => x.StartTime).ToList();
 
                 for (int i = 0; i < trainings.Count; i++)
                 {
-                    trainings[i] = TrainingDAL.Get(trainings[i].Id);
+                    trainings[i] = _trainingDAL.Get(trainings[i].Id);
                 }
 
                 wsheet.Cells[27, 2] = DateTime.DaysInMonth(year, month);
 
-                var subs = SubscriptionB.GetForBranch(branchId, dateStart.AddMonths(-12), dateEnd.AddYears(3));
+                var subs = _subscriptionB.GetForBranch(branchId, dateStart.AddMonths(-12), dateEnd.AddYears(3));
 
                 subscriptions = subs.ToDictionary(x => x.Id, x => x);
 
@@ -155,7 +170,7 @@ namespace ElasticaClients.Logic
 
         private void WriteAllInOutCome(Worksheet wsheet)
         {
-            var incomes = new IncomeTotalModel(BranchId, dateStart, dateEnd).AllIncomes;
+            var incomes = new IncomeTotalModel(_incomeB, _branchB, _trainingB, _subscriptionB, _trainingItemB, BranchId, dateStart, dateEnd).AllIncomes;
 
             var incomeByType = incomes.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList().Sum(y => y.Cost));
 
@@ -211,7 +226,7 @@ namespace ElasticaClients.Logic
                     }
                     else
                     {
-                        ti.Subscription = SubscriptionDAL.Get(ti.SubscriptionId);
+                        ti.Subscription = _subscriptionDAL.Get(ti.SubscriptionId);
                     }
 
                     if (ti.Razovoe || ti.IsTrial)
@@ -243,7 +258,7 @@ namespace ElasticaClients.Logic
                 TrainingR++;
             }
 
-            var outcome = IncomeDAL.GetAll(BranchId, dateStart, dateEnd).Sum(x => x.Cost);
+            var outcome = _incomeDAL.GetAll(BranchId, dateStart, dateEnd).Sum(x => x.Cost);
 
             wsheet.Cells[TrainingR - count - 8, TrainingC + 4] = count;
             wsheet.Cells[TrainingR - count - 7, TrainingC + 4] = outcome / count;
@@ -399,7 +414,7 @@ namespace ElasticaClients.Logic
 
             foreach (var s in abonTI)
             {
-                var sub = SubscriptionDAL.Get(s.SubscriptionId);
+                var sub = _subscriptionDAL.Get(s.SubscriptionId);
 
                 var costOne = sub.Cost / (float)sub.TrainingCount;
                 subsSum += costOne;
@@ -428,7 +443,7 @@ namespace ElasticaClients.Logic
 
             foreach (var ti in firedTI)
             {
-                var sub = SubscriptionDAL.Get(ti.SubscriptionId);
+                var sub = _subscriptionDAL.Get(ti.SubscriptionId);
 
                 var costOne = sub.Cost / (float)sub.TrainingCount;
                 firedSum += costOne;
@@ -494,7 +509,7 @@ namespace ElasticaClients.Logic
             List<TrainingItem> res = new List<TrainingItem>();
             foreach (var ti in trainingItems)
             {
-                var acc = AccountDAL.Get(ti.AccountId);
+                var acc = _accountDAL.Get(ti.AccountId);
 
                 if (acc.Subscriptions.Where(x => x.Cost > 0).Count() >= 1)
                 {

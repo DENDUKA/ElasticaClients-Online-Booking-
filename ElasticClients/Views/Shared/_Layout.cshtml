@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 	<title>@ViewBag.Title - My ASP.NET Application</title>
@@ -25,9 +25,12 @@
 </head>
 
 @{
-	var branchId = ElasticaClients.Logic.BranchB.GetBranchId(Session);
-	var selectedBranch = ElasticaClients.DAL.Data.BranchDAL.Get(branchId);
-	var branches = ElasticaClients.Logic.BranchB.GetAll();
+	var branchB = System.Web.Mvc.DependencyResolver.Current.GetService<ElasticaClients.Logic.BranchB>();
+	var branchDAL = System.Web.Mvc.DependencyResolver.Current.GetService<ElasticaClients.DAL.Data.Interfaces.IBranchDAL>();
+
+	var branchId = branchB.GetBranchId(Session);
+	var selectedBranch = branchDAL.Get(branchId);
+	var branches = branchB.GetAll();
 }
 
 <body style="padding-top:0">

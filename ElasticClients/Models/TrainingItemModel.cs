@@ -7,97 +7,100 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ElasticaClients.Models
 {
-	public class TrainingItemModel : IValidatableObject
-	{
-		public int Id { get; set; }
-		[DisplayName("Абонемент ")]
-		public int SubscriptionId { get; set; }
-		public Subscription Subscription { get; set; }
-		[Required]
-		[DisplayName("Тренировка ")]
-		public int TrainingId { get; set; }
-		public Training Training { get; set; }
-		[Required]
-		[DisplayName("Клиент ")]
-		public int AccountId { get; set; }
-		public Account Account { get; set; }
-		[DisplayName("Разовое ")]
-		public bool Razovoe { get; set; }
-		[DisplayName("Стоимость ")]
-		[Range(0, 999999, ErrorMessage = "Не отрицательное")]
-		public int RazovoeCost { get; set; }
-		[DisplayName("Пробное ")]
-		public bool IsTrial { get; set; }
+    public class TrainingItemModel : IValidatableObject
+    {
+        public int Id { get; set; }
+        [DisplayName("Абонемент ")]
+        public int SubscriptionId { get; set; }
+        public Subscription Subscription { get; set; }
+        [Required]
+        [DisplayName("Тренировка ")]
+        public int TrainingId { get; set; }
+        public Training Training { get; set; }
+        [Required]
+        [DisplayName("Клиент ")]
+        public int AccountId { get; set; }
+        public Account Account { get; set; }
+        [DisplayName("Разовое ")]
+        public bool Razovoe { get; set; }
+        [DisplayName("Стоимость ")]
+        [Range(0, 999999, ErrorMessage = "Не отрицательное")]
+        public int RazovoeCost { get; set; }
+        [DisplayName("Пробное ")]
+        public bool IsTrial { get; set; }
 
-		public static explicit operator TrainingItem(TrainingItemModel model)
-		{
-			return new TrainingItem()
-			{
-				Id = model.Id,
-				AccountId = model.AccountId,
-				SubscriptionId = model.SubscriptionId,
-				TrainingId = model.TrainingId,
-				Razovoe = model.Razovoe,
-				RazovoeCost = model.RazovoeCost,
-				IsTrial = model.IsTrial,
-			};
-		}
+        public static explicit operator TrainingItem(TrainingItemModel model)
+        {
+            return new TrainingItem()
+            {
+                Id = model.Id,
+                AccountId = model.AccountId,
+                SubscriptionId = model.SubscriptionId,
+                TrainingId = model.TrainingId,
+                Razovoe = model.Razovoe,
+                RazovoeCost = model.RazovoeCost,
+                IsTrial = model.IsTrial,
+            };
+        }
 
-		public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-		{
-			var results = new List<ValidationResult>();
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            var results = new List<ValidationResult>();
 
-			var training = TrainingB.Get(TrainingId);
+            var trainingB = System.Web.Mvc.DependencyResolver.Current.GetService(typeof(TrainingB)) as TrainingB;
+            var subscriptionB = System.Web.Mvc.DependencyResolver.Current.GetService(typeof(SubscriptionB)) as SubscriptionB;
 
-			if (TrainingB.IsAccountSigned(TrainingId, AccountId))
-			{
-				results.Add(new ValidationResult("Пользователь уже записан на эту тренировку"));
+            var training = trainingB?.Get(TrainingId);
 
-				//ModelState.AddModelError(string.Empty, "Пользователь уже записан на эту тренировку");
-				//return View(model);
-			}
+            if (trainingB != null && trainingB.IsAccountSigned(TrainingId, AccountId))
+            {
+                results.Add(new ValidationResult("Пользователь уже записан на эту тренировку"));
 
-			if (training.StatusId != (int)TrainingStatus.Active)
-			{
-				results.Add(new ValidationResult("Тренировка отменена"));
-			}
+                //ModelState.AddModelError(string.Empty, "Пользователь уже записан на эту тренировку");
+                //return View(model);
+            }
 
-			if (!TrainingB.IsHaveSeat(TrainingId))
-			{
-				results.Add(new ValidationResult("Мест нет"));
+            if (training != null && training.StatusId != (int)TrainingStatus.Active)
+            {
+                results.Add(new ValidationResult("Тренировка отменена"));
+            }
 
-				//ModelState.AddModelError(string.Empty, "Нет мест");
-				//return View(model);
-			}
+            if (trainingB != null && !trainingB.IsHaveSeat(TrainingId))
+            {
+                results.Add(new ValidationResult("Мест нет"));
 
-			if (Razovoe)
-			{
+                //ModelState.AddModelError(string.Empty, "Нет мест");
+                //return View(model);
+            }
 
-			}
-			else
-			{
-				var sub = SubscriptionB.Get(SubscriptionId);
+            if (Razovoe)
+            {
 
-				if (sub != null && (sub.StatusId == (int)SubscriptionStatus.Activated))
-				{
-					sub.DateEnd.AddDays(1);
-					if (training.StartTime > sub.DateEnd)
-					{
-						results.Add(new ValidationResult("Тренировка позже даты окончания абонемента"));
-					}
-				}
+            }
+            else
+            {
+                var sub = subscriptionB?.Get(SubscriptionId);
 
-				if (sub != null && (sub.StatusId == (int)SubscriptionStatus.Activated || sub.StatusId == (int)SubscriptionStatus.NotActivated))
-				{
+                if (sub != null && (sub.StatusId == (int)SubscriptionStatus.Activated))
+                {
+                    sub.DateEnd.AddDays(1);
+                    if (training.StartTime > sub.DateEnd)
+                    {
+                        results.Add(new ValidationResult("Тренировка позже даты окончания абонемента"));
+                    }
+                }
 
-				}
-				else
-				{
-					results.Add(new ValidationResult("Выберете активный	 абонемент", new[] { "SubscriptionId" }));
-				}
-			}
+                if (sub != null && (sub.StatusId == (int)SubscriptionStatus.Activated || sub.StatusId == (int)SubscriptionStatus.NotActivated))
+                {
 
-			return results;
-		}
-	}
+                }
+                else
+                {
+                    results.Add(new ValidationResult("Выберете активный	 абонемент", new[] { "SubscriptionId" }));
+                }
+            }
+
+            return results;
+        }
+    }
 }

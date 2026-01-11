@@ -1,6 +1,10 @@
-﻿@using FullCalendar
+@using FullCalendar
 
 @model ElasticaClients.Models.GymModel
+
+@{
+    var AccountB = System.Web.Mvc.DependencyResolver.Current.GetService<ElasticaClients.Logic.AccountB>();
+}
 
 <script src="~/Scripts/jquery-3.5.1.min.js"></script>
 <script src="~/Scripts/moment.min.js"></script>
@@ -11,7 +15,7 @@
 <script src="~/Scripts/locale/ru.js"></script>
 
 
-@if (ElasticaClients.Logic.AccountB.IsCurrentUserAdmin())
+@if (AccountB.IsCurrentUserAdmin())
 {
 	<button class="btn btn-primary" onclick="location.href='@Url.Action("Create", "Training", new { gymid = Model.Id })'"><i class="bi bi-plus-circle mr-1"></i> Добавить новый</button>
 }
