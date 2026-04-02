@@ -6,9 +6,12 @@
 {
 	var currentAcc = AccountB.GetLite(Convert.ToInt32(User.Identity.Name));
 
+	if (currentAcc != null)
+	{
 	<li class="nav-item active">
 		@Html.ActionLink(currentAcc.Name, "Details", "Account", new { id = User.Identity.Name }, new { @class = "nav-link" })
 	</li>
+	}
 	<li class="nav-item active">
 		@Html.ActionLink("Выйти ", "Logout", "Account", new { id = "" }, new { @class = "nav-link" })
 	</li>
