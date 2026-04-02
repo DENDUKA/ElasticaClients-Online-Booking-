@@ -7,7 +7,7 @@ namespace ElasticaClients.Controllers
     [Authorize(Roles = "admin")]
     public class LogController : Controller
     {
-        private const int PageSize = 30;
+        private const int PageSize = 100;
         private readonly AppLogFileStore _logFileStore;
 
         public LogController(AppLogFileStore logFileStore)

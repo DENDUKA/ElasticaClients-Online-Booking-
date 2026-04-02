@@ -15,6 +15,7 @@ namespace ElasticaClients.DAL
             services.AddScoped<ExcelHelper>();
             services.AddScoped<GymB>();
             services.AddScoped<IncomeB>();
+            services.AddScoped<AppLogFileStore>();
             services.AddScoped<LogB>();
             services.AddScoped<RoleB>();
             services.AddScoped<SubscriptionB>();
