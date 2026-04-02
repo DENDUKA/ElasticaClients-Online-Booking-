@@ -16,6 +16,7 @@ namespace ElasticaClients.Infrastructure
             services.AddSingleton<SubscriptionB>();
             services.AddSingleton<TrainingB>();
             services.AddSingleton<TrainingItemB>();
+            services.AddSingleton<AppLogFileStore>();
             services.AddSingleton<LogB>();
             services.AddSingleton<ExcelGenerator>();
             services.AddSingleton<ExcelHelper>();
