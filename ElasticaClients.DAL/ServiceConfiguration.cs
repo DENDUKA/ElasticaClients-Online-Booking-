@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using ElasticaClients.DAL.Data;
 using ElasticaClients.DAL.Data.Interfaces;
 using ElasticaClients.DAL.Data.Mocks;
 
@@ -17,6 +18,7 @@ namespace ElasticaClients.DAL
             services.AddSingleton<ISubscriptionDAL, MockSubscriptionDAL>();
             services.AddSingleton<ITrainingDAL, MockTrainingDAL>();
             services.AddSingleton<ITrainingItemDAL, MockTrainingItemDAL>();
+            services.AddSingleton<IAppLogDAL, AppLogDAL>();
 
             return services;
         }
