@@ -1,4 +1,4 @@
-using ElasticaClients.DAL.Entities;
+﻿using ElasticaClients.DAL.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Web;

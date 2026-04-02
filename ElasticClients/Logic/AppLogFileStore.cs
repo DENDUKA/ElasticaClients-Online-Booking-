@@ -1,4 +1,4 @@
-using ElasticaClients.DAL.Entities;
+﻿using ElasticaClients.DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.IO;
