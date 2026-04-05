@@ -2,6 +2,7 @@
 using ElasticaClients.DAL.Entities;
 using ElasticaClients.Logic;
 using ElasticaClients.Models;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -133,9 +134,12 @@ namespace ElasticaClients.Controllers
             return View(model);
         }
 
-        public ActionResult _GetSubscriptionsForAccount(int accId)
+        public ActionResult _GetSubscriptionsForAccount(int? accId)
         {
-            var model = _subscriptionB.GetForAccount(accId).Where(x => x.StatusId == (int)SubscriptionStatus.Activated || x.StatusId == (int)SubscriptionStatus.NotActivated).ToList();
+            if (!accId.HasValue)
+                return PartialView(new List<Subscription>());
+
+            var model = _subscriptionB.GetForAccount(accId.Value).Where(x => x.StatusId == (int)SubscriptionStatus.Activated || x.StatusId == (int)SubscriptionStatus.NotActivated).ToList();
             return PartialView(model);
         }
     }
