@@ -37,6 +37,11 @@ namespace ElasticaClients
 
             // Установить DependencyResolver для MVC
             DependencyResolver.SetResolver(new ServiceProviderDependencyResolver(serviceProvider));
+
+            // Явно запускаем фоновые задачи (Batches)
+            // Необходимо потому что Batches не инжектится в контроллеры,
+            // и без явного resolve таймер никогда не запустится
+            serviceProvider.GetService<Logic.Batches>();
         }
     }
 }
