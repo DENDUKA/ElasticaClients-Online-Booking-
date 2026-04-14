@@ -13,11 +13,13 @@ namespace ElasticaClients.Logic
         private static Stopwatch sw = new Stopwatch();
         private readonly ITrainingDAL _trainingDAL;
         private readonly ITrainingItemDAL _trainingItemDAL;
+        private readonly SubscriptionB _subscriptionB;
 
-        public TrainingB(ITrainingDAL trainingDAL, ITrainingItemDAL trainingItemDAL)
+        public TrainingB(ITrainingDAL trainingDAL, ITrainingItemDAL trainingItemDAL, SubscriptionB subscriptionB)
         {
             _trainingDAL = trainingDAL;
             _trainingItemDAL = trainingItemDAL;
+            _subscriptionB = subscriptionB;
         }
 
         public Training Get(int id)
@@ -164,6 +166,7 @@ namespace ElasticaClients.Logic
             foreach (var ti in t.TrainingItems)
             {
                 _trainingItemDAL.ChangeStatus(ti.Id, TrainingItemStatus.canceledByAdmin);
+                _subscriptionB.RecalculateValues(ti.SubscriptionId);
             }
         }
 
