@@ -4,7 +4,6 @@ using ElasticaClients.Models;
 using System;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Security;
 
@@ -22,15 +21,13 @@ namespace ElasticaClients.Controllers
         }
 
         [Authorize(Roles = "admin")]
-        public async Task<ActionResult> Index(int page = 1, int count = 1000000, string filter = "")
+        public ActionResult Index(int page = 1, int count = 1000000, string filter = "")
         {
-            var accs = await _accountB.GetWithFilterAsync(page, count, filter);
+            var accs = _accountB.GetWithFilter(page, count, filter);
 
             var model = AccountModel.ToModelList(accs);
 
-            var res = await Task.Run(() => View(model));
-
-            return res;
+            return View(model);
         }
 
         public ActionResult Details(int id)
