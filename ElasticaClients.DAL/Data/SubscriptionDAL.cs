@@ -1,4 +1,4 @@
-﻿using ElasticaClients.DAL.Accessory;
+using ElasticaClients.DAL.Accessory;
 using ElasticaClients.DAL.Data.Interfaces;
 using ElasticaClients.DAL.Entities;
 using System;
@@ -116,7 +116,7 @@ namespace ElasticaClients.DAL.Data
 
                 if (sub.StatusId == (int)SubscriptionStatus.Activated)
                 {
-                    if (sub.ActivateDate is null && oldSub.ActivateDate != null)
+                    if (sub.ActivateDate == null && oldSub.ActivateDate != null)
                     {
                         sub.ActivateDate = oldSub.ActivateDate;
                     }
@@ -133,8 +133,8 @@ namespace ElasticaClients.DAL.Data
 
         public List<Subscription> GetAll(DateTime? start = null, DateTime? end = null)
         {
-            start = start is null ? DateTime.MinValue : start;
-            end = end is null ? DateTime.MaxValue : end;
+            start = start == null ? DateTime.MinValue : start;
+            end = end == null ? DateTime.MaxValue : end;
 
             using (SubscriptionContext db = new SubscriptionContext())
             {
@@ -149,8 +149,8 @@ namespace ElasticaClients.DAL.Data
 
         public List<Subscription> GetForBranch(int branchId, bool includeRazovoe = false, DateTime? start = null, DateTime? end = null)
         {
-            start = start is null ? DateTime.MinValue : start;
-            end = end is null ? DateTime.MaxValue : end;
+            start = start == null ? DateTime.MinValue : start;
+            end = end == null ? DateTime.MaxValue : end;
 
             using (SubscriptionContext db = new SubscriptionContext())
             {

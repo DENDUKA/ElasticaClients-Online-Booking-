@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
@@ -128,8 +128,8 @@ namespace ElasticaClients.DAL.Data
 
         public List<TrainingItem> GetAllForAccount(int accountId, DateTime? start = null, DateTime? end = null)
         {
-            DateTime StartDate = start is null ? DateTime.Today.AddMonths(-200) : (DateTime)start;
-            DateTime EndDate = end is null ? DateTime.Today.AddMonths(200) : (DateTime)end;
+            DateTime StartDate = start == null ? DateTime.Today.AddMonths(-200) : (DateTime)start;
+            DateTime EndDate = end == null ? DateTime.Today.AddMonths(200) : (DateTime)end;
 
             using (TrainingItemContext db = new TrainingItemContext())
             {

@@ -1,4 +1,4 @@
-﻿using ElasticaClients.DAL.Accessory;
+using ElasticaClients.DAL.Accessory;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -44,7 +44,7 @@ namespace ElasticaClients.DAL.Entities
                 {
                     return ((DateTime)ActivateDate).AddDays(ActiveDays);
                 }
-                return default;
+                return new DateTime();
             }
         }
 
