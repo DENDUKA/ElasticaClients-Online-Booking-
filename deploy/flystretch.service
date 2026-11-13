@@ -1,0 +1,18 @@
+[Unit]
+Description=FlyStretch ASP.NET (Mono XSP4)
+After=network.target docker.service
+Wants=docker.service
+
+[Service]
+Type=simple
+WorkingDirectory=/home/FlyStratch/ElasticClients
+Environment=MONO_GAC_PREFIX=/usr/local:/usr
+Environment=LANG=en_US.UTF-8
+ExecStart=/usr/bin/mono /usr/local/lib/mono/4.5/xsp4.exe --address 127.0.0.1 --port 8080 --nonstop
+Restart=always
+RestartSec=5
+StandardOutput=append:/root/flystretch-xsp.log
+StandardError=append:/root/flystretch-xsp.log
+
+[Install]
+WantedBy=multi-user.target
